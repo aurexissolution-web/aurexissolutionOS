@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Shield } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
+import { ensureUserProfile, portalRouteForRole } from "@/lib/supabase/profile";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, type FormEvent, Suspense } from "react";
 import { CanvasRevealEffect } from "@/components/ui/canvas-reveal-effect";
@@ -39,8 +40,26 @@ function LoginForm() {
       return;
     }
 
-    router.push(redirect);
-    router.refresh();
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+
+    if (userError || !userData.user) {
+      setError("Authenticated but no active session found. Please try again.");
+      setSubmitting(false);
+      return;
+    }
+
+    try {
+      const profile = await ensureUserProfile(userData.user);
+      const destination = portalRouteForRole(profile.role);
+      router.push(destination);
+      router.refresh();
+    } catch (profileError) {
+      console.error(profileError);
+      setError("Unable to prepare your workspace. Please contact support.");
+      setSubmitting(false);
+      return;
+    }
+
     setTimeout(() => setSubmitting(false), 5000);
   }
 

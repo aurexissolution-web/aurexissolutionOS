@@ -13,6 +13,7 @@ export type IncomeType = "one_time" | "recurring";
 export interface ClientProfile {
   id: string;
   user_id: string;
+  role: UserRole;
   company_name: string;
   contact_name: string;
   contact_email: string;

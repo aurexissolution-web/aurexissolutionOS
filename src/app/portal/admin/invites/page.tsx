@@ -34,13 +34,29 @@ export default function InvitesPage() {
   const [generated, setGenerated] = useState(false);
   const [generatedLink, setGeneratedLink] = useState("");
   const [copied, setCopied] = useState(false);
+  const [loadingInvites, setLoadingInvites] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const loadInvites = useCallback(async () => {
-    const { data } = await supabase
+    setLoadingInvites(true);
+    const { data, error } = await supabase
       .from("invite_links")
       .select("id, token, email, role, used, expires_at, created_at")
       .order("created_at", { ascending: false });
-    if (data) setInvites(data as InviteItem[]);
+
+    if (error) {
+      const readable = error.message.toLowerCase().includes("permission")
+        ? "You do not have permission to view invite links."
+        : error.message;
+      setFormError(readable);
+      setInvites([]);
+    } else if (data) {
+      setFormError(null);
+      setInvites(data as InviteItem[]);
+    }
+
+    setLoadingInvites(false);
   }, []);
 
   useEffect(() => {
@@ -49,14 +65,28 @@ export default function InvitesPage() {
 
   async function handleGenerate(e: React.FormEvent) {
     e.preventDefault();
-    const { data } = await supabase
+    setSubmitting(true);
+    setFormError(null);
+
+    const { data, error } = await supabase
       .from("invite_links")
       .insert({ email, role })
       .select("token")
       .single();
+
+    if (error) {
+      const readable = error.message.toLowerCase().includes("permission")
+        ? "You do not have permission to generate invite links."
+        : error.message;
+      setFormError(readable);
+      setSubmitting(false);
+      return;
+    }
+
     if (data) {
       setGeneratedLink(`${window.location.origin}/invite/${data.token}`);
       setGenerated(true);
+      setSubmitting(false);
       loadInvites();
     }
   }
@@ -96,7 +126,15 @@ export default function InvitesPage() {
                   {copied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                 </button>
               </div>
-              <button onClick={() => { setGenerated(false); setEmail(""); }} className="text-xs text-[#94A3B8] hover:text-white transition-colors">
+              <button
+                onClick={() => {
+                  setGenerated(false);
+                  setEmail("");
+                  setGeneratedLink("");
+                  setFormError(null);
+                }}
+                className="text-xs text-[#94A3B8] hover:text-white transition-colors"
+              >
                 Generate another
               </button>
             </motion.div>
@@ -123,7 +161,13 @@ export default function InvitesPage() {
                   </select>
                 </div>
               </div>
-              <NeonButton className="!px-6 !py-3 !text-sm">
+              {formError && (
+                <div className="flex items-center gap-2 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-xs text-red-200">
+                  <XCircle className="w-4 h-4" />
+                  {formError}
+                </div>
+              )}
+              <NeonButton className="!px-6 !py-3 !text-sm" disabled={submitting}>
                 <Send className="w-4 h-4 mr-2" /> Generate & Send Invite
               </NeonButton>
             </form>
@@ -134,35 +178,41 @@ export default function InvitesPage() {
       {/* Past invites */}
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
         <h2 className="text-lg font-semibold text-white mb-4">Invite History</h2>
-        <div className="space-y-3">
-          {invites.map((inv, i) => (
-            <motion.div key={inv.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 + i * 0.04 }}>
-              <GlassCard className="!p-4 flex items-center gap-4">
-                <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${inv.used ? "bg-[#10B981]/10" : "bg-[#F59E0B]/10"}`}>
-                  {inv.used ? <CheckCircle2 className="w-4 h-4 text-[#10B981]" /> : <Clock className="w-4 h-4 text-[#F59E0B]" />}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-white truncate">{inv.email}</p>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <span
-                      className="text-[10px] px-2 py-0.5 rounded-full font-medium uppercase tracking-wider"
-                      style={{ backgroundColor: `${roleColors[inv.role]}15`, color: roleColors[inv.role] }}
-                    >
-                      {inv.role}
-                    </span>
-                    <span className="text-xs text-[#64748B] font-mono">{inv.token.slice(0, 12)}...</span>
+        {loadingInvites ? (
+          <div className="text-sm text-white/40">Loading invites…</div>
+        ) : invites.length === 0 ? (
+          <div className="text-sm text-white/40">No invite links yet.</div>
+        ) : (
+          <div className="space-y-3">
+            {invites.map((inv, i) => (
+              <motion.div key={inv.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 + i * 0.04 }}>
+                <GlassCard className="!p-4 flex items-center gap-4">
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${inv.used ? "bg-[#10B981]/10" : "bg-[#F59E0B]/10"}`}>
+                    {inv.used ? <CheckCircle2 className="w-4 h-4 text-[#10B981]" /> : <Clock className="w-4 h-4 text-[#F59E0B]" />}
                   </div>
-                </div>
-                <div className="text-right shrink-0">
-                  <p className="text-xs" style={{ color: inv.used ? "#10B981" : "#F59E0B" }}>
-                    {inv.used ? "Used" : "Pending"}
-                  </p>
-                  <p className="text-[10px] text-[#64748B]">Expires {inv.expires_at}</p>
-                </div>
-              </GlassCard>
-            </motion.div>
-          ))}
-        </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm text-white truncate">{inv.email}</p>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <span
+                        className="text-[10px] px-2 py-0.5 rounded-full font-medium uppercase tracking-wider"
+                        style={{ backgroundColor: `${roleColors[inv.role]}15`, color: roleColors[inv.role] }}
+                      >
+                        {inv.role}
+                      </span>
+                      <span className="text-xs text-[#64748B] font-mono">{inv.token.slice(0, 12)}...</span>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <p className="text-xs" style={{ color: inv.used ? "#10B981" : "#F59E0B" }}>
+                      {inv.used ? "Used" : "Pending"}
+                    </p>
+                    <p className="text-[10px] text-[#64748B]">Expires {inv.expires_at}</p>
+                  </div>
+                </GlassCard>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </motion.div>
     </div>
   );

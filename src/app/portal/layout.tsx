@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase/client";
+import { ensureUserProfile, portalRouteForRole, portalSectionForRole } from "@/lib/supabase/profile";
+import type { ClientProfile } from "@/types/portal";
 import {
   LayoutDashboard,
   User,
@@ -77,6 +79,8 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userRole, setUserRole] = useState<PortalSection | null>(null);
+  const [profile, setProfile] = useState<ClientProfile | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
 
   // Determine active section from pathname
@@ -87,14 +91,39 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
   const currentSection = sections.find((s) => s.key === activeSection)!;
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
+    let cancelled = false;
+
+    async function load() {
+      const { data } = await supabase.auth.getUser();
       if (!data.user) {
         router.push(`/login?redirect=${pathname}`);
         return;
       }
-      setUserEmail(data.user.email ?? null);
-      setAuthChecked(true);
-    });
+
+      try {
+        const ensured = await ensureUserProfile(data.user);
+        if (cancelled) return;
+        setProfile(ensured);
+        setUserEmail(ensured.contact_email || data.user.email || null);
+        const allowedSection = portalSectionForRole(ensured.role);
+        setUserRole(allowedSection);
+
+        if (!pathname.startsWith(`/portal/${allowedSection}`)) {
+          router.replace(portalRouteForRole(ensured.role));
+          return;
+        }
+
+        setAuthChecked(true);
+      } catch (error) {
+        console.error(error);
+        router.push("/login?error=profile");
+      }
+    }
+
+    load();
+    return () => {
+      cancelled = true;
+    };
   }, [pathname, router]);
 
   if (!authChecked) {
