@@ -99,8 +99,8 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
 
   if (!authChecked) {
     return (
-      <div className="flex h-screen items-center justify-center bg-[#02040A]">
-        <div className="text-[#94A3B8] text-sm">Loading...</div>
+      <div className="flex h-screen items-center justify-center bg-[#09090B]">
+        <div className="text-white/30 text-[13px]">Loading...</div>
       </div>
     );
   }
@@ -112,11 +112,11 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
   }
 
   return (
-    <div className="flex h-screen bg-[#02040A] overflow-hidden" data-lenis-prevent>
+    <div className="flex h-screen bg-[#09090B] overflow-hidden" data-lenis-prevent>
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/60 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -124,40 +124,43 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed lg:static inset-y-0 left-0 z-50 w-64 bg-[#060810] border-r border-white/5 flex flex-col transition-transform duration-300",
+          "fixed lg:static inset-y-0 left-0 z-50 w-[260px] bg-[#0A0A0C] flex flex-col transition-transform duration-300",
           sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
         {/* Logo */}
-        <div className="p-6 border-b border-white/5">
+        <div className="px-5 pt-6 pb-5">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded bg-gradient-to-br from-[#00F0FF] to-[#0047FF] flex items-center justify-center shadow-[0_0_12px_rgba(0,240,255,0.3)]">
-              <span className="text-[#02040A] font-bold text-sm">A</span>
+            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
+              <span className="text-black font-bold text-sm">A</span>
             </div>
-            <span className="text-white font-bold text-sm tracking-tight">Aurexis OS</span>
+            <div>
+              <span className="text-white font-semibold text-[14px] tracking-tight block leading-tight">Aurexis</span>
+              <span className="text-white/30 text-[10px] font-medium uppercase tracking-[0.15em]">Operating System</span>
+            </div>
           </Link>
         </div>
 
         {/* Portal switcher */}
-        <div className="px-4 py-3 border-b border-white/5">
+        <div className="px-3 pb-2">
           <div className="relative group">
-            <button className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-white/5 text-sm text-white hover:bg-white/10 transition-colors">
-              <span className="flex items-center gap-2">
-                <Shield className="w-3.5 h-3.5 text-[#00F0FF]" />
+            <button className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.06] text-[13px] text-white hover:bg-white/[0.06] transition-all duration-200">
+              <span className="flex items-center gap-2.5">
+                <Shield className="w-3.5 h-3.5 text-white/50" />
                 {currentSection.label}
               </span>
-              <ChevronDown className="w-3.5 h-3.5 text-[#94A3B8]" />
+              <ChevronDown className="w-3.5 h-3.5 text-white/30" />
             </button>
-            <div className="absolute top-full left-0 right-0 mt-1 bg-[#0A0D14] border border-white/10 rounded-lg overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+            <div className="absolute top-full left-0 right-0 mt-1.5 bg-[#111113] border border-white/[0.08] rounded-xl overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 shadow-[0_16px_48px_rgba(0,0,0,0.5)]">
               {sections.map((s) => (
                 <Link
                   key={s.key}
                   href={s.nav[0].href}
                   className={cn(
-                    "block px-4 py-2.5 text-sm transition-colors",
+                    "block px-4 py-2.5 text-[13px] transition-colors",
                     s.key === activeSection
-                      ? "text-[#00F0FF] bg-[#00F0FF]/5"
-                      : "text-[#94A3B8] hover:text-white hover:bg-white/5"
+                      ? "text-white bg-white/[0.06]"
+                      : "text-white/50 hover:text-white hover:bg-white/[0.04]"
                   )}
                 >
                   {s.label}
@@ -167,8 +170,10 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
           </div>
         </div>
 
+        <div className="mx-4 my-2 h-px bg-white/[0.06]" />
+
         {/* Nav links */}
-        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+        <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-0.5">
           {currentSection.nav.map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
@@ -178,13 +183,13 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
                 href={item.href}
                 onClick={() => setSidebarOpen(false)}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
+                  "flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200",
                   isActive
-                    ? "bg-[#00F0FF]/10 text-[#00F0FF] shadow-[inset_0_0_0_1px_rgba(0,240,255,0.15)]"
-                    : "text-[#94A3B8] hover:text-white hover:bg-white/5"
+                    ? "bg-white/[0.08] text-white"
+                    : "text-white/40 hover:text-white/70 hover:bg-white/[0.04]"
                 )}
               >
-                <Icon className="w-4 h-4 shrink-0" />
+                <Icon className={cn("w-[18px] h-[18px] shrink-0", isActive ? "text-white" : "text-white/30")} />
                 {item.label}
               </Link>
             );
@@ -192,46 +197,50 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         </nav>
 
         {/* User footer */}
-        <div className="p-4 border-t border-white/5">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#00F0FF]/20 to-[#0047FF]/20 border border-[#00F0FF]/20 flex items-center justify-center">
-              <User className="w-3.5 h-3.5 text-[#00F0FF]" />
+        <div className="p-3">
+          <div className="rounded-xl bg-white/[0.03] border border-white/[0.06] p-3">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 rounded-full bg-white/[0.08] border border-white/[0.06] flex items-center justify-center">
+                <User className="w-3.5 h-3.5 text-white/50" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[12px] text-white/80 truncate font-medium">{userEmail ?? "Loading..."}</p>
+                <p className="text-[10px] text-white/25 uppercase tracking-wider font-medium">{activeSection}</p>
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs text-white truncate">{userEmail ?? "Loading..."}</p>
-              <p className="text-[10px] text-[#64748B] uppercase tracking-wider">{activeSection}</p>
-            </div>
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-[12px] font-medium text-white/40 hover:text-red-400 hover:bg-red-400/[0.06] border border-white/[0.06] transition-all duration-200"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              Sign Out
+            </button>
           </div>
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-[#94A3B8] hover:text-red-400 hover:bg-red-400/5 transition-colors"
-          >
-            <LogOut className="w-3.5 h-3.5" />
-            Sign Out
-          </button>
         </div>
       </aside>
 
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top bar */}
-        <header className="h-14 border-b border-white/5 flex items-center justify-between px-4 lg:px-6 bg-[#02040A]/80 backdrop-blur-sm shrink-0">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="lg:hidden p-2 text-[#94A3B8] hover:text-white"
-          >
-            {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-          <div className="text-sm font-medium text-white">
-            {currentSection.nav.find((n) => n.href === pathname)?.label ?? currentSection.label}
+        <header className="h-14 border-b border-white/[0.06] flex items-center justify-between px-4 lg:px-8 bg-[#09090B] shrink-0">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="lg:hidden p-2 text-white/40 hover:text-white rounded-lg hover:bg-white/[0.04] transition-colors"
+            >
+              {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+            <div className="text-[14px] font-semibold text-white">
+              {currentSection.nav.find((n) => n.href === pathname)?.label ?? currentSection.label}
+            </div>
           </div>
-          <div className="text-[10px] text-[#64748B] font-mono uppercase tracking-widest">
-            Aurexis OS v1.0
+          <div className="text-[10px] text-white/20 font-mono uppercase tracking-[0.2em]">
+            v1.0
           </div>
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto p-4 lg:p-6">
+        <main className="flex-1 overflow-y-auto p-4 lg:p-8 bg-[#09090B]">
           {children}
         </main>
       </div>

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { GlassCard } from "@/components/ui/GlassCard";
 import {
   DollarSign,
   TrendingUp,
@@ -62,93 +61,98 @@ export default function SalesDashboard() {
   }, []);
 
   const kpis = [
-    { label: "Total Revenue", value: fmt(totals.income), change: "", up: true, icon: DollarSign, color: "#10B981", href: "/portal/sales/income" },
-    { label: "Total Expenses", value: fmt(totals.expenses), change: "", up: false, icon: TrendingDown, color: "#EF4444", href: "/portal/sales/expenses" },
-    { label: "Net Profit", value: fmt(totals.income - totals.expenses), change: "", up: true, icon: BarChart3, color: "#00F0FF", href: "/portal/sales/profit" },
-    { label: "Pipeline Value", value: fmt(totals.pipeline), change: "", up: true, icon: Kanban, color: "#8B5CF6", href: "/portal/sales/pipeline" },
+    { label: "Total Revenue", value: fmt(totals.income), up: true, icon: DollarSign, href: "/portal/sales/income" },
+    { label: "Total Expenses", value: fmt(totals.expenses), up: false, icon: TrendingDown, href: "/portal/sales/expenses" },
+    { label: "Net Profit", value: fmt(totals.income - totals.expenses), up: true, icon: BarChart3, href: "/portal/sales/profit" },
+    { label: "Pipeline Value", value: fmt(totals.pipeline), up: true, icon: Kanban, href: "/portal/sales/pipeline" },
   ];
+
   return (
-    <div className="space-y-6 max-w-6xl">
+    <div className="space-y-8 max-w-6xl">
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-white mb-1">Financial Nervous System</h1>
-        <p className="text-sm text-[#94A3B8]">Track revenue, expenses, profit, and pipeline health in real-time.</p>
+        <h1 className="text-[28px] font-semibold text-white tracking-tight mb-1">Financial Overview</h1>
+        <p className="text-[14px] text-white/40">Track revenue, expenses, profit, and pipeline health in real-time.</p>
       </motion.div>
 
       {/* KPI cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {kpis.map((kpi, i) => {
           const Icon = kpi.icon;
           return (
             <motion.div key={kpi.label} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
               <Link href={kpi.href}>
-                <GlassCard hoverEffect className="cursor-pointer !p-5">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${kpi.color}15` }}>
-                      <Icon className="w-4 h-4" style={{ color: kpi.color }} />
+                <div className="group rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 hover:bg-white/[0.04] hover:border-white/[0.1] transition-all duration-300 cursor-pointer">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-9 h-9 rounded-xl bg-white/[0.06] flex items-center justify-center">
+                      <Icon className="w-4 h-4 text-white/50" />
                     </div>
-                    <div className="flex items-center gap-1 text-xs font-medium" style={{ color: kpi.up ? "#10B981" : "#EF4444" }}>
-                      {kpi.up ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
-                      {kpi.change}
-                    </div>
+                    {kpi.up ? (
+                      <ArrowUpRight className="w-4 h-4 text-emerald-500/50" />
+                    ) : (
+                      <ArrowDownRight className="w-4 h-4 text-red-400/50" />
+                    )}
                   </div>
-                  <p className="text-2xl font-bold text-white">{kpi.value}</p>
-                  <p className="text-xs text-[#94A3B8] mt-0.5">{kpi.label}</p>
-                </GlassCard>
+                  <p className="text-[22px] font-semibold text-white tracking-tight leading-none">{kpi.value}</p>
+                  <p className="text-[12px] text-white/35 mt-1.5 font-medium">{kpi.label}</p>
+                </div>
               </Link>
             </motion.div>
           );
         })}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         {/* Revenue breakdown */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-          <GlassCard>
-            <div className="flex items-center justify-between mb-5">
-              <h2 className="text-lg font-semibold text-white">Revenue Breakdown</h2>
-              <TrendingUp className="w-4 h-4 text-[#64748B]" />
+          <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 h-full">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-[15px] font-semibold text-white">Revenue Breakdown</h2>
+              <TrendingUp className="w-4 h-4 text-white/20" />
             </div>
-            <div className="space-y-4">
+            <div className="space-y-5">
               {revenueBreakdown.map((item) => (
                 <div key={item.label}>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-sm text-[#94A3B8]">{item.label}</span>
-                    <span className="text-sm font-semibold text-white">${item.amount.toLocaleString()}</span>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[13px] text-white/50">{item.label}</span>
+                    <span className="text-[13px] font-semibold text-white">${item.amount.toLocaleString()}</span>
                   </div>
-                  <div className="w-full h-2 rounded-full bg-white/5 overflow-hidden">
+                  <div className="w-full h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${item.pct}%` }}
                       transition={{ duration: 1, ease: "easeOut" }}
-                      className="h-full rounded-full bg-gradient-to-r from-[#00F0FF] to-[#0047FF]"
+                      className="h-full rounded-full bg-white/80"
                     />
                   </div>
-                  <p className="text-[10px] text-[#64748B] mt-0.5">{item.pct}% of total</p>
+                  <p className="text-[10px] text-white/20 mt-1.5 font-medium">{item.pct}% of total</p>
                 </div>
               ))}
             </div>
-          </GlassCard>
+          </div>
         </motion.div>
 
         {/* Top expenses */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
-          <GlassCard>
-            <div className="flex items-center justify-between mb-5">
-              <h2 className="text-lg font-semibold text-white">Top Expenses (Monthly)</h2>
-              <TrendingDown className="w-4 h-4 text-[#64748B]" />
+          <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 h-full">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-[15px] font-semibold text-white">Top Expenses</h2>
+              <TrendingDown className="w-4 h-4 text-white/20" />
             </div>
-            <div className="space-y-3">
+            <div className="space-y-1">
               {topExpenses.map((exp) => (
-                <div key={exp.vendor} className="flex items-center justify-between py-2 border-b border-white/5 last:border-0">
+                <div key={exp.vendor} className="flex items-center justify-between py-3 border-b border-white/[0.04] last:border-0">
                   <div>
-                    <p className="text-sm text-white">{exp.vendor}</p>
-                    <p className="text-[10px] text-[#64748B]">{exp.category}</p>
+                    <p className="text-[13px] text-white/70">{exp.vendor}</p>
+                    <p className="text-[10px] text-white/25 mt-0.5">{exp.category}</p>
                   </div>
-                  <span className="text-sm font-semibold text-[#EF4444]">-${exp.amount}</span>
+                  <span className="text-[13px] font-semibold text-red-400/70">-${exp.amount}</span>
                 </div>
               ))}
+              {topExpenses.length === 0 && (
+                <p className="text-[13px] text-white/25 text-center py-4">No expenses recorded yet.</p>
+              )}
             </div>
-          </GlassCard>
+          </div>
         </motion.div>
       </div>
     </div>
