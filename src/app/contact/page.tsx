@@ -267,7 +267,7 @@ export default function ContactPage() {
             </div>
 
             {/* The Cal.com widget itself */}
-            <div className="relative z-10 flex-1 min-h-[600px] rounded-2xl overflow-hidden border border-white/[0.08] bg-[#040C18] shadow-[0_0_0_1px_rgba(255,255,255,0.04),0_32px_80px_rgba(0,0,0,0.6)]">
+            <div className="relative z-10 flex-1 w-full max-h-[650px] rounded-2xl overflow-hidden border border-white/[0.08] bg-[#040C18] shadow-[0_0_0_1px_rgba(255,255,255,0.04),0_32px_80px_rgba(0,0,0,0.6)]">
               {/* Top chrome bar */}
               <div className="absolute top-0 left-0 right-0 h-10 bg-gradient-to-b from-white/[0.04] to-transparent flex items-center px-4 gap-2 z-10 pointer-events-none">
                 <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
@@ -281,7 +281,7 @@ export default function ContactPage() {
               <Cal
                 namespace="strategy-session"
                 calLink="aurexis-solution/45min"
-                style={{ width: "100%", height: "100%" }}
+                style={{ width: "100%", height: "100%", overflow: "scroll" }}
                 config={{ layout: "month_view", hideEventTypeDetails: "false" }}
               />
             </div>
