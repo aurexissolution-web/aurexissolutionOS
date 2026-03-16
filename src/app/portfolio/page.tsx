@@ -6,7 +6,6 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import Link from "next/link";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
-import { supabase } from "@/lib/supabase/client";
 import type { PortfolioItem } from "@/types/portal";
 
 const FILTERS = ["All", "AI Automation", "Web Development", "App Development"] as const;
@@ -19,14 +18,13 @@ export default function PortfolioPage() {
 
   useEffect(() => {
     async function loadProjects() {
-      const { data } = await supabase
-        .from("portfolio_items")
-        .select("*")
-        .order("created_at", { ascending: false });
-      
-      if (data) {
-        setProjects(data as PortfolioItem[]);
-      }
+      try {
+        const res = await fetch("/api/portfolio");
+        const json = await res.json();
+        if (json.data) {
+          setProjects(json.data as PortfolioItem[]);
+        }
+      } catch {}
       setLoading(false);
     }
     loadProjects();

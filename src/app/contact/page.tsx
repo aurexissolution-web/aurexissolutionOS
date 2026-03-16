@@ -37,9 +37,10 @@ const SOCIAL_LINKS = [
 ];
 
 const CONTACT_DETAILS = [
-  { icon: <Mail className="w-4 h-4" />, label: "hello@aurexis.com", href: "mailto:hello@aurexis.com" },
-  { icon: <Phone className="w-4 h-4" />, label: "+60 2026-6020", href: "tel:+60202663020" },
+  { icon: <Mail className="w-4 h-4" />, label: "aurexissolution@gmail.com", href: "mailto:aurexissolution@gmail.com" },
+  { icon: <Phone className="w-4 h-4" />, label: "+60 164071129", href: "tel:+60164071129" },
   { icon: <MapPin className="w-4 h-4" />, label: "Kuala Lumpur, Malaysia", href: null },
+  { icon: <MapPin className="w-4 h-4" />, label: "Sungai Petani, Kedah", href: null },
 ];
 
 export default function ContactPage() {

@@ -7,7 +7,6 @@ import { Footer } from "@/components/layout/Footer";
 import { NeonButton } from "@/components/ui/NeonButton";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { supabase } from "@/lib/supabase/client";
 import type { PortfolioItem } from "@/types/portal";
 
 export default function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -17,13 +16,11 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
 
   useEffect(() => {
     async function loadProject() {
-      const { data } = await supabase
-        .from("portfolio_items")
-        .select("*")
-        .eq("slug", slug)
-        .single();
-      
-      setProject(data as PortfolioItem);
+      try {
+        const res = await fetch(`/api/portfolio?slug=${encodeURIComponent(slug)}`);
+        const json = await res.json();
+        setProject(json.data as PortfolioItem);
+      } catch {}
       setLoading(false);
     }
     loadProject();

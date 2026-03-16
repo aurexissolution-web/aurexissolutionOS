@@ -6,7 +6,6 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import Link from "next/link";
 import { ArrowUpRight, Clock, ArrowRight } from "lucide-react";
-import { supabase } from "@/lib/supabase/client";
 import type { BlogPost } from "@/types/portal";
 
 const CATEGORIES = ["All", "AI Insights", "Dev Logs", "The KL Pivot"] as const;
@@ -26,15 +25,13 @@ export default function BlogPage() {
 
   useEffect(() => {
     async function loadPosts() {
-      const { data } = await supabase
-        .from("blog_posts")
-        .select("*")
-        .eq("published", true)
-        .order("created_at", { ascending: false });
-      
-      if (data) {
-        setPosts(data as BlogPost[]);
-      }
+      try {
+        const res = await fetch("/api/blog");
+        const json = await res.json();
+        if (json.data) {
+          setPosts(json.data as BlogPost[]);
+        }
+      } catch {}
       setLoading(false);
     }
     loadPosts();

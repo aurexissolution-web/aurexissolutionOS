@@ -108,14 +108,15 @@ export function Footer() {
             <h4 className="text-[11px] font-bold tracking-[0.18em] uppercase text-neutral-500 mb-5">Contact Us</h4>
             <ul className="flex flex-col gap-3 text-sm text-neutral-400">
               <li>Kuala Lumpur, Malaysia</li>
+              <li>Sungai Petani, Kedah</li>
               <li>
-                <a href="tel:+60123456789" className="hover:text-white transition-colors duration-200">
-                  +60 12-345 6789
+                <a href="tel:+60164071129" className="hover:text-white transition-colors duration-200">
+                  +60 164071129
                 </a>
               </li>
               <li>
-                <a href="mailto:hello@aurexis.com" className="hover:text-white transition-colors duration-200">
-                  hello@aurexis.com
+                <a href="mailto:aurexissolution@gmail.com" className="hover:text-white transition-colors duration-200">
+                  aurexissolution@gmail.com
                 </a>
               </li>
               <li className="mt-1">

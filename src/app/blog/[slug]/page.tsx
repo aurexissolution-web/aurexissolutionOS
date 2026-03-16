@@ -6,7 +6,6 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Clock, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase/client";
 import type { BlogPost } from "@/types/portal";
 
 export default function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -16,14 +15,11 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
   
   useEffect(() => {
     async function loadPost() {
-      const { data } = await supabase
-        .from("blog_posts")
-        .select("*")
-        .eq("slug", slug)
-        .eq("published", true)
-        .single();
-      
-      setPost(data as BlogPost);
+      try {
+        const res = await fetch(`/api/blog?slug=${encodeURIComponent(slug)}`);
+        const json = await res.json();
+        setPost(json.data as BlogPost);
+      } catch {}
       setLoading(false);
     }
     loadPost();
