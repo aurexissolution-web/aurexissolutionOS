@@ -1,78 +1,39 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import Link from "next/link";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
+import { supabase } from "@/lib/supabase/client";
+import type { PortfolioItem } from "@/types/portal";
 
 const FILTERS = ["All", "AI Automation", "Web Development", "App Development"] as const;
-
-const PROJECTS = [
-  {
-    id: "nexus",
-    title: "Project Nexus",
-    category: "AI Automation",
-    stat: "50 hrs/week automated",
-    year: "2024",
-    desc: "End-to-end AI pipeline replacing a 6-person ops team. Built on GPT-4o with custom RAG.",
-    color: "#00F0FF",
-    index: "01",
-    image: "/nexus-thumb.png",
-  },
-  {
-    id: "velocity",
-    title: "Velocity Commerce",
-    category: "Web Development",
-    stat: "1.2s global load time",
-    year: "2024",
-    desc: "Headless Shopify storefront on Next.js 14 with Cloudflare edge caching. 3× conversion lift.",
-    color: "#7C3AED",
-    index: "02",
-    image: "/velocity-thumb.png",
-  },
-  {
-    id: "aero",
-    title: "Aero Logistics",
-    category: "App Development",
-    stat: "10k active users",
-    year: "2023",
-    desc: "React Native mobile platform for real-time container tracking and ETA forecasting",
-    color: "#059669",
-    index: "03",
-    image: null,
-  },
-  {
-    id: "synapse",
-    title: "Synapse CRM Agent",
-    category: "AI Automation",
-    stat: "+40% conversion rate",
-    year: "2024",
-    desc: "LLM-powered sales assistant embedded in HubSpot. Automated follow-ups, intent scoring.",
-    color: "#00F0FF",
-    index: "04",
-    image: null,
-  },
-  {
-    id: "coming-soon",
-    title: "Confidential R&D",
-    category: "Internal",
-    stat: "In development",
-    year: "2025",
-    desc: "An internal product being built for the Southeast Asian enterprise market. NDA applies.",
-    color: "#64748B",
-    index: "05",
-    image: null,
-  },
-];
 
 export default function PortfolioPage() {
   const [filter, setFilter] = useState<string>("All");
   const [hovered, setHovered] = useState<string | null>(null);
+  const [projects, setProjects] = useState<PortfolioItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadProjects() {
+      const { data } = await supabase
+        .from("portfolio_items")
+        .select("*")
+        .order("created_at", { ascending: false });
+      
+      if (data) {
+        setProjects(data as PortfolioItem[]);
+      }
+      setLoading(false);
+    }
+    loadProjects();
+  }, []);
 
   const filteredProjects =
-    filter === "All" ? PROJECTS : PROJECTS.filter((p) => p.category === filter);
+    filter === "All" ? projects : projects.filter((p) => p.tech_tags?.includes(filter));
 
   return (
     <div className="flex flex-col min-h-screen bg-[#02040A] text-[#F8FAFC]">
@@ -155,166 +116,173 @@ export default function PortfolioPage() {
           </motion.div>
 
           {/* ── PROJECT TABLE / CARDS ── */}
-          {/* Desktop: table-style rows */}
-          <div className="hidden lg:block">
-            <motion.div layout className="space-y-0">
-              <AnimatePresence>
-                {filteredProjects.map((project, i) => (
-                  <motion.div
-                    key={project.id}
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.35, delay: i * 0.05 }}
-                    onHoverStart={() => setHovered(project.id)}
-                    onHoverEnd={() => setHovered(null)}
-                  >
-                    <Link href={`/portfolio/${project.id}`}>
-                      <div
-                        className={`group relative flex items-center gap-8 py-7 px-6 border-b border-white/[0.05] transition-all duration-300 rounded-xl cursor-pointer ${
-                          hovered === project.id
-                            ? "bg-white/[0.025]"
-                            : "bg-transparent"
-                        }`}
+          {loading ? (
+            <div className="py-20 text-center text-white/40">Loading portfolio...</div>
+          ) : filteredProjects.length === 0 ? (
+            <div className="py-20 text-center text-white/40">No projects to display yet.</div>
+          ) : (
+            <>
+              {/* Desktop: table-style rows */}
+              <div className="hidden lg:block">
+                <motion.div layout className="space-y-0">
+                  <AnimatePresence>
+                    {filteredProjects.map((project, i) => (
+                      <motion.div
+                        key={project.id}
+                        layout
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.35, delay: i * 0.05 }}
+                        onHoverStart={() => setHovered(project.id)}
+                        onHoverEnd={() => setHovered(null)}
                       >
-                        {/* Glow dot (color per project) */}
-                        {hovered === project.id && (
-                          <motion.div
-                            layoutId="hoverGlow"
-                            className="absolute left-0 top-0 bottom-0 w-1 rounded-full"
-                            style={{ backgroundColor: project.color }}
-                            transition={{ duration: 0.2 }}
-                          />
-                        )}
-
-                        {/* Index number */}
-                        <span className="text-xs text-[#334155] font-mono w-6 shrink-0">
-                          {project.index}
-                        </span>
-
-                        {/* Small color dot */}
-                        <span
-                          className="w-2.5 h-2.5 rounded-full shrink-0 transition-all duration-300"
-                          style={{
-                            backgroundColor:
-                              hovered === project.id ? project.color : "#334155",
-                            boxShadow:
-                              hovered === project.id
-                                ? `0 0 10px ${project.color}80`
-                                : "none",
-                          }}
-                        />
-
-                        {/* Thumbnail — slides in on hover for projects with images */}
-                        {project.image && (
+                        <Link href={`/portfolio/${project.slug}`}>
                           <div
-                            className={`relative shrink-0 rounded-lg overflow-hidden border border-white/10 transition-all duration-500 ${
+                            className={`group relative flex items-center gap-8 py-7 px-6 border-b border-white/[0.05] transition-all duration-300 rounded-xl cursor-pointer ${
                               hovered === project.id
-                                ? "opacity-100 w-20 h-12"
-                                : "opacity-0 w-0 h-12"
+                                ? "bg-white/[0.025]"
+                                : "bg-transparent"
                             }`}
                           >
-                            <img
-                              src={project.image}
-                              alt={project.title}
-                              className="w-full h-full object-cover"
+                            {/* Glow dot (color per project) */}
+                            {hovered === project.id && (
+                              <motion.div
+                                layoutId="hoverGlow"
+                                className="absolute left-0 top-0 bottom-0 w-1 rounded-full bg-[#00F0FF]"
+                                transition={{ duration: 0.2 }}
+                              />
+                            )}
+
+                            {/* Index number */}
+                            <span className="text-xs text-[#334155] font-mono w-6 shrink-0">
+                              {String(i + 1).padStart(2, "0")}
+                            </span>
+
+                            {/* Small color dot */}
+                            <span
+                              className="w-2.5 h-2.5 rounded-full shrink-0 transition-all duration-300"
+                              style={{
+                                backgroundColor:
+                                  hovered === project.id ? "#00F0FF" : "#334155",
+                                boxShadow:
+                                  hovered === project.id
+                                    ? `0 0 10px #00F0FF80`
+                                    : "none",
+                              }}
+                            />
+
+                            {/* Thumbnail — slides in on hover for projects with images */}
+                            {project.images?.[0] && (
+                              <div
+                                className={`relative shrink-0 rounded-lg overflow-hidden border border-white/10 transition-all duration-500 ${
+                                  hovered === project.id
+                                    ? "opacity-100 w-20 h-12"
+                                    : "opacity-0 w-0 h-12"
+                                }`}
+                              >
+                                <img
+                                  src={project.images[0]}
+                                  alt={project.title}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            )}
+
+                            {/* Title */}
+                            <span className="text-xl font-semibold text-white group-hover:text-white transition-colors flex-1 min-w-[180px]">
+                              {project.title}
+                            </span>
+
+
+                            {/* Description (hidden until hover) */}
+                            <span
+                              className={`text-sm text-[#64748B] flex-[2] leading-relaxed transition-all duration-300 ${
+                                hovered === project.id ? "opacity-100" : "opacity-0"
+                              }`}
+                            >
+                              {project.description}
+                            </span>
+
+                            {/* Category */}
+                            <span className="text-xs text-[#64748B] font-medium uppercase tracking-widest w-36 text-right shrink-0">
+                              {project.tech_tags?.[0] || "Project"}
+                            </span>
+
+                            {/* Stat */}
+                            <span
+                              className="text-sm font-medium w-44 text-right shrink-0 transition-colors duration-300"
+                              style={{
+                                color: hovered === project.id ? "#00F0FF" : "#94A3B8",
+                              }}
+                            >
+                              {project.client_name}
+                            </span>
+
+                            {/* Year */}
+                            <span className="text-xs text-[#334155] w-10 text-right shrink-0">
+                              {new Date(project.created_at).getFullYear()}
+                            </span>
+
+                            {/* Arrow */}
+                            <ArrowUpRight
+                              className={`w-5 h-5 shrink-0 transition-all duration-300 ${
+                                hovered === project.id
+                                  ? "opacity-100 text-white translate-x-0 -translate-y-0"
+                                  : "opacity-0 -translate-x-1 translate-y-1"
+                              }`}
                             />
                           </div>
-                        )}
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </motion.div>
+              </div>
 
-                        {/* Title */}
-                        <span className="text-xl font-semibold text-white group-hover:text-white transition-colors flex-1 min-w-[180px]">
-                          {project.title}
-                        </span>
-
-
-                        {/* Description (hidden until hover) */}
-                        <span
-                          className={`text-sm text-[#64748B] flex-[2] leading-relaxed transition-all duration-300 ${
-                            hovered === project.id ? "opacity-100" : "opacity-0"
-                          }`}
-                        >
-                          {project.desc}
-                        </span>
-
-                        {/* Category */}
-                        <span className="text-xs text-[#64748B] font-medium uppercase tracking-widest w-36 text-right shrink-0">
-                          {project.category}
-                        </span>
-
-                        {/* Stat */}
-                        <span
-                          className="text-sm font-medium w-44 text-right shrink-0 transition-colors duration-300"
-                          style={{
-                            color: hovered === project.id ? project.color : "#94A3B8",
-                          }}
-                        >
-                          {project.stat}
-                        </span>
-
-                        {/* Year */}
-                        <span className="text-xs text-[#334155] w-10 text-right shrink-0">
-                          {project.year}
-                        </span>
-
-                        {/* Arrow */}
-                        <ArrowUpRight
-                          className={`w-5 h-5 shrink-0 transition-all duration-300 ${
-                            hovered === project.id
-                              ? "opacity-100 text-white translate-x-0 -translate-y-0"
-                              : "opacity-0 -translate-x-1 translate-y-1"
-                          }`}
-                        />
-                      </div>
-                    </Link>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </motion.div>
-          </div>
-
-          {/* Mobile: card grid */}
-          <div className="lg:hidden">
-            <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <AnimatePresence>
-                {filteredProjects.map((project, i) => (
-                  <motion.div
-                    key={project.id}
-                    layout
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.3, delay: i * 0.05 }}
-                  >
-                    <Link href={`/portfolio/${project.id}`}>
-                      <div className="group relative overflow-hidden p-6 rounded-2xl border border-white/[0.06] bg-white/[0.01] hover:bg-white/[0.03] hover:border-white/[0.12] transition-all duration-300 cursor-pointer">
-                        {/* Image banner for projects that have one */}
-                        {project.image && (
-                          <div className="-mx-6 -mt-6 mb-5 h-36 overflow-hidden rounded-t-2xl">
-                            <img
-                              src={project.image}
-                              alt={project.title}
-                              className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#02040A]/80 pointer-events-none" />
+              {/* Mobile: card grid */}
+              <div className="lg:hidden">
+                <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <AnimatePresence>
+                    {filteredProjects.map((project, i) => (
+                      <motion.div
+                        key={project.id}
+                        layout
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.3, delay: i * 0.05 }}
+                      >
+                        <Link href={`/portfolio/${project.slug}`}>
+                          <div className="group relative overflow-hidden p-6 rounded-2xl border border-white/[0.06] bg-white/[0.01] hover:bg-white/[0.03] hover:border-white/[0.12] transition-all duration-300 cursor-pointer">
+                            {/* Image banner for projects that have one */}
+                            {project.images?.[0] && (
+                              <div className="-mx-6 -mt-6 mb-5 h-36 overflow-hidden rounded-t-2xl">
+                                <img
+                                  src={project.images[0]}
+                                  alt={project.title}
+                                  className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#02040A]/80 pointer-events-none" />
+                              </div>
+                            )}
+                            <div className="absolute top-0 left-0 right-0 h-px" style={{ background: `linear-gradient(90deg, transparent, #00F0FF60, transparent)` }} />
+                            <div className="flex items-start justify-between mb-4">
+                              <span className="text-xs text-[#334155] font-mono">{String(i + 1).padStart(2, "0")}</span>
+                              <ArrowUpRight className="w-4 h-4 text-[#334155] group-hover:text-white transition-colors" />
+                            </div>
+                            <h3 className="text-lg font-semibold text-white mb-2">{project.title}</h3>
+                            <p className="text-xs text-[#64748B] mb-4 leading-relaxed">{project.description}</p>
+                            <p className="text-sm font-medium text-[#00F0FF]">{project.client_name}</p>
                           </div>
-                        )}
-                        <div className="absolute top-0 left-0 right-0 h-px" style={{ background: `linear-gradient(90deg, transparent, ${project.color}60, transparent)` }} />
-                        <div className="flex items-start justify-between mb-4">
-                          <span className="text-xs text-[#334155] font-mono">{project.index}</span>
-                          <ArrowUpRight className="w-4 h-4 text-[#334155] group-hover:text-white transition-colors" />
-                        </div>
-                        <h3 className="text-lg font-semibold text-white mb-2">{project.title}</h3>
-                        <p className="text-xs text-[#64748B] mb-4 leading-relaxed">{project.desc}</p>
-                        <p className="text-sm font-medium" style={{ color: project.color }}>{project.stat}</p>
-                      </div>
-                    </Link>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </motion.div>
-          </div>
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </motion.div>
+              </div>
+            </>
+          )}
 
           {/* ── CTA ── */}
           <motion.div

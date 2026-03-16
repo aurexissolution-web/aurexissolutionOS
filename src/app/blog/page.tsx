@@ -1,66 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import Link from "next/link";
 import { ArrowUpRight, Clock, ArrowRight } from "lucide-react";
+import { supabase } from "@/lib/supabase/client";
+import type { BlogPost } from "@/types/portal";
 
 const CATEGORIES = ["All", "AI Insights", "Dev Logs", "The KL Pivot"] as const;
-
-const FEATURED_POST = {
-  id: "rag-architecture",
-  title: "How RAG Architecture is Replacing Traditional SaaS Dashboards",
-  description:
-    "A deep dive into Retrieval-Augmented Generation and why your next software build shouldn't rely on 2010s database structures.",
-  category: "AI Insights",
-  readTime: "8 min read",
-  date: "Aug 15, 2024",
-};
-
-const POSTS = [
-  {
-    id: "supabase-vs-firebase",
-    title: "Supabase vs Firebase: Why We Migrated to Postgres",
-    category: "Dev Logs",
-    readTime: "5 min read",
-    date: "Jul 30, 2024",
-    featured: false,
-  },
-  {
-    id: "kl-hq",
-    title: "Building the Aurexis HQ in Kuala Lumpur",
-    category: "The KL Pivot",
-    readTime: "3 min read",
-    date: "Jul 10, 2024",
-    featured: false,
-  },
-  {
-    id: "lowcode-cost",
-    title: "The Hidden Cost of 'Low Code' Automation Tools",
-    category: "AI Insights",
-    readTime: "6 min read",
-    date: "Jun 22, 2024",
-    featured: false,
-  },
-  {
-    id: "framer-motion-60fps",
-    title: "Framer Motion: Achieving 60fps Web UI",
-    category: "Dev Logs",
-    readTime: "7 min read",
-    date: "Jun 04, 2024",
-    featured: false,
-  },
-  {
-    id: "react-native-vs-flutter",
-    title: "Why React Native Beats Flutter for Full-Stack Teams",
-    category: "Dev Logs",
-    readTime: "9 min read",
-    date: "May 18, 2024",
-    featured: false,
-  },
-];
 
 const CATEGORY_COLORS: Record<string, string> = {
   "AI Insights": "#00F0FF",
@@ -72,11 +21,31 @@ const CATEGORY_COLORS: Record<string, string> = {
 export default function BlogPage() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [email, setEmail] = useState("");
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadPosts() {
+      const { data } = await supabase
+        .from("blog_posts")
+        .select("*")
+        .eq("published", true)
+        .order("created_at", { ascending: false });
+      
+      if (data) {
+        setPosts(data as BlogPost[]);
+      }
+      setLoading(false);
+    }
+    loadPosts();
+  }, []);
 
   const filteredPosts =
     activeCategory === "All"
-      ? POSTS
-      : POSTS.filter((p) => p.category === activeCategory);
+      ? posts
+      : posts.filter((p) => p.tags?.includes(activeCategory));
+
+  const FEATURED_POST = posts.length > 0 ? posts[0] : null;
 
   return (
     <div className="flex flex-col min-h-screen bg-[#02040A] text-[#F8FAFC]">
@@ -127,69 +96,71 @@ export default function BlogPage() {
           </motion.div>
 
           {/* ── FEATURED POST ── */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="mb-16"
-          >
-            <Link href={`/blog/${FEATURED_POST.id}`}>
-              <div className="group relative rounded-3xl overflow-hidden border border-white/[0.07] bg-white/[0.01] hover:border-white/[0.14] transition-all duration-500 cursor-pointer">
-                {/* Top accent line */}
-                <div
-                  className="absolute top-0 left-0 right-0 h-px"
-                  style={{
-                    background: `linear-gradient(90deg, transparent, ${CATEGORY_COLORS[FEATURED_POST.category]}80, transparent)`,
-                  }}
-                />
+          {FEATURED_POST && (
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              className="mb-16"
+            >
+              <Link href={`/blog/${FEATURED_POST.id}`}>
+                <div className="group relative rounded-3xl overflow-hidden border border-white/[0.07] bg-white/[0.01] hover:border-white/[0.14] transition-all duration-500 cursor-pointer">
+                  {/* Top accent line */}
+                  <div
+                    className="absolute top-0 left-0 right-0 h-px"
+                    style={{
+                      background: `linear-gradient(90deg, transparent, ${CATEGORY_COLORS[FEATURED_POST.tags?.[0] || "Internal"]}80, transparent)`,
+                    }}
+                  />
 
-                {/* Background glow */}
-                <div
-                  className="absolute top-0 right-0 w-[400px] h-[300px] blur-[100px] opacity-10 transition-opacity duration-500 group-hover:opacity-20 pointer-events-none"
-                  style={{ backgroundColor: CATEGORY_COLORS[FEATURED_POST.category] }}
-                />
+                  {/* Background glow */}
+                  <div
+                    className="absolute top-0 right-0 w-[400px] h-[300px] blur-[100px] opacity-10 transition-opacity duration-500 group-hover:opacity-20 pointer-events-none"
+                    style={{ backgroundColor: CATEGORY_COLORS[FEATURED_POST.tags?.[0] || "Internal"] }}
+                  />
 
-                <div className="relative z-10 grid lg:grid-cols-[1fr_2fr] gap-0">
-                  {/* Left – metadata column */}
-                  <div className="flex flex-col justify-between p-10 lg:border-r border-white/[0.05]">
-                    <div>
-                      <span
-                        className="text-xs font-bold uppercase tracking-widest mb-6 block"
-                        style={{ color: CATEGORY_COLORS[FEATURED_POST.category] }}
-                      >
-                        ★ Featured · {FEATURED_POST.category}
-                      </span>
-                      <div className="text-[80px] md:text-[100px] font-black text-white/[0.04] leading-none tracking-tighter select-none">
-                        01
+                  <div className="relative z-10 grid lg:grid-cols-[1fr_2fr] gap-0">
+                    {/* Left – metadata column */}
+                    <div className="flex flex-col justify-between p-10 lg:border-r border-white/[0.05]">
+                      <div>
+                        <span
+                          className="text-xs font-bold uppercase tracking-widest mb-6 block"
+                          style={{ color: CATEGORY_COLORS[FEATURED_POST.tags?.[0] || "Internal"] }}
+                        >
+                          ★ Featured · {FEATURED_POST.tags?.[0] || "Update"}
+                        </span>
+                        <div className="text-[80px] md:text-[100px] font-black text-white/[0.04] leading-none tracking-tighter select-none">
+                          01
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4 text-xs text-[#64748B]">
+                        <span className="flex items-center gap-1.5">
+                          <Clock className="w-3.5 h-3.5" />
+                          5 min read
+                        </span>
+                        <span>·</span>
+                        <span>{new Date(FEATURED_POST.created_at).toLocaleDateString()}</span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4 text-xs text-[#64748B]">
-                      <span className="flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5" />
-                        {FEATURED_POST.readTime}
-                      </span>
-                      <span>·</span>
-                      <span>{FEATURED_POST.date}</span>
-                    </div>
-                  </div>
 
-                  {/* Right – content column */}
-                  <div className="flex flex-col justify-center p-10">
-                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-5 leading-tight group-hover:text-white transition-colors">
-                      {FEATURED_POST.title}
-                    </h2>
-                    <p className="text-[#64748B] leading-relaxed mb-8 max-w-xl">
-                      {FEATURED_POST.description}
-                    </p>
-                    <div className="flex items-center gap-2 text-sm font-medium text-white group-hover:gap-3 transition-all">
-                      Read Article
-                      <ArrowUpRight className="w-4 h-4" />
+                    {/* Right – content column */}
+                    <div className="flex flex-col justify-center p-10">
+                      <h2 className="text-3xl md:text-4xl font-bold text-white mb-5 leading-tight group-hover:text-white transition-colors">
+                        {FEATURED_POST.title}
+                      </h2>
+                      <p className="text-[#64748B] leading-relaxed mb-8 max-w-xl">
+                        {FEATURED_POST.excerpt}
+                      </p>
+                      <div className="flex items-center gap-2 text-sm font-medium text-white group-hover:gap-3 transition-all">
+                        Read Article
+                        <ArrowUpRight className="w-4 h-4" />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </Link>
-          </motion.div>
+              </Link>
+            </motion.div>
+          )}
 
           {/* ── MAIN GRID ── */}
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12 xl:gap-20">
@@ -220,44 +191,50 @@ export default function BlogPage() {
 
               {/* Posts */}
               <div className="space-y-0">
-                {filteredPosts.map((post, i) => (
-                  <motion.div
-                    key={post.id}
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: i * 0.06 }}
-                  >
-                    <Link href={`/blog/${post.id}`}>
-                      <div className="group flex items-start gap-6 py-7 border-b border-white/[0.05] hover:bg-white/[0.015] rounded-xl px-3 transition-all duration-300 cursor-pointer">
-                        {/* Large faded number */}
-                        <span className="text-2xl font-black text-white/[0.06] font-mono tabular-nums shrink-0 mt-0.5">
-                          {String(i + 2).padStart(2, "0")}
-                        </span>
+                {loading ? (
+                  <div className="py-12 text-center text-white/40 text-sm">Loading articles...</div>
+                ) : filteredPosts.length === 0 ? (
+                  <div className="py-12 text-center text-white/40 text-sm">No articles found in this category.</div>
+                ) : (
+                  filteredPosts.map((post, i) => (
+                    <motion.div
+                      key={post.id}
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: i * 0.06 }}
+                    >
+                      <Link href={`/blog/${post.slug}`}>
+                        <div className="group flex items-start gap-6 py-7 border-b border-white/[0.05] hover:bg-white/[0.015] rounded-xl px-3 transition-all duration-300 cursor-pointer">
+                          {/* Large faded number */}
+                          <span className="text-2xl font-black text-white/[0.06] font-mono tabular-nums shrink-0 mt-0.5">
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
 
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-3 mb-2.5">
-                            <span
-                              className="text-xs font-bold uppercase tracking-widest"
-                              style={{ color: CATEGORY_COLORS[post.category] ?? "#64748B" }}
-                            >
-                              {post.category}
-                            </span>
-                            <span className="text-[#334155] text-xs">·</span>
-                            <span className="text-[#64748B] text-xs flex items-center gap-1">
-                              <Clock className="w-3 h-3" />
-                              {post.readTime}
-                            </span>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-3 mb-2.5">
+                              <span
+                                className="text-xs font-bold uppercase tracking-widest"
+                                style={{ color: CATEGORY_COLORS[post.tags?.[0] || "Internal"] ?? "#64748B" }}
+                              >
+                                {post.tags?.[0] || "Update"}
+                              </span>
+                              <span className="text-[#334155] text-xs">·</span>
+                              <span className="text-[#64748B] text-xs flex items-center gap-1">
+                                <Clock className="w-3 h-3" />
+                                5 min read
+                              </span>
+                            </div>
+                            <h3 className="text-lg font-semibold text-white/90 group-hover:text-white leading-snug transition-colors">
+                              {post.title}
+                            </h3>
                           </div>
-                          <h3 className="text-lg font-semibold text-white/90 group-hover:text-white leading-snug transition-colors">
-                            {post.title}
-                          </h3>
-                        </div>
 
-                        <ArrowUpRight className="w-4 h-4 text-[#334155] group-hover:text-white opacity-0 group-hover:opacity-100 shrink-0 mt-1 transition-all duration-300" />
-                      </div>
-                    </Link>
-                  </motion.div>
-                ))}
+                          <ArrowUpRight className="w-4 h-4 text-[#334155] group-hover:text-white opacity-0 group-hover:opacity-100 shrink-0 mt-1 transition-all duration-300" />
+                        </div>
+                      </Link>
+                    </motion.div>
+                  ))
+                )}
               </div>
             </div>
 
@@ -305,8 +282,8 @@ export default function BlogPage() {
                   Most Read
                 </p>
                 <div className="space-y-6">
-                  {POSTS.slice(0, 3).map((post, i) => (
-                    <Link key={post.id} href={`/blog/${post.id}`}>
+                  {posts.slice(0, 3).map((post, i) => (
+                    <Link key={post.id} href={`/blog/${post.slug}`}>
                       <div className="group flex gap-4 cursor-pointer py-1">
                         <span className="text-3xl font-black text-white/[0.05] group-hover:text-white/10 transition-colors tabular-nums leading-none mt-1">
                           {String(i + 1).padStart(2, "0")}
@@ -316,7 +293,7 @@ export default function BlogPage() {
                             {post.title}
                           </h4>
                           <span className="text-xs text-[#64748B] mt-1 block">
-                            {post.readTime}
+                            5 min read
                           </span>
                         </div>
                       </div>
