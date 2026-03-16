@@ -24,7 +24,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     async function load() {
       const [c, t, b, p] = await Promise.all([
-        supabase.from("client_profiles").select("id", { count: "exact", head: true }),
+        supabase.from("client_profiles").select("id", { count: "exact", head: true }).eq("role", "client"),
         supabase.from("tickets").select("id", { count: "exact", head: true }).in("status", ["open", "in_progress"]),
         supabase.from("blog_posts").select("id", { count: "exact", head: true }),
         supabase.from("portfolio_items").select("id", { count: "exact", head: true }),

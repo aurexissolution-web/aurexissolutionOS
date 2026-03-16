@@ -55,6 +55,7 @@ export default function ClientCRMPage() {
       const { data: profiles } = await supabase
         .from("client_profiles")
         .select("id, company_name, contact_name, contact_email, contact_phone")
+        .eq("role", "client")
         .order("created_at", { ascending: false });
 
       if (!profiles) return;

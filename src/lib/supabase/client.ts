@@ -17,23 +17,3 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   },
 });
 
-export async function ensureAnonymousSession() {
-  const { data: sessionData, error: sessionError } =
-    await supabase.auth.getSession();
-
-  if (sessionError) throw sessionError;
-  if (sessionData.session) return sessionData.session;
-
-  const { data, error } = await supabase.auth.signInAnonymously();
-  if (error || !data.session) {
-    const msg = error?.message || "Failed to create anonymous session";
-    if (msg.toLowerCase().includes("captcha")) {
-      throw new Error(
-        "Supabase Auth captcha is enabled and is blocking anonymous sign-in. Disable captcha in Supabase Auth settings (or implement captchaToken support)."
-      );
-    }
-    throw new Error(msg);
-  }
-
-  return data.session;
-}

@@ -1,3 +1,4 @@
+import { supabaseAdmin } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 
@@ -27,8 +28,9 @@ type OpenRouterResponse = {
 };
 
 export async function POST(req: Request) {
-  const body = (await req.json().catch(() => null)) as { message?: unknown } | null;
+  const body = (await req.json().catch(() => null)) as { message?: unknown; session_id?: unknown } | null;
   const message = typeof body?.message === "string" ? body.message.trim() : "";
+  const sessionId = typeof body?.session_id === "string" ? body.session_id.trim() : "";
 
   if (!message) {
     return Response.json({ error: "Message is required" }, { status: 400 });
@@ -46,6 +48,20 @@ export async function POST(req: Request) {
   const referer = process.env.OPENROUTER_HTTP_REFERER || "http://localhost:3000";
   const title = process.env.OPENROUTER_APP_TITLE || "Aurexis Architect";
 
+  // Load recent conversation history for context
+  let historyMessages: { role: string; content: string }[] = [];
+  if (sessionId) {
+    const { data: history } = await supabaseAdmin
+      .from("chat_logs")
+      .select("role, content")
+      .eq("session_id", sessionId)
+      .order("created_at", { ascending: true })
+      .limit(20);
+    if (history) {
+      historyMessages = history.map((h) => ({ role: h.role, content: h.content }));
+    }
+  }
+
   const upstream = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
     headers: {
@@ -58,6 +74,7 @@ export async function POST(req: Request) {
       model: model,
       messages: [
         { role: "system", content: CONTEXT_PREAMBLE },
+        ...historyMessages,
         { role: "user", content: message }
       ],
       temperature: 0.3,
@@ -75,6 +92,15 @@ export async function POST(req: Request) {
   }
 
   const answer = json?.choices?.[0]?.message?.content?.trim() ?? "";
+
+  // Persist both messages to chat_logs for learning
+  if (sessionId) {
+    const rows = [
+      { session_id: sessionId, role: "user", content: message },
+      { session_id: sessionId, role: "assistant", content: answer },
+    ];
+    supabaseAdmin.from("chat_logs").insert(rows).then(() => {});
+  }
 
   return Response.json({ answer }, { status: 200 });
 }

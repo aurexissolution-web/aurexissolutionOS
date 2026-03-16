@@ -5,7 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Shield } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
-import { ensureUserProfile, portalRouteForRole } from "@/lib/supabase/profile";
+import { ensureUserProfile, portalRouteForRole, allowedSectionsForRole } from "@/lib/supabase/profile";
+import type { PortalSection } from "@/lib/supabase/profile";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, type FormEvent, Suspense } from "react";
 import { CanvasRevealEffect } from "@/components/ui/canvas-reveal-effect";
@@ -50,6 +51,20 @@ function LoginForm() {
 
     try {
       const profile = await ensureUserProfile(userData.user);
+      const allowed = allowedSectionsForRole(profile.role);
+
+      const requestedSection: PortalSection =
+        redirect.includes("/admin") ? "admin" :
+        redirect.includes("/sales") ? "sales" : "client";
+
+      if (!allowed.includes(requestedSection)) {
+        await supabase.auth.signOut();
+        const roleLabel = profile.role.charAt(0).toUpperCase() + profile.role.slice(1);
+        setError(`This account is registered as ${roleLabel}. Please use the ${roleLabel} Portal login.`);
+        setSubmitting(false);
+        return;
+      }
+
       const destination = portalRouteForRole(profile.role);
       router.push(destination);
       router.refresh();

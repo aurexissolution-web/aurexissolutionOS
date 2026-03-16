@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase/client";
-import { ensureUserProfile, portalRouteForRole, portalSectionForRole } from "@/lib/supabase/profile";
+import { ensureUserProfile, portalRouteForRole, allowedSectionsForRole } from "@/lib/supabase/profile";
+import type { PortalSection } from "@/lib/supabase/profile";
 import type { ClientProfile } from "@/types/portal";
 import {
   LayoutDashboard,
@@ -18,7 +20,7 @@ import {
   Users,
   Link2,
   PenTool,
-  Image,
+  Image as ImageIcon,
   Settings,
   DollarSign,
   TrendingUp,
@@ -32,7 +34,7 @@ import {
 } from "lucide-react";
 import type { LucideProps } from "lucide-react";
 
-type PortalSection = "client" | "admin" | "sales";
+// PortalSection type imported from profile.ts
 type IconComp = React.ComponentType<LucideProps>;
 
 interface NavItem {
@@ -56,7 +58,7 @@ const adminNav: NavItem[] = [
   { label: "Client CRM", href: "/portal/admin/clients", icon: Users },
   { label: "Access Control", href: "/portal/admin/invites", icon: Link2 },
   { label: "Blog Engine", href: "/portal/admin/blog", icon: PenTool },
-  { label: "Portfolio", href: "/portal/admin/portfolio", icon: Image },
+  { label: "Portfolio", href: "/portal/admin/portfolio", icon: ImageIcon },
   { label: "Project Control", href: "/portal/admin/projects", icon: Settings },
 ];
 
@@ -79,7 +81,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
-  const [userRole, setUserRole] = useState<PortalSection | null>(null);
+  const [allowedSections, setAllowedSections] = useState<PortalSection[]>([]);
   const [profile, setProfile] = useState<ClientProfile | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
 
@@ -105,10 +107,14 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         if (cancelled) return;
         setProfile(ensured);
         setUserEmail(ensured.contact_email || data.user.email || null);
-        const allowedSection = portalSectionForRole(ensured.role);
-        setUserRole(allowedSection);
+        const allowed = allowedSectionsForRole(ensured.role);
+        setAllowedSections(allowed);
 
-        if (!pathname.startsWith(`/portal/${allowedSection}`)) {
+        const sectionFromPath: PortalSection =
+          pathname.startsWith("/portal/admin") ? "admin" :
+          pathname.startsWith("/portal/sales") ? "sales" : "client";
+
+        if (!allowed.includes(sectionFromPath)) {
           router.replace(portalRouteForRole(ensured.role));
           return;
         }
@@ -160,11 +166,11 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         {/* Logo */}
         <div className="px-5 pt-6 pb-5">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
-              <span className="text-black font-bold text-sm">A</span>
+            <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
+              <Image src="/logo.svg" alt="Aurexis logo" width={20} height={20} className="object-contain" />
             </div>
             <div>
-              <span className="text-white font-semibold text-[14px] tracking-tight block leading-tight">Aurexis</span>
+              <span className="text-white font-semibold text-[14px] tracking-tight block leading-tight">AurexisOS</span>
               <span className="text-white/30 text-[10px] font-medium uppercase tracking-[0.15em]">Operating System</span>
             </div>
           </Link>
@@ -181,7 +187,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
               <ChevronDown className="w-3.5 h-3.5 text-white/30" />
             </button>
             <div className="absolute top-full left-0 right-0 mt-1.5 bg-[#111113] border border-white/[0.08] rounded-xl overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 shadow-[0_16px_48px_rgba(0,0,0,0.5)]">
-              {sections.map((s) => (
+              {sections.filter((s) => allowedSections.includes(s.key)).map((s) => (
                 <Link
                   key={s.key}
                   href={s.nav[0].href}

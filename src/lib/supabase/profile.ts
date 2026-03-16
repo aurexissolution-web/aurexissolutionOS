@@ -27,10 +27,18 @@ export function determineRoleFromEmail(email?: string | null): UserRole {
   return "client";
 }
 
-export function portalSectionForRole(role: UserRole): "client" | "admin" | "sales" {
+export type PortalSection = "client" | "admin" | "sales";
+
+export function portalSectionForRole(role: UserRole): PortalSection {
   if (role === "admin") return "admin";
   if (role === "sales") return "sales";
   return "client";
+}
+
+export function allowedSectionsForRole(role: UserRole): PortalSection[] {
+  if (role === "admin") return ["admin", "sales"];
+  if (role === "sales") return ["sales"];
+  return ["client"];
 }
 
 export function portalRouteForRole(role: UserRole): string {

@@ -29,6 +29,20 @@ type ChatMessage = {
 };
 
 const MESSAGES_STORAGE_KEY = "aurexis_chat_messages";
+const SESSION_ID_KEY = "aurexis_chat_session_id";
+
+function getSessionId(): string {
+  try {
+    let id = globalThis.localStorage?.getItem(SESSION_ID_KEY);
+    if (!id) {
+      id = crypto.randomUUID();
+      globalThis.localStorage?.setItem(SESSION_ID_KEY, id);
+    }
+    return id;
+  } catch {
+    return crypto.randomUUID();
+  }
+}
 
 function loadMessages(): ChatMessage[] {
   try {
@@ -201,6 +215,7 @@ const ChatPanel = React.forwardRef<
 
   const clearConversation = React.useCallback(() => {
     globalThis.localStorage?.removeItem(MESSAGES_STORAGE_KEY);
+    globalThis.localStorage?.removeItem(SESSION_ID_KEY);
     setMessages([]);
     setError(null);
     setStatus("idle");
@@ -273,7 +288,7 @@ const ChatPanel = React.forwardRef<
       const res = await fetch("/api/ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text }),
+        body: JSON.stringify({ message: text, session_id: getSessionId() }),
       });
 
       const data = (await res.json().catch(() => null)) as
