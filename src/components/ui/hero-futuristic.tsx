@@ -168,9 +168,9 @@ const Scene = () => {
 };
 
 export const AboutHero = () => {
-  const titleWords = "We Don't Just Build.".split(' ');
-  const accentWords = 'We Automate.'.split(' ');
-  const subtitle = 'The intelligence behind your growth — AI agents, web platforms, and data-driven systems.';
+  const titleWords = "WE HATE INEFFICIENCY.".split(' ');
+  const accentWords = 'WE ENGINEER AUTONOMY.'.split(' ');
+  const subtitle = 'Most agencies just write code. We architect specialized AI, web, and app ecosystems designed to eliminate manual bottlenecks and scale your revenue.';
 
   const [visibleWords, setVisibleWords] = useState(0);
   const totalWords = titleWords.length + accentWords.length;
@@ -209,7 +209,7 @@ export const AboutHero = () => {
 
       {/* Text overlay */}
       <div className="h-svh uppercase items-center w-full absolute z-30 pointer-events-none px-10 flex justify-center flex-col bg-[radial-gradient(ellipse_at_center,_rgba(2,4,10,0.85)_0%,_rgba(2,4,10,0.4)_40%,_transparent_75%)]">
-        <div className="text-3xl md:text-5xl xl:text-6xl 2xl:text-7xl font-extrabold leading-tight">
+        <div className="text-2xl md:text-4xl xl:text-5xl 2xl:text-6xl font-extrabold leading-tight">
           <div className="flex flex-wrap gap-x-3 lg:gap-x-5 gap-y-1 overflow-hidden">
             {allWords.map(({ word, accent }, index) => (
               <span

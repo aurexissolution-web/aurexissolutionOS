@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { NeonButton } from "@/components/ui/NeonButton";
-import { Link2, Copy, CheckCircle2, Clock, XCircle, Send } from "lucide-react";
+import { Link2, Copy, CheckCircle2, Clock, XCircle, Send, Trash2 } from "lucide-react";
 import type { UserRole } from "@/types/portal";
 import { supabase } from "@/lib/supabase/client";
 
@@ -37,6 +37,7 @@ export default function InvitesPage() {
   const [loadingInvites, setLoadingInvites] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const loadInvites = useCallback(async () => {
     setLoadingInvites(true);
@@ -95,6 +96,23 @@ export default function InvitesPage() {
     navigator.clipboard.writeText(generatedLink);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  }
+
+  async function handleDelete(inviteId: string) {
+    setFormError(null);
+    setDeletingId(inviteId);
+    const { error } = await supabase.from("invite_links").delete().eq("id", inviteId);
+
+    if (error) {
+      const readable = error.message.toLowerCase().includes("permission")
+        ? "You do not have permission to delete invite links."
+        : error.message;
+      setFormError(readable);
+    } else {
+      await loadInvites();
+    }
+
+    setDeletingId(null);
   }
 
   return (
@@ -202,11 +220,25 @@ export default function InvitesPage() {
                       <span className="text-xs text-[#64748B] font-mono">{inv.token.slice(0, 12)}...</span>
                     </div>
                   </div>
-                  <div className="text-right shrink-0">
-                    <p className="text-xs" style={{ color: inv.used ? "#10B981" : "#F59E0B" }}>
-                      {inv.used ? "Used" : "Pending"}
-                    </p>
-                    <p className="text-[10px] text-[#64748B]">Expires {inv.expires_at}</p>
+                  <div className="text-right shrink-0 flex flex-col items-end gap-2">
+                    <div className="flex items-center gap-2">
+                      <div>
+                        <p className="text-xs" style={{ color: inv.used ? "#10B981" : "#F59E0B" }}>
+                          {inv.used ? "Used" : "Pending"}
+                        </p>
+                        <p className="text-[10px] text-[#64748B]">Expires {inv.expires_at}</p>
+                      </div>
+                      {!inv.used && (
+                        <button
+                          onClick={() => handleDelete(inv.id)}
+                          disabled={deletingId === inv.id}
+                          className="p-2 rounded-lg border border-white/10 text-white/70 hover:border-red-400/50 hover:text-red-300 transition-colors disabled:opacity-50"
+                          aria-label={`Remove invite for ${inv.email}`}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </GlassCard>
               </motion.div>
