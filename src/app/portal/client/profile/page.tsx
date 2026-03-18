@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { NeonButton } from "@/components/ui/NeonButton";
-import { User, Building2, Mail, Phone, MapPin, CreditCard, Save, CheckCircle2 } from "lucide-react";
+import { User, Building2, Mail, Phone, MapPin, CreditCard, Save, CheckCircle2, Camera } from "lucide-react";
+import Image from "next/image";
 import { supabase } from "@/lib/supabase/client";
 import { useProfile } from "@/lib/supabase/hooks";
 
@@ -15,6 +16,7 @@ interface ProfileForm {
   contact_phone: string;
   billing_address: string;
   billing_preferences: string;
+  avatar_url: string;
 }
 
 const inputClass =
@@ -23,6 +25,7 @@ const inputClass =
 export default function ClientProfilePage() {
   const { profile, loading } = useProfile();
   const [saved, setSaved] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [form, setForm] = useState<ProfileForm>({
     company_name: "",
     contact_name: "",
@@ -30,6 +33,7 @@ export default function ClientProfilePage() {
     contact_phone: "",
     billing_address: "",
     billing_preferences: "",
+    avatar_url: "",
   });
 
   useEffect(() => {
@@ -41,9 +45,38 @@ export default function ClientProfilePage() {
         contact_phone: profile.contact_phone || "",
         billing_address: profile.billing_address || "",
         billing_preferences: profile.billing_preferences || "",
+        avatar_url: profile.avatar_url || "",
       });
     }
   }, [profile]);
+
+  async function handleAvatarUpload(file: File) {
+    if (!profile) return;
+    setUploading(true);
+    const ext = file.name.split(".").pop();
+    const path = `avatars/${profile.id}.${ext}`;
+
+    const { error: uploadErr } = await supabase.storage
+      .from("avatars")
+      .upload(path, file, { upsert: true });
+
+    if (uploadErr) {
+      // Try creating the bucket if it doesn't exist
+      await supabase.storage.createBucket("avatars", { public: true });
+      await supabase.storage.from("avatars").upload(path, file, { upsert: true });
+    }
+
+    const { data: urlData } = supabase.storage.from("avatars").getPublicUrl(path);
+    const avatarUrl = urlData.publicUrl + "?t=" + Date.now();
+
+    await supabase
+      .from("client_profiles")
+      .update({ avatar_url: avatarUrl, updated_at: new Date().toISOString() })
+      .eq("id", profile.id);
+
+    setForm((prev) => ({ ...prev, avatar_url: avatarUrl }));
+    setUploading(false);
+  }
 
   function update(key: keyof ProfileForm, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -51,9 +84,10 @@ export default function ClientProfilePage() {
 
   async function handleSave() {
     if (!profile) return;
+    const { avatar_url: _avatar, ...formWithoutAvatar } = form;
     await supabase
       .from("client_profiles")
-      .update({ ...form, updated_at: new Date().toISOString() })
+      .update({ ...formWithoutAvatar, updated_at: new Date().toISOString() })
       .eq("id", profile.id);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
@@ -73,6 +107,39 @@ export default function ClientProfilePage() {
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
         <GlassCard>
           <div className="space-y-6">
+            {/* Profile Picture */}
+            <div className="flex flex-col items-center gap-3 pb-4 border-b border-white/5">
+              <label className="relative cursor-pointer group">
+                <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-white/10 group-hover:border-[#00F0FF]/50 transition-colors bg-white/5 flex items-center justify-center">
+                  {form.avatar_url ? (
+                    <Image
+                      src={form.avatar_url}
+                      alt="Profile"
+                      width={96}
+                      height={96}
+                      className="w-full h-full object-cover"
+                      unoptimized
+                    />
+                  ) : (
+                    <User className="w-10 h-10 text-white/20" />
+                  )}
+                </div>
+                <div className="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <Camera className="w-5 h-5 text-white" />
+                </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleAvatarUpload(file);
+                  }}
+                />
+              </label>
+              <p className="text-xs text-[#64748B]">{uploading ? "Uploading..." : "Click to change photo"}</p>
+            </div>
+
             {/* Company */}
             <div>
               <label className="flex items-center gap-2 text-sm font-medium text-[#94A3B8] mb-2">
