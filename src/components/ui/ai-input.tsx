@@ -146,7 +146,7 @@ function DockButton() {
     <motion.button
       type="button"
       onClick={triggerOpen}
-      className="group relative flex h-full w-full items-center justify-center outline-none bg-gradient-to-br from-[#00F0FF]/10 to-[#0047FF]/10"
+      className="group relative flex h-full w-full items-center justify-center outline-none bg-gradient-to-br from-[#00F0FF]/10 to-[#0047FF]/10 overflow-hidden"
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
@@ -155,9 +155,13 @@ function DockButton() {
       whileTap={{ scale: 0.95 }}
       aria-label="Open Aurexis AI chat"
     >
-      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#00F0FF]/20 to-[#0047FF]/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100 blur-md" />
+      <motion.div 
+        className="absolute inset-0 rounded-full bg-gradient-to-br from-[#00F0FF]/30 to-[#0047FF]/30 blur-md"
+        animate={{ opacity: [0.3, 0.7, 0.3], scale: [0.9, 1.1, 0.9] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      />
       <div className="absolute inset-0 rounded-full bg-white/[0.02]" />
-      <Sparkles className="size-5 text-[#00F0FF] transition-colors duration-300 group-hover:text-white relative z-10" />
+      <Sparkles className="size-5 text-[#00F0FF] transition-colors duration-300 group-hover:text-white relative z-10 drop-shadow-[0_0_8px_rgba(0,240,255,0.8)]" />
     </motion.button>
   );
 }
