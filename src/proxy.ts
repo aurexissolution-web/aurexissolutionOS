@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 const PROTECTED_PATHS = ["/portal"];
 const AUTH_PAGES = ["/login"];
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   const isProtected = PROTECTED_PATHS.some((p) => pathname.startsWith(p));
