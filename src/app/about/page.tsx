@@ -18,37 +18,37 @@ import { LocationSection } from "@/components/sections/LocationSection";
 import { Target, Zap, Shield, Cpu, Smartphone, User, Rocket, Layers } from "lucide-react";
 
 const focusThreads = [
-  "Clear Intelligence",
-  "Smooth Workflows",
-  "Future Insight",
+  "01 The Mission",
+  "02 The Vision",
+  "03 The Goals",
 ];
 
 const visionCards = [
   {
     id: "mission",
-    eyebrow: "Mission",
-    title: "Smarter Insights at Every Step",
+    eyebrow: "— W H Y  W E  E X I S T",
+    title: "To architect autonomous growth.",
     description:
-      "We architect autonomous systems that turn scattered operations into a live command center so teams can steer with certainty, not guesswork.",
-    points: ["Telemetry-rich dashboards", "Embedded AI copilots"],
+      "Our mission is to strip away operational noise. We exist to transform traditional businesses into high-speed, AI-driven ecosystems. We build the specialized infrastructure that allows companies to scale their revenue aggressively without infinitely scaling their headcount.",
+    points: ["Eliminate friction", "Engineer autonomy"],
     accent: "from-[#00F0FF]/20 via-transparent to-[#0047FF]/5",
   },
   {
     id: "vision",
-    eyebrow: "Vision",
-    title: "Automate Work Without the Chaos",
+    eyebrow: "— W H E R E  W E  A R E  G O I N G",
+    title: "A digital landscape without limits.",
     description:
-      "Aurexis keeps every process humming end-to-end, translating messy workflows into seamless automations that scale across products, teams, and regions.",
-    points: ["System orchestration", "Zero busywork pipelines"],
+      "We envision a future where manual workflows are entirely obsolete. Aurexis Solution aims to be the premier technical partner in Kuala Lumpur and beyond, setting the absolute gold standard for how enterprise AI, web architecture, and mobile platforms operate as a single, unified brain.",
+    points: ["The new standard", "Unified ecosystems"],
     accent: "from-[#0047FF]/20 via-[#09090B] to-transparent",
   },
   {
     id: "goals",
-    eyebrow: "Goals",
-    title: "Predict What's Next Before It Happens",
+    eyebrow: "— H O W  W E  M E A S U R E  I T",
+    title: "Relentless, measurable dominance.",
     description:
-      "We engineer forecasting loops so you see risks, demand, and opportunity arcs before they arrive—acting with future-ready confidence.",
-    points: ["Proactive intelligence", "Always-on experimentation"],
+      "Our primary goal is to deploy custom engineering that guarantees undeniable, measurable ROI for our partners. Internally, we are driven by aggressive expansion—scaling our own operations, refining our proprietary tech stacks, and pushing the boundaries of what specialized AI can achieve.",
+    points: ["Measurable ROI", "Continuous expansion"],
     accent: "from-white/10 via-transparent to-[#00F0FF]/10",
   },
 ];
@@ -293,15 +293,15 @@ export default function AboutPage() {
                 </h2>
                 <h3 className="text-4xl md:text-5xl font-bold text-white mb-8">
                   Built for the Future. <br/>
-                  <span className="text-[#94A3B8]">Operating in KL.</span>
+                  <span className="text-[#94A3B8]">Engineered for Scale.</span>
                 </h3>
                 
                 <div className="space-y-6 text-[#94A3B8] text-lg leading-relaxed mb-10">
                   <p>
-                    <strong className="text-white">The Story:</strong> I started Aurexis Solution with a clear vision: to bridge the gap between abstract AI concepts and tangible, automated business outcomes. We are strategically relocating to the heart of Malaysia's tech hub, <strong>Kuala Lumpur</strong>, to better serve our growing portfolio of innovators and scale alongside the fastest-growing market in SE Asia.
+                    <strong className="text-white">The Story:</strong> I started Aurexis Solution with a singular vision: to bridge the gap between abstract AI concepts and tangible, automated business outcomes. Traditional agencies focus on isolated deliverables; we focus on unified ecosystems. We exist to architect the underlying digital infrastructure that allows forward-thinking innovators to scale their revenue aggressively without infinitely scaling their headcount.
                   </p>
                   <p>
-                    <strong className="text-white">The Expertise:</strong> As CTO, I don't just manage projects; I architect them. I believe that true innovation requires deep technical expertise. When you work with us, you're partnering with leadership that understands the code, the infrastructure, and the exact mechanics of how to scale your vision.
+                    <strong className="text-white">The Expertise:</strong> As Founder & CTO, I don't just manage projects; I architect them. True innovation requires deep, hands-on technical expertise. When you partner with Aurexis, you are working directly with leadership that understands the code, the modern tech stack, and the exact mechanical workflows required to bring your vision to life.
                   </p>
                 </div>
                 

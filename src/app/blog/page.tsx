@@ -100,7 +100,7 @@ export default function BlogPage() {
               transition={{ duration: 0.7, delay: 0.1 }}
               className="mb-16"
             >
-              <Link href={`/blog/${FEATURED_POST.id}`}>
+              <Link href={`/blog/${FEATURED_POST.slug}`}>
                 <div className="group relative rounded-3xl overflow-hidden border border-white/[0.07] bg-white/[0.01] hover:border-white/[0.14] transition-all duration-500 cursor-pointer">
                   {/* Top accent line */}
                   <div

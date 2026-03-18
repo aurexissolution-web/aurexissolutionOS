@@ -37,6 +37,7 @@ export default function PortfolioPage() {
   const [items, setItems] = useState<PortfolioItemData[]>([]);
   const [showEditor, setShowEditor] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -44,6 +45,7 @@ export default function PortfolioPage() {
     tech_tags: "",
     client_name: "",
     live_url: "",
+    images: [] as string[],
   });
 
   const loadItems = useCallback(async () => {
@@ -60,7 +62,7 @@ export default function PortfolioPage() {
 
   function openNew() {
     setEditingId(null);
-    setForm({ title: "", description: "", case_study: "", tech_tags: "", client_name: "", live_url: "" });
+    setForm({ title: "", description: "", case_study: "", tech_tags: "", client_name: "", live_url: "", images: [] });
     setShowEditor(true);
   }
 
@@ -73,6 +75,7 @@ export default function PortfolioPage() {
       tech_tags: item.tech_tags.join(", "),
       client_name: item.client_name || "",
       live_url: item.live_url || "",
+      images: item.images || [],
     });
     setShowEditor(true);
   }
@@ -87,6 +90,7 @@ export default function PortfolioPage() {
       tech_tags: form.tech_tags.split(",").map((t) => t.trim()).filter(Boolean),
       client_name: form.client_name || null,
       live_url: form.live_url || null,
+      images: form.images,
     };
 
     if (editingId) {
@@ -101,6 +105,37 @@ export default function PortfolioPage() {
   async function handleDelete(id: string) {
     await supabase.from("portfolio_items").delete().eq("id", id);
     loadItems();
+  }
+
+  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+
+      const { error } = await supabase.storage.from("portfolio-images").upload(fileName, file);
+
+      if (error) throw error;
+
+      const { data: publicUrlData } = supabase.storage.from("portfolio-images").getPublicUrl(fileName);
+
+      setForm((prev) => ({
+        ...prev,
+        images: [...prev.images, publicUrlData.publicUrl],
+      }));
+    } catch (err: any) {
+      console.error("Upload error:", err);
+      alert("Failed to upload image: " + err.message);
+    } finally {
+      setIsUploading(false);
+    }
+  }
+
+  function removeImage(index: number) {
+    setForm((prev) => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }));
   }
 
   return (
@@ -174,10 +209,28 @@ export default function PortfolioPage() {
                   {/* Image upload placeholder */}
                   <div>
                     <label className="block text-sm font-medium text-[#94A3B8] mb-2">Project Images</label>
-                    <div className="border-2 border-dashed border-white/10 rounded-lg p-8 text-center hover:border-[#00F0FF]/30 transition-colors cursor-pointer">
-                      <Upload className="w-8 h-8 text-[#64748B] mx-auto mb-2" />
-                      <p className="text-xs text-[#64748B]">Click or drag to upload high-res images</p>
-                      <p className="text-[10px] text-[#64748B] mt-1">Requires Supabase Storage bucket configuration</p>
+                    {form.images.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        {form.images.map((url, idx) => (
+                          <div key={idx} className="relative w-20 h-20 rounded-md border border-white/10 overflow-hidden group">
+                            <img src={url} alt={`Upload ${idx}`} className="w-full h-full object-cover" />
+                            <button type="button" onClick={() => removeImage(idx)} className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Trash2 className="w-4 h-4 text-red-400" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <div className="relative border-2 border-dashed border-white/10 rounded-lg p-8 text-center hover:border-[#00F0FF]/30 transition-colors cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileUpload}
+                        disabled={isUploading}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+                      />
+                      <Upload className={`w-8 h-8 mx-auto mb-2 ${isUploading ? "text-[#00F0FF] animate-pulse" : "text-[#64748B]"}`} />
+                      <p className="text-xs text-[#64748B]">{isUploading ? "Uploading..." : "Click or drag to upload high-res images"}</p>
                     </div>
                   </div>
 
@@ -196,17 +249,16 @@ export default function PortfolioPage() {
 
       {/* Portfolio grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {items.map((item, i) => (
-          <motion.div
-            key={item.id}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 + i * 0.05 }}
-          >
+        {items.map((item) => (
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} key={item.id}>
             <GlassCard hoverEffect className="!p-5">
               {/* Image placeholder */}
-              <div className="w-full h-36 rounded-lg bg-gradient-to-br from-[#0047FF]/10 to-[#8B5CF6]/10 border border-white/5 flex items-center justify-center mb-4">
-                <ImageIcon className="w-8 h-8 text-[#64748B]" />
+              <div className="w-full h-36 rounded-lg bg-gradient-to-br from-[#0047FF]/10 to-[#8B5CF6]/10 border border-white/5 flex items-center justify-center mb-4 overflow-hidden">
+                {item.images && item.images.length > 0 ? (
+                  <img src={item.images[0]} alt={item.title} className="w-full h-full object-cover" />
+                ) : (
+                  <ImageIcon className="w-8 h-8 text-[#64748B]" />
+                )}
               </div>
 
               <h3 className="text-sm font-bold text-white mb-1">{item.title}</h3>
@@ -223,7 +275,7 @@ export default function PortfolioPage() {
               <div className="flex items-center justify-between">
                 <div className="text-xs text-[#64748B]">
                   {item.client_name && <span>{item.client_name} • </span>}
-                  {item.created_at}
+                  {new Date(item.created_at).toLocaleDateString()}
                 </div>
                 <div className="flex items-center gap-1">
                   {item.live_url && (

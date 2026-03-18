@@ -16,6 +16,8 @@ import {
   CheckCircle2,
   Calendar,
   Tag,
+  Upload,
+  Image as ImageIcon,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 
@@ -27,6 +29,7 @@ interface BlogPostItem {
   content: string;
   tags: string[];
   published: boolean;
+  cover_image: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -38,6 +41,7 @@ export default function BlogEnginePage() {
   const [posts, setPosts] = useState<BlogPostItem[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showEditor, setShowEditor] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [editorForm, setEditorForm] = useState({
     title: "",
     slug: "",
@@ -45,12 +49,13 @@ export default function BlogEnginePage() {
     content: "",
     tags: "",
     published: false,
+    cover_image: "",
   });
 
   const loadPosts = useCallback(async () => {
     const { data } = await supabase
       .from("blog_posts")
-      .select("id, title, slug, excerpt, content, tags, published, created_at, updated_at")
+      .select("id, title, slug, excerpt, content, tags, published, cover_image, created_at, updated_at")
       .order("created_at", { ascending: false });
     if (data) setPosts(data as BlogPostItem[]);
   }, []);
@@ -61,7 +66,7 @@ export default function BlogEnginePage() {
 
   function openNew() {
     setEditingId(null);
-    setEditorForm({ title: "", slug: "", excerpt: "", content: "", tags: "", published: false });
+    setEditorForm({ title: "", slug: "", excerpt: "", content: "", tags: "", published: false, cover_image: "" });
     setShowEditor(true);
   }
 
@@ -74,6 +79,7 @@ export default function BlogEnginePage() {
       content: post.content || "",
       tags: post.tags.join(", "),
       published: post.published,
+      cover_image: post.cover_image || "",
     });
     setShowEditor(true);
   }
@@ -86,6 +92,7 @@ export default function BlogEnginePage() {
       content: editorForm.content,
       tags: editorForm.tags.split(",").map((t) => t.trim()).filter(Boolean),
       published: editorForm.published,
+      cover_image: editorForm.cover_image || null,
       updated_at: new Date().toISOString(),
     };
 
@@ -108,6 +115,37 @@ export default function BlogEnginePage() {
     if (!post) return;
     await supabase.from("blog_posts").update({ published: !post.published }).eq("id", id);
     loadPosts();
+  }
+
+  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+
+      const { error } = await supabase.storage.from("blog-images").upload(fileName, file);
+
+      if (error) throw error;
+
+      const { data: publicUrlData } = supabase.storage.from("blog-images").getPublicUrl(fileName);
+
+      setEditorForm((prev) => ({
+        ...prev,
+        cover_image: publicUrlData.publicUrl,
+      }));
+    } catch (err: any) {
+      console.error("Upload error:", err);
+      alert("Failed to upload image: " + err.message);
+    } finally {
+      setIsUploading(false);
+    }
+  }
+
+  function removeImage() {
+    setEditorForm((prev) => ({ ...prev, cover_image: "" }));
   }
 
   return (
@@ -185,7 +223,7 @@ export default function BlogEnginePage() {
                   <div>
                     <label className="block text-sm font-medium text-[#94A3B8] mb-2">Content (Markdown)</label>
                     <textarea
-                      rows={8}
+                      rows={6}
                       className={inputClass + " resize-none font-mono text-xs"}
                       placeholder="Write your article in Markdown..."
                       value={editorForm.content}
@@ -201,6 +239,31 @@ export default function BlogEnginePage() {
                       value={editorForm.tags}
                       onChange={(e) => setEditorForm({ ...editorForm, tags: e.target.value })}
                     />
+                  </div>
+
+                  {/* Cover Image Upload */}
+                  <div>
+                    <label className="block text-sm font-medium text-[#94A3B8] mb-2">Cover Image</label>
+                    {editorForm.cover_image ? (
+                      <div className="relative w-full h-40 rounded-lg border border-white/10 overflow-hidden group mb-3">
+                        <img src={editorForm.cover_image} alt="Cover" className="w-full h-full object-cover" />
+                        <button type="button" onClick={removeImage} className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Trash2 className="w-6 h-6 text-red-400" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="relative border-2 border-dashed border-white/10 rounded-lg p-8 text-center hover:border-[#00F0FF]/30 transition-colors cursor-pointer">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileUpload}
+                          disabled={isUploading}
+                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+                        />
+                        <Upload className={`w-8 h-8 mx-auto mb-2 ${isUploading ? "text-[#00F0FF] animate-pulse" : "text-[#64748B]"}`} />
+                        <p className="text-xs text-[#64748B]">{isUploading ? "Uploading..." : "Click or drag to upload cover image"}</p>
+                      </div>
+                    )}
                   </div>
 
                   <label className="flex items-center gap-2 cursor-pointer">
