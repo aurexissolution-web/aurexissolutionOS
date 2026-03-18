@@ -2,7 +2,6 @@
 
 import { ServiceData } from "@/data/services";
 import Cal, { getCalApi } from "@calcom/embed-react";
-import Image from "next/image";
 import { SectionBadge } from "@/components/ui/section-badge";
 import { useEffect } from "react";
 
@@ -49,17 +48,19 @@ export function ServiceConversion({ data }: ServiceConversionProps) {
           </p>
 
           <div className="flex items-center gap-6">
+            {/* eslint-disable @next/next/no-img-element */}
             <div className="flex -space-x-3">
-              <div className="w-10 h-10 rounded-full border-2 border-[#02040A] bg-zinc-800 overflow-hidden relative">
-                <Image src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aurexis1" alt="Avatar 1" fill className="object-cover" />
+              <div className="w-10 h-10 rounded-full border-2 border-[#02040A] bg-zinc-800 overflow-hidden">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aurexis1" alt="Avatar 1" className="w-full h-full object-cover" />
               </div>
-              <div className="w-10 h-10 rounded-full border-2 border-[#02040A] bg-zinc-800 overflow-hidden relative">
-                <Image src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aurexis2" alt="Avatar 2" fill className="object-cover" />
+              <div className="w-10 h-10 rounded-full border-2 border-[#02040A] bg-zinc-800 overflow-hidden">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aurexis2" alt="Avatar 2" className="w-full h-full object-cover" />
               </div>
-              <div className="w-10 h-10 rounded-full border-2 border-[#02040A] bg-zinc-800 overflow-hidden relative">
-                <Image src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aurexis3" alt="Avatar 3" fill className="object-cover" />
+              <div className="w-10 h-10 rounded-full border-2 border-[#02040A] bg-zinc-800 overflow-hidden">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aurexis3" alt="Avatar 3" className="w-full h-full object-cover" />
               </div>
             </div>
+            {/* eslint-enable @next/next/no-img-element */}
             <div className="text-sm text-[#9ca3af]">
               Join <strong className="text-white font-medium">50+</strong> technical founders.
             </div>
