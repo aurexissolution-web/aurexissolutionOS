@@ -155,9 +155,9 @@ export function Footer() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 py-5 border-t border-white/[0.05] text-[12px] text-neutral-600">
           <span>© {new Date().getFullYear()} Aurexis Solution. All rights reserved.</span>
           <div className="flex gap-5">
-            <Link href="/privacy" className="hover:text-neutral-400 transition-colors">Privacy Policy</Link>
-            <Link href="/terms"   className="hover:text-neutral-400 transition-colors">Terms of Service</Link>
-            <Link href="/contact" className="hover:text-neutral-400 transition-colors">Cookie Settings</Link>
+            <Link href="/privacy-policy" className="hover:text-neutral-400 transition-colors">Privacy Policy</Link>
+            <Link href="/terms-of-service" className="hover:text-neutral-400 transition-colors">Terms of Service</Link>
+            <Link href="/cookie-policy" className="hover:text-neutral-400 transition-colors">Cookie Policy</Link>
           </div>
         </div>
 

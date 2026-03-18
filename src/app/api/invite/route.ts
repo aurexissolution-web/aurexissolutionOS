@@ -37,6 +37,14 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: "Missing token or password" }, { status: 400 });
   }
 
+  if (typeof password !== "string" || password.length < 8) {
+    return Response.json({ error: "Password must be at least 8 characters" }, { status: 400 });
+  }
+
+  if (typeof token !== "string" || !/^[a-zA-Z0-9_-]+$/.test(token)) {
+    return Response.json({ error: "Invalid token format" }, { status: 400 });
+  }
+
   // Validate token
   const { data: invite, error: inviteError } = await supabaseAdmin
     .from("invite_links")

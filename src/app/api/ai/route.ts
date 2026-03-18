@@ -2,6 +2,24 @@ import { supabaseAdmin } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 
+// Simple in-memory rate limiter (per IP, 10 requests per minute)
+const rateMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT = 10;
+const RATE_WINDOW_MS = 60_000;
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateMap.get(ip);
+  if (!entry || now > entry.resetAt) {
+    rateMap.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS });
+    return false;
+  }
+  entry.count++;
+  return entry.count > RATE_LIMIT;
+}
+
+const MAX_MESSAGE_LENGTH = 1000;
+
 const CONTEXT_PREAMBLE = `
 You are the Aurexis Architect (Aurexis Solution). Answer questions about Aurexis, its services, and process. Be professional, concise, and action-oriented.
 
@@ -28,6 +46,12 @@ type OpenRouterResponse = {
 };
 
 export async function POST(req: Request) {
+  // Rate limiting by IP
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  if (isRateLimited(ip)) {
+    return Response.json({ error: "Too many requests. Please wait a moment." }, { status: 429 });
+  }
+
   const body = (await req.json().catch(() => null)) as { message?: unknown; session_id?: unknown } | null;
   const message = typeof body?.message === "string" ? body.message.trim() : "";
   const sessionId = typeof body?.session_id === "string" ? body.session_id.trim() : "";
@@ -36,11 +60,19 @@ export async function POST(req: Request) {
     return Response.json({ error: "Message is required" }, { status: 400 });
   }
 
+  if (message.length > MAX_MESSAGE_LENGTH) {
+    return Response.json({ error: `Message too long (max ${MAX_MESSAGE_LENGTH} characters)` }, { status: 400 });
+  }
+
+  if (sessionId && !/^[a-zA-Z0-9_-]{1,64}$/.test(sessionId)) {
+    return Response.json({ error: "Invalid session ID" }, { status: 400 });
+  }
+
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
     return Response.json(
-      { error: "OPENROUTER_API_KEY is not set" },
-      { status: 501 }
+      { error: "AI service is not configured" },
+      { status: 503 }
     );
   }
 

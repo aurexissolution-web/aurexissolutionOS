@@ -1,6 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
+import crypto from "crypto";
 
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
+
+function verifyStripeSignature(payload: string, sigHeader: string, secret: string): boolean {
+  try {
+    const parts = sigHeader.split(",").reduce((acc, part) => {
+      const [key, value] = part.split("=");
+      acc[key.trim()] = value;
+      return acc;
+    }, {} as Record<string, string>);
+
+    const timestamp = parts["t"];
+    const signature = parts["v1"];
+    if (!timestamp || !signature) return false;
+
+    // Reject if timestamp is more than 5 minutes old
+    const tolerance = 300;
+    const timestampSec = parseInt(timestamp, 10);
+    if (Math.abs(Date.now() / 1000 - timestampSec) > tolerance) return false;
+
+    const signedPayload = `${timestamp}.${payload}`;
+    const expectedSignature = crypto
+      .createHmac("sha256", secret)
+      .update(signedPayload)
+      .digest("hex");
+
+    return crypto.timingSafeEqual(
+      Buffer.from(signature),
+      Buffer.from(expectedSignature)
+    );
+  } catch {
+    return false;
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,11 +42,17 @@ export async function POST(request: NextRequest) {
 
     if (!STRIPE_WEBHOOK_SECRET) {
       console.warn("Stripe webhook secret not configured");
-      return NextResponse.json({ received: true, warning: "No webhook secret configured" });
+      return NextResponse.json({ error: "Webhook not configured" }, { status: 503 });
     }
 
-    // For production, verify the signature using Stripe SDK
-    // For now, we parse the event and process it
+    if (!signature) {
+      return NextResponse.json({ error: "Missing signature" }, { status: 400 });
+    }
+
+    if (!verifyStripeSignature(body, signature, STRIPE_WEBHOOK_SECRET)) {
+      return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
+    }
+
     let event;
     try {
       event = JSON.parse(body);

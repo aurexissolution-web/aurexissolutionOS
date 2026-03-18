@@ -1,5 +1,6 @@
 import { supabaseAdmin } from "@/lib/supabase/server";
-import { NextResponse } from "next/server";
+import { verifyAdmin } from "@/lib/auth/verify";
+import { NextRequest, NextResponse } from "next/server";
 
 const BUCKETS = [
   "avatars",
@@ -8,7 +9,11 @@ const BUCKETS = [
   "blog-images",
 ];
 
-export async function POST() {
+export async function POST(req: NextRequest) {
+  const admin = await verifyAdmin(req);
+  if (!admin) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   const results: Record<string, string> = {};
 
   for (const bucket of BUCKETS) {

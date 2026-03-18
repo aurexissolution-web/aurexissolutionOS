@@ -1,9 +1,15 @@
+import { verifyAuth } from "@/lib/auth/verify";
 import { NextRequest, NextResponse } from "next/server";
 
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 
 export async function POST(request: NextRequest) {
   try {
+    const user = await verifyAuth(request);
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     if (!STRIPE_SECRET_KEY) {
       return NextResponse.json({ error: "Stripe not configured" }, { status: 503 });
     }
@@ -11,8 +17,12 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { invoice_id, amount, currency, description, client_email } = body;
 
-    if (!amount || !currency) {
-      return NextResponse.json({ error: "Missing amount or currency" }, { status: 400 });
+    if (!amount || !currency || typeof amount !== "number" || amount <= 0) {
+      return NextResponse.json({ error: "Invalid amount or currency" }, { status: 400 });
+    }
+
+    if (typeof currency !== "string" || currency.length !== 3) {
+      return NextResponse.json({ error: "Invalid currency code" }, { status: 400 });
     }
 
     // Create Stripe Checkout Session
