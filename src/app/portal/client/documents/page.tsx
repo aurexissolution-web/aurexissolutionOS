@@ -97,10 +97,9 @@ export default function DocumentsPage() {
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <a
-                      href={doc.file_url}
+                      href={`/api/download-doc?url=${encodeURIComponent(doc.file_url)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      download
                       className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-[#94A3B8] hover:text-white transition-colors"
                     >
                       <Download className="w-4 h-4" />

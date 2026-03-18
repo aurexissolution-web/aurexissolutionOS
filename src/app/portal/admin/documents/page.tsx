@@ -251,7 +251,7 @@ export default function AdminDocumentsPage() {
                       <option value="expired">Expired</option>
                     </select>
                     {doc.file_url && (
-                      <a href={doc.file_url} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-[#94A3B8] hover:text-white transition-colors">
+                      <a href={`/api/download-doc?url=${encodeURIComponent(doc.file_url)}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-[#94A3B8] hover:text-white transition-colors">
                         <FileText className="w-4 h-4" />
                       </a>
                     )}
