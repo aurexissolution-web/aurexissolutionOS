@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { NeonButton } from "@/components/ui/NeonButton";
 import { FileText, Download, CheckCircle2, Clock, AlertCircle, Shield } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 import { useProfile } from "@/lib/supabase/hooks";
@@ -19,7 +18,7 @@ interface DocItem {
 }
 
 const statusConfig = {
-  pending: { icon: Clock, color: "#F59E0B", label: "Pending Signature" },
+  pending: { icon: Clock, color: "#F59E0B", label: "Pending" },
   signed: { icon: CheckCircle2, color: "#10B981", label: "Signed" },
   expired: { icon: AlertCircle, color: "#EF4444", label: "Expired" },
 };
@@ -52,7 +51,7 @@ export default function DocumentsPage() {
     <div className="space-y-6 max-w-4xl">
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-2xl font-bold text-white mb-1">Secure Document Vault</h1>
-        <p className="text-sm text-[#94A3B8]">Review, download, and sign NDAs and service agreements.</p>
+        <p className="text-sm text-[#94A3B8]">Review and download your NDAs and service agreements.</p>
       </motion.div>
 
       {/* Security badge */}
@@ -97,12 +96,15 @@ export default function DocumentsPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    {doc.status === "pending" && (
-                      <NeonButton className="!px-4 !py-2 !text-xs">Sign Now</NeonButton>
-                    )}
-                    <button className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-[#94A3B8] hover:text-white transition-colors">
+                    <a
+                      href={doc.file_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download
+                      className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-[#94A3B8] hover:text-white transition-colors"
+                    >
                       <Download className="w-4 h-4" />
-                    </button>
+                    </a>
                   </div>
                 </div>
               </GlassCard>
