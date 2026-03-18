@@ -15,6 +15,8 @@ import {
   CreditCard,
   Map,
   ChevronRight,
+  Trash2,
+  AlertTriangle,
 } from "lucide-react";
 import type { ProjectPhase, TicketStatus } from "@/types/portal";
 import { supabase } from "@/lib/supabase/client";
@@ -49,52 +51,74 @@ export default function ClientCRMPage() {
   const [search, setSearch] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [clients, setClients] = useState<ClientSummary[]>([]);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+
+  async function load() {
+    const { data: profiles } = await supabase
+      .from("client_profiles")
+      .select("id, user_id, company_name, contact_name, contact_email, contact_phone")
+      .eq("role", "client")
+      .order("created_at", { ascending: false });
+
+    if (!profiles) return;
+
+    const enriched: ClientSummary[] = await Promise.all(
+      profiles.map(async (p) => {
+        const [projectsRes, ticketsRes, invoicesRes, feedbackRes] = await Promise.all([
+          supabase.from("projects").select("phase, services").eq("client_id", p.id).order("updated_at", { ascending: false }).limit(1),
+          supabase.from("tickets").select("id, subject, status, urgency").eq("client_id", p.id).in("status", ["open", "in_progress"]),
+          supabase.from("invoices").select("amount").eq("client_id", p.id),
+          supabase.from("feedback").select("nps_score, comment, created_at").eq("client_id", p.id).order("created_at", { ascending: false }).limit(3),
+        ]);
+
+        const proj = projectsRes.data?.[0];
+        const totalInvoiced = (invoicesRes.data ?? []).reduce((s, i) => s + Number(i.amount), 0);
+        const fbData = feedbackRes.data ?? [];
+        const avgNps = fbData.length > 0 ? fbData.reduce((s, f) => s + f.nps_score, 0) / fbData.length : 0;
+
+        return {
+          id: p.id,
+          user_id: p.user_id,
+          company_name: p.company_name,
+          contact_name: p.contact_name,
+          contact_email: p.contact_email,
+          contact_phone: p.contact_phone,
+          services: proj?.services ?? [],
+          project_phase: proj?.phase ?? null,
+          open_tickets: ticketsRes.data?.length ?? 0,
+          total_invoiced: totalInvoiced,
+          avg_nps: Math.round(avgNps * 10) / 10,
+          tickets: (ticketsRes.data ?? []).map((t) => ({ id: t.id.slice(0, 8), subject: t.subject, status: t.status, urgency: t.urgency })),
+          feedback: fbData.map((f) => ({ nps: f.nps_score, comment: f.comment, date: f.created_at?.slice(0, 10) })),
+        } as ClientSummary & { user_id: string };
+      })
+    );
+
+    setClients(enriched);
+  }
 
   useEffect(() => {
-    async function load() {
-      const { data: profiles } = await supabase
-        .from("client_profiles")
-        .select("id, company_name, contact_name, contact_email, contact_phone")
-        .eq("role", "client")
-        .order("created_at", { ascending: false });
-
-      if (!profiles) return;
-
-      const enriched: ClientSummary[] = await Promise.all(
-        profiles.map(async (p) => {
-          const [projectsRes, ticketsRes, invoicesRes, feedbackRes] = await Promise.all([
-            supabase.from("projects").select("phase, services").eq("client_id", p.id).order("updated_at", { ascending: false }).limit(1),
-            supabase.from("tickets").select("id, subject, status, urgency").eq("client_id", p.id).in("status", ["open", "in_progress"]),
-            supabase.from("invoices").select("amount").eq("client_id", p.id),
-            supabase.from("feedback").select("nps_score, comment, created_at").eq("client_id", p.id).order("created_at", { ascending: false }).limit(3),
-          ]);
-
-          const proj = projectsRes.data?.[0];
-          const totalInvoiced = (invoicesRes.data ?? []).reduce((s, i) => s + Number(i.amount), 0);
-          const fbData = feedbackRes.data ?? [];
-          const avgNps = fbData.length > 0 ? fbData.reduce((s, f) => s + f.nps_score, 0) / fbData.length : 0;
-
-          return {
-            id: p.id,
-            company_name: p.company_name,
-            contact_name: p.contact_name,
-            contact_email: p.contact_email,
-            contact_phone: p.contact_phone,
-            services: proj?.services ?? [],
-            project_phase: proj?.phase ?? null,
-            open_tickets: ticketsRes.data?.length ?? 0,
-            total_invoiced: totalInvoiced,
-            avg_nps: Math.round(avgNps * 10) / 10,
-            tickets: (ticketsRes.data ?? []).map((t) => ({ id: t.id.slice(0, 8), subject: t.subject, status: t.status, urgency: t.urgency })),
-            feedback: fbData.map((f) => ({ nps: f.nps_score, comment: f.comment, date: f.created_at?.slice(0, 10) })),
-          } as ClientSummary;
-        })
-      );
-
-      setClients(enriched);
-    }
     load();
   }, []);
+
+  async function handleDeleteClient(userId: string, clientId: string) {
+    setDeletingId(clientId);
+    try {
+      const res = await fetch(`/api/delete-client?id=${userId}`, { method: "DELETE" });
+      if (res.ok) {
+        setSelectedId(null);
+        setDeleteConfirm(null);
+        await load();
+      } else {
+        alert("Failed to delete client");
+      }
+    } catch (e) {
+      alert("Error deleting client");
+    } finally {
+      setDeletingId(null);
+    }
+  }
 
   const filtered = clients.filter(
     (c) =>
@@ -243,6 +267,40 @@ export default function ClientCRMPage() {
                       ))}
                     </div>
                   )}
+
+                  {/* Danger Zone */}
+                  <div className="border-t border-red-500/20 pt-4 mt-6">
+                    {deleteConfirm === selected.id ? (
+                      <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3">
+                        <p className="text-xs text-red-400 mb-3 flex items-center gap-1.5 font-medium">
+                          <AlertTriangle className="w-4 h-4" /> This will permanently delete the client and ALL related data (projects, tickets, invoices).
+                        </p>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleDeleteClient((selected as any).user_id, selected.id)}
+                            disabled={deletingId === selected.id}
+                            className="flex-1 py-1.5 rounded-md bg-red-500 hover:bg-red-600 text-white text-xs font-bold transition-colors disabled:opacity-50"
+                          >
+                            {deletingId === selected.id ? "Deleting..." : "Confirm Delete"}
+                          </button>
+                          <button
+                            onClick={() => setDeleteConfirm(null)}
+                            disabled={deletingId === selected.id}
+                            className="flex-1 py-1.5 rounded-md bg-white/5 hover:bg-white/10 text-white text-xs font-medium transition-colors disabled:opacity-50"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setDeleteConfirm(selected.id)}
+                        className="w-full py-2 rounded-lg border border-red-500/20 text-red-400 hover:bg-red-500/10 hover:text-red-300 text-xs font-medium flex items-center justify-center gap-2 transition-all"
+                      >
+                        <Trash2 className="w-4 h-4" /> Delete Client
+                      </button>
+                    )}
+                  </div>
                 </div>
               </GlassCard>
             </motion.div>

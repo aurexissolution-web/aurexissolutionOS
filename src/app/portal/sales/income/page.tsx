@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { NeonButton } from "@/components/ui/NeonButton";
-import { DollarSign, Plus, X, Save, RefreshCw, Zap } from "lucide-react";
+import { DollarSign, Plus, X, Save, RefreshCw, Zap, Trash2, Edit2 } from "lucide-react";
 import type { IncomeType } from "@/types/portal";
 import { supabase } from "@/lib/supabase/client";
 
@@ -28,6 +28,7 @@ function fmt(n: number) {
 export default function IncomePage() {
   const [items, setItems] = useState<IncomeItem[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({ type: "one_time" as IncomeType, description: "", client_name: "", amount: "", date: "", recurring_months: "" });
 
   const loadItems = useCallback(async () => {
@@ -46,16 +47,51 @@ export default function IncomePage() {
   const mrrTotal = items.filter((i) => i.type === "recurring").reduce((s, i) => s + Number(i.amount), 0);
 
   async function handleAdd() {
-    await supabase.from("income_entries").insert({
-      type: form.type,
-      description: form.description,
-      amount: parseFloat(form.amount) || 0,
-      date: form.date || new Date().toISOString().slice(0, 10),
-      recurring_months: form.type === "recurring" ? (parseInt(form.recurring_months) || null) : null,
-    });
-    setShowForm(false);
-    setForm({ type: "one_time", description: "", client_name: "", amount: "", date: "", recurring_months: "" });
+    if (editingId) {
+      await supabase.from("income_entries").update({
+        type: form.type,
+        description: form.description,
+        amount: parseFloat(form.amount) || 0,
+        date: form.date || new Date().toISOString().slice(0, 10),
+        recurring_months: form.type === "recurring" ? (parseInt(form.recurring_months) || null) : null,
+      }).eq("id", editingId);
+    } else {
+      await supabase.from("income_entries").insert({
+        type: form.type,
+        description: form.description,
+        amount: parseFloat(form.amount) || 0,
+        date: form.date || new Date().toISOString().slice(0, 10),
+        recurring_months: form.type === "recurring" ? (parseInt(form.recurring_months) || null) : null,
+      });
+    }
+    closeForm();
     loadItems();
+  }
+
+  async function handleDelete(id: string) {
+    if (confirm("Are you sure you want to delete this income entry?")) {
+      await supabase.from("income_entries").delete().eq("id", id);
+      loadItems();
+    }
+  }
+
+  function openEdit(item: IncomeItem) {
+    setForm({
+      type: item.type,
+      description: item.description,
+      client_name: "", // Not returned by API currently, but keeping schema
+      amount: item.amount.toString(),
+      date: item.date,
+      recurring_months: item.recurring_months ? item.recurring_months.toString() : "",
+    });
+    setEditingId(item.id);
+    setShowForm(true);
+  }
+
+  function closeForm() {
+    setShowForm(false);
+    setEditingId(null);
+    setForm({ type: "one_time", description: "", client_name: "", amount: "", date: "", recurring_months: "" });
   }
 
   return (
@@ -104,12 +140,12 @@ export default function IncomePage() {
       {/* Add form modal */}
       <AnimatePresence>
         {showForm && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4" onClick={() => setShowForm(false)}>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4" onClick={closeForm}>
             <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} onClick={(e) => e.stopPropagation()} className="w-full max-w-lg">
               <GlassCard className="!border-[#00F0FF]/20">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-lg font-bold text-white">Log Income</h2>
-                  <button onClick={() => setShowForm(false)} className="text-[#94A3B8] hover:text-white"><X className="w-5 h-5" /></button>
+                  <h2 className="text-lg font-bold text-white">{editingId ? "Edit Income" : "Log Income"}</h2>
+                  <button onClick={closeForm} className="text-[#94A3B8] hover:text-white"><X className="w-5 h-5" /></button>
                 </div>
                 <div className="space-y-4">
                   <div>
@@ -170,7 +206,15 @@ export default function IncomePage() {
                   {item.recurring_months && <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#00F0FF]/10 text-[#00F0FF]">{item.recurring_months}mo</span>}
                 </div>
               </div>
-              <span className="text-lg font-bold text-[#10B981] shrink-0">+{fmt(item.amount)}</span>
+              <div className="flex items-center gap-3 shrink-0">
+                <span className="text-lg font-bold text-[#10B981]">+{fmt(item.amount)}</span>
+                <button onClick={() => openEdit(item)} className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-[#94A3B8] hover:text-white transition-colors">
+                  <Edit2 className="w-4 h-4" />
+                </button>
+                <button onClick={() => handleDelete(item.id)} className="p-2 rounded-lg bg-white/5 hover:bg-red-500/10 text-[#94A3B8] hover:text-red-400 transition-colors">
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
             </GlassCard>
           </motion.div>
         ))}
