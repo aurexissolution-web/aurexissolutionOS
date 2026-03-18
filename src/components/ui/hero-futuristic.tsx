@@ -188,14 +188,15 @@ export const AboutHero = () => {
   }, [totalWords]);
 
   useEffect(() => {
-    if (visibleWords < totalWords) {
-      const timeout = setTimeout(() => setVisibleWords(visibleWords + 1), 500);
-      return () => clearTimeout(timeout);
-    } else {
-      const timeout = setTimeout(() => setSubtitleVisible(true), 700);
-      return () => clearTimeout(timeout);
-    }
-  }, [visibleWords, totalWords]);
+    // Trigger word animations shortly after mount
+    const t1 = setTimeout(() => setVisibleWords(totalWords), 100);
+    // Trigger subtitle after words finish (totalWords * 130ms + buffer)
+    const t2 = setTimeout(() => setSubtitleVisible(true), totalWords * 130 + 800);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [totalWords]);
 
   const allWords = [
     ...titleWords.map((w) => ({ word: w, accent: false })),
