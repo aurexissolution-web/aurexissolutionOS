@@ -56,10 +56,14 @@ const clientNav: NavItem[] = [
 const adminNav: NavItem[] = [
   { label: "Dashboard", href: "/portal/admin", icon: LayoutDashboard },
   { label: "Client CRM", href: "/portal/admin/clients", icon: Users },
+  { label: "Project Control", href: "/portal/admin/projects", icon: Settings },
+  { label: "Tickets", href: "/portal/admin/tickets", icon: Ticket },
+  { label: "Feedback", href: "/portal/admin/feedback", icon: MessageSquare },
+  { label: "Documents", href: "/portal/admin/documents", icon: FileText },
+  { label: "Invoices", href: "/portal/admin/invoices", icon: CreditCard },
   { label: "Access Control", href: "/portal/admin/invites", icon: Link2 },
   { label: "Blog Engine", href: "/portal/admin/blog", icon: PenTool },
   { label: "Portfolio", href: "/portal/admin/portfolio", icon: ImageIcon },
-  { label: "Project Control", href: "/portal/admin/projects", icon: Settings },
 ];
 
 const salesNav: NavItem[] = [

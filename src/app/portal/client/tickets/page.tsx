@@ -24,10 +24,12 @@ type IconComp = React.ComponentType<LucideProps>;
 interface TicketItem {
   id: string;
   subject: string;
+  description: string;
   urgency: TicketUrgency;
   status: TicketStatus;
   category: string;
   created_at: string;
+  admin_reply: string | null;
 }
 
 const urgencyColors: Record<TicketUrgency, string> = {
@@ -60,11 +62,13 @@ export default function TicketsPage() {
     category: "Bug",
   });
 
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
   const loadTickets = useCallback(async () => {
     if (!profile) return;
     const { data } = await supabase
       .from("tickets")
-      .select("id, subject, urgency, status, category, created_at")
+      .select("id, subject, description, urgency, status, category, created_at, admin_reply")
       .eq("client_id", profile.id)
       .order("created_at", { ascending: false });
     if (data) setTickets(data as TicketItem[]);
@@ -231,6 +235,7 @@ export default function TicketsPage() {
         <div className="space-y-3">
           {tickets.map((ticket, i) => {
             const StatusIcon = statusIcons[ticket.status];
+            const isExpanded = expandedId === ticket.id;
             return (
               <motion.div
                 key={ticket.id}
@@ -238,33 +243,50 @@ export default function TicketsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
               >
-                <GlassCard className="!p-4 flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
-                    <AlertTriangle className="w-4 h-4" style={{ color: urgencyColors[ticket.urgency] }} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-mono text-[#64748B]">{ticket.id}</span>
-                      <span
-                        className="text-[10px] px-2 py-0.5 rounded-full font-medium uppercase tracking-wider"
-                        style={{
-                          color: urgencyColors[ticket.urgency],
-                          backgroundColor: `${urgencyColors[ticket.urgency]}15`,
-                        }}
-                      >
-                        {ticket.urgency}
-                      </span>
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-[#94A3B8]">
-                        {ticket.category}
-                      </span>
+                <GlassCard className="!p-0 overflow-hidden">
+                  <div className="p-4 flex items-center gap-4 cursor-pointer hover:bg-white/[0.02] transition-colors" onClick={() => setExpandedId(isExpanded ? null : ticket.id)}>
+                    <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
+                      <AlertTriangle className="w-4 h-4" style={{ color: urgencyColors[ticket.urgency] }} />
                     </div>
-                    <p className="text-sm text-white truncate">{ticket.subject}</p>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span
+                          className="text-[10px] px-2 py-0.5 rounded-full font-medium uppercase tracking-wider"
+                          style={{
+                            color: urgencyColors[ticket.urgency],
+                            backgroundColor: `${urgencyColors[ticket.urgency]}15`,
+                          }}
+                        >
+                          {ticket.urgency}
+                        </span>
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-[#94A3B8]">
+                          {ticket.category}
+                        </span>
+                        {ticket.admin_reply && (
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#00F0FF]/10 text-[#00F0FF]">Reply available</span>
+                        )}
+                      </div>
+                      <p className="text-sm text-white truncate">{ticket.subject}</p>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-[#94A3B8] shrink-0">
+                      <StatusIcon className="w-3.5 h-3.5" />
+                      <span className="capitalize">{ticket.status.replace("_", " ")}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-[#94A3B8] shrink-0">
-                    <StatusIcon className="w-3.5 h-3.5" />
-                    <span className="capitalize">{ticket.status.replace("_", " ")}</span>
-                  </div>
-                  <span className="text-xs text-[#64748B] shrink-0">{ticket.created_at}</span>
+                  {isExpanded && (
+                    <div className="border-t border-white/5 p-4 space-y-3">
+                      <div>
+                        <p className="text-xs text-[#64748B] uppercase tracking-wider mb-1">Your message</p>
+                        <p className="text-sm text-[#94A3B8]">{ticket.description}</p>
+                      </div>
+                      {ticket.admin_reply && (
+                        <div className="p-3 rounded-lg bg-[#00F0FF]/5 border border-[#00F0FF]/10">
+                          <p className="text-xs text-[#00F0FF] uppercase tracking-wider mb-1">Admin Reply</p>
+                          <p className="text-sm text-white">{ticket.admin_reply}</p>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </GlassCard>
               </motion.div>
             );
