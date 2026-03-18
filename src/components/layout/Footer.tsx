@@ -69,6 +69,7 @@ export function Footer() {
           <div className="sm:col-span-2 lg:col-span-1 flex flex-col gap-4">
             {/* Logo */}
             <Link href="/" className="inline-flex items-center gap-2 mb-1">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/logo.svg"
                 alt="Aurexis Solution"

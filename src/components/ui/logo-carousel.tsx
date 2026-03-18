@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import {
   Carousel,
   CarouselApi,
@@ -27,7 +28,6 @@ export function LogoCarousel({
   logos,
   autoPlayInterval = 2500,
   itemsPerViewMobile = 3,
-  itemsPerViewDesktop = 7,
   themeColor = "#00F0FF",
 }: LogoCarouselProps) {
   const [api, setApi] = useState<CarouselApi>();
@@ -101,11 +101,12 @@ export function LogoCarousel({
                   />
 
                   {/* Icon */}
-                  <div className="flex-1 flex items-center justify-center w-full">
-                    <img
+                  <div className="flex-1 flex items-center justify-center w-full relative h-9">
+                    <Image
                       src={logo.src}
                       alt={logo.alt}
-                      className="h-9 w-9 object-contain opacity-40 group-hover:opacity-100 transition-all duration-500 filter grayscale group-hover:grayscale-0 group-hover:scale-110"
+                      fill
+                      className="object-contain opacity-40 group-hover:opacity-100 transition-all duration-500 filter grayscale group-hover:grayscale-0 group-hover:scale-110"
                       onError={(e) => {
                         // Fallback square if image fails to load
                         e.currentTarget.style.display = 'none';

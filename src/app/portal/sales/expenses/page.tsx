@@ -52,6 +52,7 @@ export default function ExpensesPage() {
   }, []);
 
   useEffect(() => {
+     
     loadItems();
   }, [loadItems]);
 

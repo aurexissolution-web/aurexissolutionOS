@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
 import { ServiceData } from "@/data/services";
 import { ArrowRight, Crosshair, Blocks, Cpu, Rocket } from "lucide-react";
 import { SectionBadge } from "@/components/ui/section-badge";

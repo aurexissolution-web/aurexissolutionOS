@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { ArrowRight, Target, Zap, Cpu, Shield, Plus } from "lucide-react";
+import { Target, Zap, Cpu, Shield, Plus } from "lucide-react";
 import { AnimatedBadge } from "@/components/ui/animated-badge";
 import { cn } from "@/lib/utils";
 

@@ -13,11 +13,9 @@ import {
   EyeOff,
   X,
   Save,
-  CheckCircle2,
   Calendar,
   Tag,
   Upload,
-  Image as ImageIcon,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 
@@ -136,9 +134,9 @@ export default function BlogEnginePage() {
         ...prev,
         cover_image: publicUrlData.publicUrl,
       }));
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Upload error:", err);
-      alert("Failed to upload image: " + err.message);
+      alert("Failed to upload image: " + (err instanceof Error ? err.message : "Unknown error"));
     } finally {
       setIsUploading(false);
     }
@@ -246,6 +244,7 @@ export default function BlogEnginePage() {
                     <label className="block text-sm font-medium text-[#94A3B8] mb-2">Cover Image</label>
                     {editorForm.cover_image ? (
                       <div className="relative w-full h-40 rounded-lg border border-white/10 overflow-hidden group mb-3">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={editorForm.cover_image} alt="Cover" className="w-full h-full object-cover" />
                         <button type="button" onClick={removeImage} className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                           <Trash2 className="w-6 h-6 text-red-400" />

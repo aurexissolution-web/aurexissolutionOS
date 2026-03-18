@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { NeonButton } from "@/components/ui/NeonButton";
 import { CreditCard, Upload, CheckCircle2, Clock, AlertTriangle, FileText, Landmark, Copy } from "lucide-react";
 import type { InvoiceStatus } from "@/types/portal";
 import type { LucideProps } from "lucide-react";

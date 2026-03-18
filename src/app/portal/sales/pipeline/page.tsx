@@ -5,15 +5,12 @@ import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { NeonButton } from "@/components/ui/NeonButton";
 import {
-  Kanban,
   Plus,
   X,
   Save,
   Calendar,
-  DollarSign,
   User,
   Building2,
-  Mail,
   GripVertical,
 } from "lucide-react";
 import type { LeadStage } from "@/types/portal";
@@ -71,6 +68,7 @@ export default function PipelinePage() {
   }, []);
 
   useEffect(() => {
+     
     loadLeads();
   }, [loadLeads]);
 

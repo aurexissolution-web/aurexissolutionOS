@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { BarChart3, DollarSign, TrendingDown, TrendingUp, ArrowUpRight } from "lucide-react";
+import { BarChart3, DollarSign, TrendingDown, ArrowUpRight } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 
 function fmt(n: number) {

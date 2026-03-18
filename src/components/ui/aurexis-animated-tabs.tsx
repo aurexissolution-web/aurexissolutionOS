@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatedTabs, type Tab } from "@/components/ui/animated-tabs";
+import Image from "next/image";
 
 const aurexisTabs: Tab[] = [
   {
@@ -8,11 +9,14 @@ const aurexisTabs: Tab[] = [
     label: "Mission",
     content: (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 w-full h-full pb-4">
-        <img
-          src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop"
-          alt="The Mission"
-          className="rounded-2xl w-full h-64 md:h-[400px] object-cover border border-[#00F0FF]/10 shadow-2xl"
-        />
+        <div className="relative w-full h-64 md:h-[400px] rounded-2xl overflow-hidden border border-[#00F0FF]/10 shadow-2xl">
+          <Image
+            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop"
+            alt="The Mission"
+            fill
+            className="object-cover"
+          />
+        </div>
         <div className="flex flex-col justify-center gap-y-6">
           <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
             The Mission
@@ -29,11 +33,14 @@ const aurexisTabs: Tab[] = [
     label: "Vision",
     content: (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 w-full h-full pb-4">
-        <img
-          src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1200&auto=format&fit=crop"
-          alt="The Vision"
-          className="rounded-2xl w-full h-64 md:h-[400px] object-cover border border-[#0047FF]/10 shadow-2xl"
-        />
+        <div className="relative w-full h-64 md:h-[400px] rounded-2xl overflow-hidden border border-[#0047FF]/10 shadow-2xl">
+          <Image
+            src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1200&auto=format&fit=crop"
+            alt="The Vision"
+            fill
+            className="object-cover"
+          />
+        </div>
         <div className="flex flex-col justify-center gap-y-6">
           <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
             The Vision
@@ -50,11 +57,14 @@ const aurexisTabs: Tab[] = [
     label: "Goals",
     content: (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 w-full h-full pb-4">
-        <img
-          src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1200&auto=format&fit=crop"
-          alt="The Goals"
-          className="rounded-2xl w-full h-64 md:h-[400px] object-cover border border-white/5 shadow-2xl"
-        />
+        <div className="relative w-full h-64 md:h-[400px] rounded-2xl overflow-hidden border border-white/5 shadow-2xl">
+          <Image
+            src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1200&auto=format&fit=crop"
+            alt="The Goals"
+            fill
+            className="object-cover"
+          />
+        </div>
         <div className="flex flex-col justify-center gap-y-6">
           <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
             The Goals

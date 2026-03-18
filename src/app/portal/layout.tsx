@@ -86,7 +86,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [allowedSections, setAllowedSections] = useState<PortalSection[]>([]);
-  const [profile, setProfile] = useState<ClientProfile | null>(null);
+  const [_profile, setProfile] = useState<ClientProfile | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
 
   // Determine active section from pathname

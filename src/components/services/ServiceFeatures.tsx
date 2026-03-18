@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { ServiceData } from "@/data/services";
 import { Server, Code2, Cpu, Globe } from "lucide-react"; 
 import { SectionBadge } from "@/components/ui/section-badge";

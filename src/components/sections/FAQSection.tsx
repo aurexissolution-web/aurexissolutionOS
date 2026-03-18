@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Plus, Minus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { AnimatedBadge } from "@/components/ui/animated-badge";
 
 const faqs = [

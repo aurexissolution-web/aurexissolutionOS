@@ -4,7 +4,7 @@ import { use, useEffect, useState } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { Clock, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import type { BlogPost } from "@/types/portal";
 
@@ -67,6 +67,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                 
                 {post.cover_image ? (
                   <div className="w-full aspect-video rounded-2xl bg-[#09090B] border border-white/10 mb-12 overflow-hidden relative">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={post.cover_image} alt={post.title} className="w-full h-full object-cover" />
                   </div>
                 ) : (

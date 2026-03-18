@@ -24,10 +24,10 @@ function Star({
   themeColor: string;
   seed: number;
 }) {
-  const initialPos = {
+  const initialPos = React.useMemo(() => ({
     top: `${seededUnit(seed) * 100}%`,
     left: `${seededUnit(seed + 1) * 100}%`,
-  };
+  }), [seed]);
 
   const sizePx = 1 + seededUnit(seed + 2) * 2;
   const glowPx = 4 + seededUnit(seed + 3) * 10;

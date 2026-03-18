@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { ServiceData } from "@/data/services";
 import { AnimatedBadge } from "@/components/ui/animated-badge";

@@ -12,8 +12,6 @@ import {
   Phone,
   Ticket,
   MessageSquare,
-  CreditCard,
-  Map,
   ChevronRight,
   Trash2,
   AlertTriangle,
@@ -113,7 +111,7 @@ export default function ClientCRMPage() {
       } else {
         alert("Failed to delete client");
       }
-    } catch (e) {
+    } catch {
       alert("Error deleting client");
     } finally {
       setDeletingId(null);
@@ -277,7 +275,7 @@ export default function ClientCRMPage() {
                         </p>
                         <div className="flex gap-2">
                           <button
-                            onClick={() => handleDeleteClient((selected as any).user_id, selected.id)}
+                            onClick={() => handleDeleteClient((selected as ClientSummary & { user_id: string }).user_id, selected.id)}
                             disabled={deletingId === selected.id}
                             className="flex-1 py-1.5 rounded-md bg-red-500 hover:bg-red-600 text-white text-xs font-bold transition-colors disabled:opacity-50"
                           >

@@ -179,6 +179,7 @@ export default function PortfolioPage() {
                                     : "opacity-0 w-0 h-12"
                                 }`}
                               >
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                   src={project.images[0]}
                                   alt={project.title}
@@ -256,6 +257,7 @@ export default function PortfolioPage() {
                             {/* Image banner for projects that have one */}
                             {project.images?.[0] && (
                               <div className="-mx-6 -mt-6 mb-5 h-36 overflow-hidden rounded-t-2xl">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                   src={project.images[0]}
                                   alt={project.title}

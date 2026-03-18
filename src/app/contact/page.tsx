@@ -162,6 +162,7 @@ export default function ContactPage() {
                       key={i}
                       className="w-9 h-9 rounded-full border-2 border-[#02040A] overflow-hidden bg-zinc-800 ring-1 ring-white/10"
                     >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={`https://api.dicebear.com/7.x/lorelei/svg?${s}`}
                         alt=""

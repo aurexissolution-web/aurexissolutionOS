@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const services = [
   {
@@ -41,7 +41,7 @@ function ServiceRow({
   isActive,
   onHover,
   onLeave,
-  index,
+  index: _index,
 }: {
   service: (typeof services)[number];
   isActive: boolean;

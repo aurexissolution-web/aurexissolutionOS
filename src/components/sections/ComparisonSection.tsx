@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check, X, Shield, Zap, Target, Cpu, MessageCircle, BarChart3, ChevronRight } from "lucide-react";
+import { Check, X, ChevronRight } from "lucide-react";
 import { PremiumBadge } from "@/components/ui/PremiumBadge";
 
 interface ComparisonItem {

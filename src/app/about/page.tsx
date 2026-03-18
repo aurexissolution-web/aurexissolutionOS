@@ -1,21 +1,18 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
+import { motion, useScroll, useSpring, useInView } from "framer-motion";
 import Image from "next/image";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { GlassCard } from "@/components/ui/GlassCard";
-import { NeonButton } from "@/components/ui/NeonButton";
 import { AboutHero } from "@/components/ui/hero-futuristic";
-import { AnimatedBadge } from "@/components/ui/animated-badge";
 import { PremiumBadge } from "@/components/ui/PremiumBadge";
 import { ComparisonSection } from "@/components/sections/ComparisonSection";
 import { ValueAdd } from "@/components/sections/ValueAdd";
 import { CulturalFit } from "@/components/sections/CulturalFit";
 import { AboutCTA } from "@/components/sections/AboutCTA";
 import { LocationSection } from "@/components/sections/LocationSection";
-import { Target, Zap, Shield, Cpu, Smartphone, User, Rocket, Layers } from "lucide-react";
+import { Shield, Rocket, Layers } from "lucide-react";
 
 const focusThreads = [
   "01 The Mission",

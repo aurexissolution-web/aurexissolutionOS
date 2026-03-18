@@ -1,26 +1,6 @@
 'use client';
-import React, { useState } from 'react';
-import { Github, Star } from 'lucide-react';
-import { Liquid } from '@/components/ui/button-1';
-const COLORS = {
-  color1: '#FFFFFF',
-  color2: '#0047FF',
-  color3: '#336BFF',
-  color4: '#F8FAFC',
-  color5: '#E6EFFF',
-  color6: '#00F0FF',
-  color7: '#00C2FF',
-  color8: '#0099FF',
-  color9: '#0070FF',
-  color10: '#0057FF',
-  color11: '#0047FF',
-  color12: '#80F8FF',
-  color13: '#4DBBFF',
-  color14: '#B3E6FF',
-  color15: '#80D4FF',
-  color16: '#002EAA',
-  color17: '#00A3FF',
-};
+import React from "react";
+
 const GradientStartButton = () => {
   return (
     <div className="flex justify-center">

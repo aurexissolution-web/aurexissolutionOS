@@ -40,6 +40,7 @@ export default function IncomePage() {
   }, []);
 
   useEffect(() => {
+     
     loadItems();
   }, [loadItems]);
 

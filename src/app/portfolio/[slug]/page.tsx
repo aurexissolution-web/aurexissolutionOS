@@ -1,7 +1,6 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { NeonButton } from "@/components/ui/NeonButton";
@@ -53,6 +52,7 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
                 
                 {project.images?.[0] ? (
                   <div className="w-full aspect-video rounded-2xl bg-[#09090B] border border-white/10 mb-16 overflow-hidden relative">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={project.images[0]} alt={project.title} className="w-full h-full object-cover" />
                   </div>
                 ) : (

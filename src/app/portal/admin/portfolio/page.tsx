@@ -126,9 +126,9 @@ export default function PortfolioPage() {
         ...prev,
         images: [...prev.images, publicUrlData.publicUrl],
       }));
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Upload error:", err);
-      alert("Failed to upload image: " + err.message);
+      alert("Failed to upload image: " + (err instanceof Error ? err.message : "Unknown error"));
     } finally {
       setIsUploading(false);
     }
@@ -213,6 +213,7 @@ export default function PortfolioPage() {
                       <div className="flex flex-wrap gap-2 mb-3">
                         {form.images.map((url, idx) => (
                           <div key={idx} className="relative w-20 h-20 rounded-md border border-white/10 overflow-hidden group">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src={url} alt={`Upload ${idx}`} className="w-full h-full object-cover" />
                             <button type="button" onClick={() => removeImage(idx)} className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                               <Trash2 className="w-4 h-4 text-red-400" />
@@ -253,6 +254,7 @@ export default function PortfolioPage() {
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} key={item.id}>
             <GlassCard hoverEffect className="!p-5">
               {/* Image placeholder */}
+              {/* eslint-disable @next/next/no-img-element */}
               <div className="w-full h-36 rounded-lg bg-gradient-to-br from-[#0047FF]/10 to-[#8B5CF6]/10 border border-white/5 flex items-center justify-center mb-4 overflow-hidden">
                 {item.images && item.images.length > 0 ? (
                   <img src={item.images[0]} alt={item.title} className="w-full h-full object-cover" />
@@ -260,6 +262,7 @@ export default function PortfolioPage() {
                   <ImageIcon className="w-8 h-8 text-[#64748B]" />
                 )}
               </div>
+              {/* eslint-enable @next/next/no-img-element */}
 
               <h3 className="text-sm font-bold text-white mb-1">{item.title}</h3>
               <p className="text-xs text-[#94A3B8] line-clamp-2 mb-3">{item.description}</p>

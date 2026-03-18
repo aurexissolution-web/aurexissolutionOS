@@ -47,7 +47,7 @@ const steps = [
 /* ── Drawer Row ───────────────────────────────────────────────── */
 function DrawerRow({
   step,
-  index,
+  index: _index,
   isOpen,
   onToggle,
 }: {

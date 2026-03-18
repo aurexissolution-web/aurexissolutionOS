@@ -162,6 +162,7 @@ export default function ServicesHubPage() {
                     >
                       {/* Background image */}
                       <div className="absolute inset-0 z-0">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={svc.image}
                           alt={svc.title}
