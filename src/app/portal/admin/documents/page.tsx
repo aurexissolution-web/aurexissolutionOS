@@ -97,39 +97,39 @@ export default function AdminDocumentsPage() {
     loadClients();
   }, [loadDocs, loadClients]);
 
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
   async function handleUpload(e: React.FormEvent) {
     e.preventDefault();
     if (!file) return;
     setUploading(true);
+    setUploadError(null);
 
-    const ext = file.name.split(".").pop();
-    const filePath = `documents/${form.client_id}/${Date.now()}.${ext}`;
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("client_id", form.client_id);
+    formData.append("name", form.name);
+    formData.append("type", form.type);
 
-    const { error: uploadErr } = await supabase.storage
-      .from("legal-docs")
-      .upload(filePath, file, { upsert: true });
+    try {
+      const res = await fetch("/api/upload-doc", { method: "POST", body: formData });
+      const json = await res.json();
 
-    if (uploadErr) {
-      // Try creating the bucket if it doesn't exist, then retry
-      await supabase.storage.createBucket("legal-docs", { public: true });
-      await supabase.storage.from("legal-docs").upload(filePath, file, { upsert: true });
+      if (!res.ok) {
+        setUploadError(json.error || "Upload failed");
+        setUploading(false);
+        return;
+      }
+
+      setUploading(false);
+      setShowUpload(false);
+      setFile(null);
+      setForm({ client_id: "", name: "", type: "other" });
+      loadDocs();
+    } catch {
+      setUploadError("Upload failed. Please try again.");
+      setUploading(false);
     }
-
-    const { data: urlData } = supabase.storage.from("legal-docs").getPublicUrl(filePath);
-
-    await supabase.from("documents").insert({
-      client_id: form.client_id,
-      name: form.name,
-      type: form.type,
-      file_url: urlData.publicUrl,
-      status: "pending",
-    });
-
-    setUploading(false);
-    setShowUpload(false);
-    setFile(null);
-    setForm({ client_id: "", name: "", type: "other" });
-    loadDocs();
   }
 
   async function updateStatus(docId: string, status: "pending" | "signed" | "expired") {
@@ -197,6 +197,11 @@ export default function AdminDocumentsPage() {
                       onChange={(e) => setFile(e.target.files?.[0] || null)}
                     />
                   </div>
+                  {uploadError && (
+                    <div className="flex items-center gap-2 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-xs text-red-200">
+                      <AlertCircle className="w-4 h-4 shrink-0" /> {uploadError}
+                    </div>
+                  )}
                   <NeonButton className="w-full !py-3 !text-sm" disabled={uploading || !file}>
                     {uploading ? "Uploading..." : "Upload Document"}
                   </NeonButton>
