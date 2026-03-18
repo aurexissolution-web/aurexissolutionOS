@@ -51,10 +51,10 @@ const quickLinks = [
 ];
 
 const socials = [
-  { icon: Facebook,  href: "#", label: "Facebook" },
-  { icon: Twitter,   href: "#", label: "Twitter" },
-  { icon: Instagram, href: "#", label: "Instagram" },
-  { icon: Linkedin,  href: "#", label: "LinkedIn" },
+  { icon: Instagram, href: "https://www.instagram.com/aurexissolution?igsh=eTJsb3J3aG9wcHc4&utm_source=qr", label: "Instagram" },
+  { icon: Facebook,  href: "https://www.facebook.com/share/18HRuAqL75/?mibextid=wwXIfr", label: "Facebook" },
+  { icon: Linkedin,  href: "https://www.linkedin.com/company/aurexissolution/", label: "LinkedIn" },
+  { icon: Twitter,   href: "https://x.com/aurexissolution?s=21", label: "X (Twitter)" },
 ];
 
 export function Footer() {
@@ -141,6 +141,8 @@ export function Footer() {
                   key={label}
                   href={href}
                   aria-label={label}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 rounded-xl border border-white/[0.07] bg-white/[0.02] flex items-center justify-center hover:border-[rgba(0,240,255,0.25)] hover:bg-[rgba(0,240,255,0.06)] transition-all duration-200 group"
                 >
                   <Icon className="w-4 h-4 text-neutral-500 group-hover:text-[#00F0FF] transition-colors duration-200" />
