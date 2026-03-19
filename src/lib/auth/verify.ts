@@ -13,9 +13,10 @@ export async function verifyAuth(req: NextRequest) {
   const token = authHeader?.replace("Bearer ", "");
 
   // Also check cookies for session
+  const newCookieToken = req.cookies.get("sb-access-token")?.value;
   const cookieToken = req.cookies.get(`sb-${new URL(supabaseUrl).hostname.split(".")[0]}-auth-token`)?.value;
 
-  let accessToken = token;
+  let accessToken = token || newCookieToken;
 
   if (!accessToken && cookieToken) {
     try {
