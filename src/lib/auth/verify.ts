@@ -19,7 +19,12 @@ export async function verifyAuth(req: NextRequest) {
   let accessToken = token;
 
   if (!accessToken && (newCookieToken || cookieToken)) {
-    const rawCookie = newCookieToken || cookieToken;
+    let rawCookie = newCookieToken || cookieToken;
+    try {
+      if (rawCookie) rawCookie = decodeURIComponent(rawCookie);
+    } catch {
+      // ignore decoding errors
+    }
     try {
       const parsed = JSON.parse(rawCookie as string);
       accessToken = parsed?.access_token || rawCookie;
