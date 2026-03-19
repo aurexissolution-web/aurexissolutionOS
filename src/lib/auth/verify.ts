@@ -16,14 +16,15 @@ export async function verifyAuth(req: NextRequest) {
   const newCookieToken = req.cookies.get("sb-access-token")?.value;
   const cookieToken = req.cookies.get(`sb-${new URL(supabaseUrl).hostname.split(".")[0]}-auth-token`)?.value;
 
-  let accessToken = token || newCookieToken;
+  let accessToken = token;
 
-  if (!accessToken && cookieToken) {
+  if (!accessToken && (newCookieToken || cookieToken)) {
+    const rawCookie = newCookieToken || cookieToken;
     try {
-      const parsed = JSON.parse(cookieToken);
-      accessToken = parsed?.access_token;
+      const parsed = JSON.parse(rawCookie as string);
+      accessToken = parsed?.access_token || rawCookie;
     } catch {
-      accessToken = cookieToken;
+      accessToken = rawCookie;
     }
   }
 
