@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextRequest } from "next/server";
+import { supabaseAdmin } from "../supabase/server";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -51,11 +52,7 @@ export async function verifyAdmin(req: NextRequest) {
   const user = await verifyAuth(req);
   if (!user) return null;
 
-  const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-    auth: { persistSession: false },
-  });
-
-  const { data: profile } = await supabase
+  const { data: profile } = await supabaseAdmin
     .from("client_profiles")
     .select("role")
     .eq("user_id", user.id)
