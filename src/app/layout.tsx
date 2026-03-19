@@ -18,6 +18,10 @@ import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
 export const metadata: Metadata = {
   title: "AUREXIS SOLUTION | AI, Web & App Automation",
   description: "Building high-performance AI, Web, and App ecosystems for the next generation of industry leaders.",
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
