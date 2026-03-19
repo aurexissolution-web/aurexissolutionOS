@@ -36,8 +36,8 @@ export function portalSectionForRole(role: UserRole): PortalSection {
 }
 
 export function allowedSectionsForRole(role: UserRole): PortalSection[] {
-  if (role === "admin") return ["admin", "sales"];
-  if (role === "sales") return ["sales"];
+  if (role === "admin") return ["admin", "sales", "client"];
+  if (role === "sales") return ["sales", "client"];
   return ["client"];
 }
 
