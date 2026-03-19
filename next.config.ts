@@ -16,7 +16,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "img-src 'self' data: blob: https://images.unsplash.com https://www.cult-ui.com https://i.postimg.cc https://*.supabase.co https://api.dicebear.com",
       "font-src 'self' data: https://fonts.gstatic.com",
-      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://openrouter.ai https://api.stripe.com https://prod.spline.design https://fonts.gstatic.com https://fonts.googleapis.com https://app.cal.com https://api.dicebear.com",
+      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://openrouter.ai https://api.stripe.com https://prod.spline.design https://fonts.gstatic.com https://fonts.googleapis.com https://app.cal.com https://api.dicebear.com https://unpkg.com",
       "frame-src 'self' https://checkout.stripe.com https://prod.spline.design https://app.cal.com",
       "media-src 'self' blob:",
       "worker-src 'self' blob:",
