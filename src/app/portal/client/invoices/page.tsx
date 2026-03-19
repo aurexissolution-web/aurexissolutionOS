@@ -32,7 +32,7 @@ const statusConfig: Record<InvoiceStatus, { icon: Icon; color: string; label: st
 };
 
 const BANK_DETAILS = {
-  bank_name: "Aurexis Solution Sdn Bhd",
+  bank_name: "AUREXIS SOLUTION Sdn Bhd",
   bank: "Maybank",
   account_number: "5621 0812 3456",
   swift_code: "MBBEMYKL",

@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
 
 export const metadata: Metadata = {
-  title: "Aurexis Solution | AI, Web & App Automation",
+  title: "AUREXIS SOLUTION | AI, Web & App Automation",
   description: "Building high-performance AI, Web, and App ecosystems for the next generation of industry leaders.",
 };
 

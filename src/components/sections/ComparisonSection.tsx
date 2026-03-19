@@ -65,7 +65,7 @@ export const ComparisonSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1.5fr] gap-4 mb-4 border-b border-white/5 pb-6">
           <div className="text-[10px] uppercase tracking-[0.4em] text-neutral-600 font-black">Benchmark feature</div>
           <div className="text-[10px] uppercase tracking-[0.4em] text-neutral-600 font-black">Traditional Vendors</div>
-          <div className="text-[10px] uppercase tracking-[0.4em] text-[#00F0FF] font-black">Aurexis Solution</div>
+          <div className="text-[10px] uppercase tracking-[0.4em] text-[#00F0FF] font-black">AUREXIS SOLUTION</div>
         </div>
 
         {/* Comparison Rows */}

@@ -35,7 +35,7 @@ const visionCards = [
     eyebrow: "— W H E R E  W E  A R E  G O I N G",
     title: "A digital landscape without limits.",
     description:
-      "We envision a future where manual workflows are entirely obsolete. Aurexis Solution aims to be the premier technical partner in Kuala Lumpur and beyond, setting the absolute gold standard for how enterprise AI, web architecture, and mobile platforms operate as a single, unified brain.",
+      "We envision a future where manual workflows are entirely obsolete. AUREXIS SOLUTION aims to be the premier technical partner in Kuala Lumpur and beyond, setting the absolute gold standard for how enterprise AI, web architecture, and mobile platforms operate as a single, unified brain.",
     points: ["The new standard", "Unified ecosystems"],
     accent: "from-[#0047FF]/20 via-[#09090B] to-transparent",
   },
@@ -264,7 +264,7 @@ export default function AboutPage() {
                 <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden border border-white/10 bg-[#02040A] shadow-[0_0_40px_rgba(0,240,255,0.05)]">
                   <Image 
                     src="/images/cto.jpg"
-                    alt="Aurexis Solution CTO"
+                    alt="AUREXIS SOLUTION CTO"
                     fill
                     className="object-cover object-center mix-blend-luminosity opacity-90 transition-opacity duration-500 hover:mix-blend-normal hover:opacity-100"
                     sizes="(max-width: 1024px) 100vw, 50vw"
@@ -295,7 +295,7 @@ export default function AboutPage() {
                 
                 <div className="space-y-6 text-[#94A3B8] text-lg leading-relaxed mb-10">
                   <p>
-                    <strong className="text-white">The Story:</strong> I started Aurexis Solution with a singular vision: to bridge the gap between abstract AI concepts and tangible, automated business outcomes. Traditional agencies focus on isolated deliverables; we focus on unified ecosystems. We exist to architect the underlying digital infrastructure that allows forward-thinking innovators to scale their revenue aggressively without infinitely scaling their headcount.
+                    <strong className="text-white">The Story:</strong> I started AUREXIS SOLUTION with a singular vision: to bridge the gap between abstract AI concepts and tangible, automated business outcomes. Traditional agencies focus on isolated deliverables; we focus on unified ecosystems. We exist to architect the underlying digital infrastructure that allows forward-thinking innovators to scale their revenue aggressively without infinitely scaling their headcount.
                   </p>
                   <p>
                     <strong className="text-white">The Expertise:</strong> As Founder & CTO, I don't just manage projects; I architect them. True innovation requires deep, hands-on technical expertise. When you partner with Aurexis, you are working directly with leadership that understands the code, the modern tech stack, and the exact mechanical workflows required to bring your vision to life.

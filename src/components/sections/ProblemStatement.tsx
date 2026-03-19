@@ -172,7 +172,7 @@ export function ProblemStatement() {
         {/* Section header */}
         <div className="max-w-5xl mb-32">
           <div className="mb-8">
-            <AnimatedBadge text="Why Aurexis Solution" color="#00F0FF" />
+            <AnimatedBadge text="Why AUREXIS SOLUTION" color="#00F0FF" />
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-medium tracking-tighter text-white mb-6 leading-[1.05]">
             The problem isn't your technology.<br className="hidden lg:block" />

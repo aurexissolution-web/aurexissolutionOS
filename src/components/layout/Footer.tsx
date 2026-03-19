@@ -72,10 +72,10 @@ export function Footer() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/logo.svg"
-                alt="Aurexis Solution"
+                alt="AUREXIS SOLUTION"
                 className="h-[64px] w-auto object-contain"
               />
-              <span className="text-white font-bold text-[15px] tracking-wide">Aurexis Solution</span>
+              <span className="text-white font-bold text-[15px] tracking-wide">AUREXIS SOLUTION</span>
             </Link>
 
             <h3 className="text-lg font-semibold text-white leading-snug">
@@ -156,7 +156,7 @@ export function Footer() {
 
         {/* ── Bottom bar ── */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 py-5 border-t border-white/[0.05] text-[12px] text-neutral-600">
-          <span>© {new Date().getFullYear()} Aurexis Solution. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} AUREXIS SOLUTION. All rights reserved.</span>
           <div className="flex gap-5">
             <Link href="/privacy-policy" className="hover:text-neutral-400 transition-colors">Privacy Policy</Link>
             <Link href="/terms-of-service" className="hover:text-neutral-400 transition-colors">Terms of Service</Link>

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy | Aurexis Solution",
-  description: "Understand how Aurexis Solution uses cookies and how you can manage your preferences.",
+  title: "Cookie Policy | AUREXIS SOLUTION",
+  description: "Understand how AUREXIS SOLUTION uses cookies and how you can manage your preferences.",
 };
 
 export default function CookiePolicyPage() {

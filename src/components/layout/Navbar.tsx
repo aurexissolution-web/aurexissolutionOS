@@ -60,11 +60,11 @@ export function Navbar() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logo.svg"
-              alt="Aurexis Solution"
+              alt="AUREXIS SOLUTION"
               className="h-[48px] w-auto object-contain"
             />
             <span className="text-white font-semibold text-[15px] tracking-[-0.01em]">
-              Aurexis Solution
+              AUREXIS SOLUTION
             </span>
           </Link>
 

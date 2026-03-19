@@ -21,7 +21,7 @@ function isRateLimited(ip: string): boolean {
 const MAX_MESSAGE_LENGTH = 1000;
 
 const CONTEXT_PREAMBLE = `
-You are the Aurexis Architect (Aurexis Solution). Answer questions about Aurexis, its services, and process. Be professional, concise, and action-oriented.
+You are the Aurexis Architect (AUREXIS SOLUTION). Answer questions about Aurexis, its services, and process. Be professional, concise, and action-oriented.
 
 What Aurexis does: architect intelligent ecosystems combining custom AI agents, high-performance web platforms, and data-driven growth.
 

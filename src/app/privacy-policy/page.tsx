@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Aurexis Solution",
-  description: "Learn how Aurexis Solution collects, uses, and protects your personal data across our digital platforms.",
+  title: "Privacy Policy | AUREXIS SOLUTION",
+  description: "Learn how AUREXIS SOLUTION collects, uses, and protects your personal data across our digital platforms.",
 };
 
 export default function PrivacyPolicyPage() {
@@ -19,7 +19,7 @@ export default function PrivacyPolicyPage() {
           <section className="space-y-3">
             <h2 className="text-2xl font-semibold text-white">1. Introduction</h2>
             <p>
-              Aurexis Solution ("we," "our," or "us") is committed to protecting your privacy and ensuring your
+              AUREXIS SOLUTION ("we," "our," or "us") is committed to protecting your privacy and ensuring your
               personal data is handled securely. This Privacy Policy outlines how we collect, use, and safeguard
               your information when you visit our website, utilize our Client Portal, or engage our digital architecture
               and AI automation services. We comply with the Personal Data Protection Act (PDPA) of Malaysia and adhere
