@@ -60,7 +60,8 @@ export async function middleware(req: NextRequest) {
 
   // Redirect authenticated users away from login page
   if (isAuthPage && isAuthenticated) {
-    return NextResponse.redirect(new URL("/portal", req.url));
+    const redirectParam = req.nextUrl.searchParams.get("redirect") || "/portal/client";
+    return NextResponse.redirect(new URL(redirectParam, req.url));
   }
 
   return NextResponse.next();
