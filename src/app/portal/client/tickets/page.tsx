@@ -98,7 +98,7 @@ export default function TicketsPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          client_name: profile.company_name || profile.contact_name,
+          client_name: profile.company_name || profile.contact_name || profile.email || "Unknown Client",
           subject: form.subject,
           urgency: form.urgency,
           category: form.category,

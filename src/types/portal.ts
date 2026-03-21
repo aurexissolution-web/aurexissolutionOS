@@ -18,6 +18,7 @@ export interface ClientProfile {
   contact_name: string;
   contact_email: string;
   contact_phone: string;
+  email?: string;
   billing_address: string;
   billing_preferences: string;
   avatar_url: string | null;
