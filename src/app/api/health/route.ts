@@ -28,4 +28,6 @@ export async function GET() {
     });
   } catch (error: any) {
     console.error("Health check failed:", error);
-    return Neximpsponse.json({ status: "error", message: import { createClient } from "@supabase/
+    return NextResponse.json({ status: "error", message: error.message }, { status: 500 });
+  }
+}
