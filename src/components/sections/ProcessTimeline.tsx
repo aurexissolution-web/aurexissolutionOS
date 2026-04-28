@@ -1,318 +1,340 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { ArrowRight, Search, Layers, Zap, Rocket } from "lucide-react";
-import { AnimatedBadge } from "@/components/ui/animated-badge";
+import {
+  KeyboardEvent,
+  PointerEvent as ReactPointerEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-/* ── Data ─────────────────────────────────────────────────────── */
-const steps = [
+type Step = {
+  number: string;
+  title: string;
+  meta: string;
+  detail: string;
+};
+
+const steps: Step[] = [
   {
-    num: "01",
-    title: "Discovery & Audit",
-    subtitle: "Understanding your ecosystem end-to-end",
-    icon: Search,
-    tags: ["System Mapping", "Gap Analysis", "Stakeholder Interviews"],
+    number: "01",
+    title: "Discovery",
+    meta: "1–2 weeks · scoped, no fee",
     detail:
-      "We run a deep diagnostic across your existing infrastructure, workflows, and data pipelines. Every bottleneck is catalogued, every inefficiency documented. The outcome: a ruthlessly prioritised opportunity map that guides every decision that follows.",
+      "We sit down, map your pain points, decide what to build. No commitment yet — this is the conversation.",
   },
   {
-    num: "02",
-    title: "Architecture Blueprint",
-    subtitle: "Designing the precise solution with zero guesswork",
-    icon: Layers,
-    tags: ["Tech Stack Selection", "System Design", "Risk Assessment"],
+    number: "02",
+    title: "Ecosystem Map",
+    meta: "1 week · RM 5,000 (deducted from build)",
     detail:
-      "We translate discovery insights into a rigorous technical blueprint — defining stack choices, integration points, data flows, and security constraints. You see exactly what we're building before a single line of code is written.",
+      "Documented architecture: which systems, which agents, which integrations. Locked scope, locked timeline, locked cost.",
   },
   {
-    num: "03",
-    title: "Agile Sprint Build",
-    subtitle: "Rapid iteration, constant visibility, zero dead weight",
-    icon: Zap,
-    tags: ["2-Week Sprints", "Demo Reviews", "CI/CD Pipeline"],
+    number: "03",
+    title: "Build",
+    meta: "6–16 weeks · 50% of project upfront",
     detail:
-      "Using disciplined two-week sprints, we ship functional increments you can test and provide feedback on. Every sprint ends with a live demo, a progress report, and a retrospective — keeping the build lean, on scope, and never stagnant.",
+      "We architect, build, and ship. Weekly Monday demos — you see progress every week, not at the end.",
   },
   {
-    num: "04",
-    title: "Launch & Scale",
-    subtitle: "Deploying to production, engineered for growth",
-    icon: Rocket,
-    tags: ["Production Deployment", "Performance Tuning", "Post-Launch Support"],
+    number: "04",
+    title: "Launch",
+    meta: "1–2 weeks · 50% on launch",
     detail:
-      "Launch is not the finish line — it's the starting gun. We deploy to production with zero-downtime strategies, instrument observability tooling so you can see every metric in real time, and remain on-call for the critical post-launch window.",
+      "Production deploy, training, handover. We stay through the first 30 days post-launch.",
+  },
+  {
+    number: "05",
+    title: "Retainer",
+    meta: "Ongoing · RM 8,000–25,000/month",
+    detail:
+      "Maintenance, optimization, new features. You scale, we scale with you. Cancel any time.",
   },
 ];
 
-/* ── Drawer Row ───────────────────────────────────────────────── */
-function DrawerRow({
-  step,
-  index: _index,
-  isOpen,
-  onToggle,
-}: {
-  step: (typeof steps)[0];
-  index: number;
-  isOpen: boolean;
-  onToggle: () => void;
-}) {
-  const bodyRef = useRef<HTMLDivElement>(null);
-  const [height, setHeight] = useState(0);
-  const [hovered, setHovered] = useState(false);
+const TOTAL = steps.length;
+const LAST_INDEX = TOTAL - 1;
+const AUTO_ADVANCE_MS = 4000;
 
-  useEffect(() => {
-    if (!bodyRef.current) return;
-    const raf = requestAnimationFrame(() => {
-      if (!bodyRef.current) return;
-      setHeight(isOpen ? bodyRef.current.scrollHeight : 0);
-    });
-    return () => cancelAnimationFrame(raf);
-  }, [isOpen]);
-
-  const Icon = step.icon;
-  const active = isOpen;
-  const lit = active || hovered;
-
-  return (
-    <div
-      className="group relative last:border-none"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{ willChange: "transform" }}
-    >
-      {/* Gradient bottom separator */}
-      <div
-        className="absolute bottom-0 inset-x-0 h-px transition-opacity duration-300"
-        style={{
-          background: "linear-gradient(90deg, transparent, rgba(0,240,255,0.12) 30%, rgba(255,255,255,0.06) 60%, transparent)",
-          opacity: active ? 0 : 1,
-        }}
-      />
-
-      {/* Hover sweep background */}
-      <div
-        className="pointer-events-none absolute inset-0 transition-opacity duration-500 rounded-xl"
-        style={{
-          background: "linear-gradient(90deg, rgba(0,240,255,0.04) 0%, rgba(0,240,255,0.01) 40%, transparent 80%)",
-          opacity: lit && !active ? 1 : 0,
-        }}
-      />
-
-      {/* Active row background */}
-      <div
-        className="pointer-events-none absolute inset-0 transition-opacity duration-500 rounded-xl"
-        style={{
-          background: "linear-gradient(90deg, rgba(0,240,255,0.07) 0%, rgba(0,240,255,0.02) 50%, transparent 85%)",
-          opacity: active ? 1 : 0,
-        }}
-      />
-
-      {/* Trigger row */}
-      <button
-        onClick={onToggle}
-        className="relative w-full flex items-center gap-5 py-6 px-0 text-left focus:outline-none z-10"
-        aria-expanded={isOpen}
-      >
-        {/* Step number */}
-        <span
-          className="shrink-0 w-8 text-[11px] font-bold tracking-[0.18em] tabular-nums transition-colors duration-300"
-          style={{ color: lit ? "rgba(0,240,255,0.8)" : "rgba(255,255,255,0.18)" }}
-        >
-          {step.num}
-        </span>
-
-        {/* Icon badge */}
-        <span
-          className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center border transition-all duration-400"
-          style={{
-            borderColor: active
-              ? "rgba(0,240,255,0.45)"
-              : hovered
-              ? "rgba(0,240,255,0.2)"
-              : "rgba(255,255,255,0.07)",
-            background: active
-              ? "rgba(0,240,255,0.12)"
-              : hovered
-              ? "rgba(0,240,255,0.06)"
-              : "linear-gradient(135deg, rgba(255,255,255,0.04), rgba(0,0,0,0))",
-            boxShadow: lit ? "0 0 18px rgba(0,240,255,0.1)" : "none",
-          }}
-        >
-          <Icon
-            className="w-4 h-4 transition-colors duration-300"
-            style={{ color: active ? "#00F0FF" : hovered ? "rgba(0,240,255,0.75)" : "rgba(255,255,255,0.35)" }}
-          />
-        </span>
-
-        {/* Title block */}
-        <div className="flex-1 min-w-0">
-          <h3
-            className="text-base md:text-[17px] font-semibold tracking-tight transition-colors duration-300"
-            style={{ color: active ? "#ffffff" : hovered ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.65)" }}
-          >
-            {step.title}
-          </h3>
-          <p
-            className="text-[13px] mt-0.5 hidden sm:block transition-colors duration-300"
-            style={{ color: lit ? "rgba(255,255,255,0.38)" : "rgba(255,255,255,0.22)" }}
-          >
-            {step.subtitle}
-          </p>
-        </div>
-
-        {/* Tags — visible only when closed */}
-        <div
-          className="hidden lg:flex items-center gap-2 shrink-0 transition-all duration-400"
-          style={{ opacity: active ? 0 : hovered ? 1 : 0.55 }}
-        >
-          {step.tags.slice(0, 2).map((tag) => (
-            <span
-              key={tag}
-              className="px-2.5 py-1 rounded-full text-[10px] font-semibold border transition-all duration-300"
-              style={{
-                color: hovered ? "rgba(0,240,255,0.9)" : "rgba(0,240,255,0.55)",
-                borderColor: hovered ? "rgba(0,240,255,0.28)" : "rgba(0,240,255,0.12)",
-                background: hovered ? "rgba(0,240,255,0.08)" : "rgba(0,240,255,0.03)",
-              }}
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        {/* Arrow */}
-        <span
-          className="shrink-0 w-7 h-7 rounded-full border flex items-center justify-center ml-2 transition-all duration-500"
-          style={{
-            borderColor: active
-              ? "rgba(0,240,255,0.55)"
-              : hovered
-              ? "rgba(0,240,255,0.25)"
-              : "rgba(255,255,255,0.07)",
-            background: active
-              ? "rgba(0,240,255,0.12)"
-              : hovered
-              ? "rgba(0,240,255,0.05)"
-              : "transparent",
-            transform: active ? "rotate(90deg)" : "rotate(0deg)",
-            boxShadow: active ? "0 0 12px rgba(0,240,255,0.2)" : "none",
-          }}
-        >
-          <ArrowRight
-            className="w-3.5 h-3.5 transition-colors duration-300"
-            style={{ color: active ? "#00F0FF" : hovered ? "rgba(0,240,255,0.7)" : "rgba(255,255,255,0.3)" }}
-          />
-        </span>
-      </button>
-
-      {/* Expandable body */}
-      <div
-        className="overflow-hidden transition-all"
-        style={{
-          height: `${height}px`,
-          transitionDuration: "420ms",
-          transitionTimingFunction: "cubic-bezier(0.4,0,0.2,1)",
-        }}
-      >
-        <div ref={bodyRef} className="pb-8 pl-[5.25rem] pr-0">
-          {/* Cyan left accent */}
-          <div
-            className="relative pl-6 border-l"
-            style={{ borderColor: "rgba(0,240,255,0.2)" }}
-          >
-            {/* Dot on border */}
-            <div
-              className="absolute -left-[5px] top-1 w-2.5 h-2.5 rounded-full border-2"
-              style={{ background: "#00F0FF", borderColor: "#000" }}
-            />
-
-            <p className="text-[15px] text-neutral-400 leading-relaxed max-w-xl mb-5">
-              {step.detail}
-            </p>
-
-            {/* All tags */}
-            <div className="flex flex-wrap gap-2">
-              {step.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1.5 rounded-full text-[11px] font-semibold border"
-                  style={{
-                    color: "rgba(0,240,255,0.8)",
-                    borderColor: "rgba(0,240,255,0.2)",
-                    background: "rgba(0,240,255,0.06)",
-                  }}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Left cyan glow bar (active) */}
-      <div
-        className="pointer-events-none absolute left-0 top-0 bottom-0 w-[2px] rounded-full transition-all duration-500"
-        style={{
-          background: "linear-gradient(to bottom, transparent, #00F0FF, transparent)",
-          opacity: active ? 1 : hovered ? 0.3 : 0,
-          transform: lit ? "scaleY(1)" : "scaleY(0.3)",
-          transformOrigin: "center",
-        }}
-      />
-    </div>
-  );
+function ratioToStep(ratio: number): number {
+  const clamped = Math.max(0, Math.min(1, ratio));
+  return Math.round(clamped * LAST_INDEX);
 }
 
-
-/* ── Section ──────────────────────────────────────────────────── */
 export function ProcessTimeline() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const [activeStep, setActiveStep] = useState(0);
+  const [draggedRatio, setDraggedRatio] = useState<number | null>(null);
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
 
-  const toggle = (i: number) => setOpenIndex((prev) => (prev === i ? null : i));
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReducedMotion(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    if (hasInteracted || reducedMotion) return;
+    const id = window.setInterval(() => {
+      setActiveStep((s) => (s + 1) % TOTAL);
+    }, AUTO_ADVANCE_MS);
+    return () => window.clearInterval(id);
+  }, [hasInteracted, reducedMotion]);
+
+  const isDragging = draggedRatio !== null;
+  const visualRatio = isDragging ? draggedRatio : activeStep / LAST_INDEX;
+
+  function ratioFromPointer(clientX: number): number {
+    const rect = trackRef.current?.getBoundingClientRect();
+    if (!rect) return 0;
+    const x = clientX - rect.left;
+    return Math.max(0, Math.min(1, x / rect.width));
+  }
+
+  function handlePointerDown(e: ReactPointerEvent<HTMLDivElement>) {
+    e.preventDefault();
+    setHasInteracted(true);
+    const ratio = ratioFromPointer(e.clientX);
+    setDraggedRatio(ratio);
+    setActiveStep(ratioToStep(ratio));
+    e.currentTarget.setPointerCapture(e.pointerId);
+  }
+
+  function handlePointerMove(e: ReactPointerEvent<HTMLDivElement>) {
+    if (!isDragging) return;
+    const ratio = ratioFromPointer(e.clientX);
+    setDraggedRatio(ratio);
+    setActiveStep(ratioToStep(ratio));
+  }
+
+  function handlePointerUp(e: ReactPointerEvent<HTMLDivElement>) {
+    if (!isDragging) return;
+    setDraggedRatio(null);
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+  }
+
+  function handleKeyDown(e: KeyboardEvent<HTMLDivElement>) {
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      e.preventDefault();
+      setHasInteracted(true);
+      setActiveStep((s) => Math.min(LAST_INDEX, s + 1));
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      e.preventDefault();
+      setHasInteracted(true);
+      setActiveStep((s) => Math.max(0, s - 1));
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      setHasInteracted(true);
+      setActiveStep(0);
+    } else if (e.key === "End") {
+      e.preventDefault();
+      setHasInteracted(true);
+      setActiveStep(LAST_INDEX);
+    }
+  }
+
+  function jumpToStep(index: number) {
+    setHasInteracted(true);
+    setActiveStep(index);
+  }
+
+  const currentStep = steps[activeStep];
+  const transitionClass = isDragging ? "" : "transition-[width,left] duration-200 ease-out";
 
   return (
-    <section className="pt-20 pb-4 bg-[#000000]">
-      <div className="container mx-auto px-6 max-w-5xl">
-
-        {/* Header */}
-        <div className="mb-16 flex flex-col md:flex-row md:items-end md:justify-between gap-8">
-          <div>
-            <div className="mb-6">
-              <AnimatedBadge text="Our Process" color="#00F0FF" />
-            </div>
-            <h2 className="text-4xl md:text-6xl font-medium tracking-tighter text-white leading-[1.06]">
-              The Development<br />
-              <span className="text-[#2a2a2a]">Roadmap.</span>
-            </h2>
-          </div>
-          <p className="text-base text-neutral-500 max-w-xs md:text-right font-light leading-relaxed">
-            A disciplined, four-phase process from raw idea to production-grade platform.
-          </p>
-        </div>
-
-        {/* Drawers */}
-        <div
-          className="rounded-[24px] border border-white/[0.05] overflow-hidden"
-          style={{ background: "#050505", boxShadow: "0 0 0 1px rgba(255,255,255,0.02)" }}
+    <section className="bg-[var(--color-background)] pt-8 pb-16 px-6">
+      <div className="mx-auto max-w-7xl">
+        <motion.div
+          className="mx-auto max-w-3xl text-center mb-10"
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5 }}
         >
-          <div className="px-8 md:px-10">
+          <span className="inline-block text-[11px] font-semibold uppercase tracking-[0.28em] text-white/40 mb-3">
+            How We Work
+          </span>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-[-0.02em] leading-[1.05] text-white text-balance mb-3">
+            Five steps.{" "}
+            <em
+              className="font-serif italic text-[var(--color-electric-cyan)] font-normal"
+              style={{ filter: "drop-shadow(0 0 18px rgba(0,240,255,0.32))" }}
+            >
+              No mystery.
+            </em>
+          </h2>
+          <p className="mx-auto max-w-xl text-[15px] leading-[1.6] text-white/55 text-balance">
+            Drag the cyan dot. Each step explains itself.
+          </p>
+        </motion.div>
+
+        <motion.div
+          className="mx-auto max-w-5xl"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <div className="hidden md:grid grid-cols-5 gap-2 mb-4">
+            {steps.map((step, i) => {
+              const isActive = i === activeStep;
+              return (
+                <button
+                  key={step.number}
+                  type="button"
+                  onClick={() => jumpToStep(i)}
+                  className={`text-left text-[10.5px] font-mono uppercase tracking-[0.22em] transition-colors duration-200 ${
+                    isActive ? "text-white" : "text-white/40 hover:text-white/70"
+                  }`}
+                >
+                  <span className="text-[var(--color-electric-cyan)]/70 mr-2">
+                    {step.number}
+                  </span>
+                  {step.title}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="md:hidden flex justify-between items-baseline mb-3 text-[10.5px] font-mono uppercase tracking-[0.22em] text-white/40">
             {steps.map((step, i) => (
-              <DrawerRow
-                key={step.num}
-                step={step}
-                index={i}
-                isOpen={openIndex === i}
-                onToggle={() => toggle(i)}
-              />
+              <button
+                key={step.number}
+                type="button"
+                onClick={() => jumpToStep(i)}
+                className={`transition-colors ${
+                  i === activeStep ? "text-white" : "hover:text-white/70"
+                }`}
+              >
+                {step.number}
+              </button>
             ))}
           </div>
-        </div>
 
-        {/* Footer note */}
-        <p className="mt-8 text-center text-xs text-neutral-600 tracking-wide">
-          Average project cycle — 6 to 12 weeks from audit to launch
-        </p>
+          <div
+            ref={trackRef}
+            role="slider"
+            tabIndex={0}
+            aria-valuemin={1}
+            aria-valuemax={TOTAL}
+            aria-valuenow={activeStep + 1}
+            aria-valuetext={`${steps[activeStep].number} ${steps[activeStep].title}`}
+            aria-label="Process step selector"
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
+            onKeyDown={handleKeyDown}
+            className="relative h-10 cursor-grab active:cursor-grabbing touch-none select-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--color-electric-cyan)]/40 focus-visible:rounded-md"
+          >
+            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-1 rounded-full bg-white/[0.06]" />
+            <div
+              className={`absolute top-1/2 -translate-y-1/2 left-0 h-1 rounded-full bg-[var(--color-electric-cyan)]/70 ${transitionClass}`}
+              style={{ width: `${visualRatio * 100}%` }}
+            />
+
+            {steps.map((_, i) => {
+              const ratio = i / LAST_INDEX;
+              const isPassed = i <= activeStep;
+              return (
+                <div
+                  key={i}
+                  aria-hidden
+                  className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-200"
+                  style={{ left: `${ratio * 100}%` }}
+                >
+                  <div
+                    className={`rounded-full transition-all duration-200 ${
+                      isPassed
+                        ? "h-2 w-2 bg-[var(--color-electric-cyan)]"
+                        : "h-1.5 w-1.5 bg-white/30"
+                    }`}
+                  />
+                </div>
+              );
+            })}
+
+            <div
+              className={`absolute top-1/2 -translate-x-1/2 -translate-y-1/2 ${transitionClass}`}
+              style={{ left: `${visualRatio * 100}%` }}
+            >
+              <div
+                className="h-[18px] w-[18px] rounded-full bg-[var(--color-electric-cyan)] border-2 border-white"
+                style={{
+                  boxShadow: isDragging
+                    ? "0 0 18px rgba(0,240,255,0.9), 0 0 4px rgba(0,240,255,1)"
+                    : "0 0 12px rgba(0,240,255,0.6)",
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="mt-3 text-[10.5px] font-mono uppercase tracking-[0.22em] text-white/40 text-center">
+            Step {String(activeStep + 1).padStart(2, "0")} / {String(TOTAL).padStart(2, "0")}
+          </div>
+        </motion.div>
+
+        <motion.div
+          className="relative mx-auto max-w-3xl mt-10"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 blur-3xl opacity-40"
+            style={{
+              background:
+                "radial-gradient(60% 60% at 50% 50%, rgba(0,240,255,0.10), transparent 70%)",
+            }}
+          />
+
+          <div
+            className="relative rounded-[18px] border border-white/[0.08] bg-white/[0.025] backdrop-blur-md p-6 lg:p-8 min-h-[180px]"
+            style={{
+              boxShadow: "0 0 40px rgba(0,240,255,0.06), 0 8px 24px rgba(0,0,0,0.35)",
+            }}
+          >
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentStep.number}
+                initial={reducedMotion ? false : { opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={reducedMotion ? { opacity: 1 } : { opacity: 0, y: -6 }}
+                transition={{ duration: 0.18, ease: "easeOut" }}
+                className="grid grid-cols-[auto_1fr] gap-5 lg:gap-7 items-start"
+              >
+                <div
+                  aria-hidden
+                  className="font-serif italic text-[40px] md:text-[48px] leading-none text-white/15 select-none"
+                >
+                  {currentStep.number}
+                </div>
+
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-extrabold tracking-[-0.01em] leading-tight text-white mb-2">
+                    {currentStep.title}
+                  </h3>
+                  <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-electric-cyan)]/85 mb-3">
+                    {currentStep.meta}
+                  </div>
+                  <div className="h-px w-10 bg-[var(--color-electric-cyan)]/60 mb-3" />
+                  <p className="text-[15px] md:text-[16px] leading-[1.6] text-white/65">
+                    {currentStep.detail}
+                  </p>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

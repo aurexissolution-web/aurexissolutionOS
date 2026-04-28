@@ -1,103 +1,124 @@
 "use client";
 
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { HeroPoster } from "./HeroPoster";
+import { useShaderEligibility } from "@/lib/hooks/use-shader-eligibility";
 
-const Spline = lazy(() => import("@splinetool/react-spline"));
+const HeroShader = lazy(() => import("./HeroShader"));
+
+type IdleCallbackHandle = number;
+type IdleWindow = Window & {
+  requestIdleCallback?: (cb: () => void, opts?: { timeout?: number }) => IdleCallbackHandle;
+  cancelIdleCallback?: (handle: IdleCallbackHandle) => void;
+};
 
 export function HeroSection() {
+  const eligible = useShaderEligibility();
+  const [shaderReady, setShaderReady] = useState(false);
+
+  useEffect(() => {
+    if (!eligible) {
+      setShaderReady(false);
+      return;
+    }
+
+    const w = window as IdleWindow;
+    if (w.requestIdleCallback) {
+      const handle = w.requestIdleCallback(() => setShaderReady(true), { timeout: 1500 });
+      return () => w.cancelIdleCallback?.(handle);
+    }
+
+    const timer = window.setTimeout(() => setShaderReady(true), 800);
+    return () => window.clearTimeout(timer);
+  }, [eligible]);
+
   return (
     <section className="relative min-h-screen flex flex-col items-center overflow-hidden">
-
-      {/* Spline 3D Background (full bleed behind everything) */}
-      <div className="absolute inset-0 z-0 w-full h-full pointer-events-none">
-        <Suspense fallback={
-          <div className="w-full h-full bg-[#02040A] flex items-center justify-center">
-            <div className="w-8 h-8 border-2 border-[#00F0FF]/30 border-t-[#00F0FF] rounded-full animate-spin" />
-          </div>
-        }>
-          {/* Wrapper to physically crop out the Spline logo by scaling it out of bounds */}
-          <div className="absolute inset-0 w-full h-full overflow-hidden bg-[#02040A]">
-            <Spline
-              scene="https://prod.spline.design/Jk40Mo0ZdZwuYhtE/scene.splinecode"
-              className="w-full h-full transform-gpu will-change-transform scale-[1.1] translate-y-[-5%] opacity-60"
-              style={{ width: "100%", height: "100%" }}
-            />
-          </div>
-        </Suspense>
-        {/* Gradient fades at edges so Spline blends into the dark background */}
-        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#02040A] to-transparent z-[5]" />
-        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#02040A]/60 to-transparent z-[5]" />
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <HeroPoster />
+        {shaderReady && (
+          <Suspense fallback={null}>
+            <HeroShader />
+          </Suspense>
+        )}
+        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[var(--color-background)] to-transparent z-[5]" />
+        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[var(--color-background)]/60 to-transparent z-[5]" />
       </div>
 
-      {/* Covers "Built with Spline" watermark aggressively. Spline usually puts it bottom right or bottom left. 
-          We'll cover both corners at the very bottom just to be absolutely certain. */}
-      <div className="absolute bottom-0 right-0 w-80 h-16 bg-[#02040A] z-[50] pointer-events-auto" />
-      <div className="absolute bottom-0 left-0 w-80 h-16 bg-[#02040A] z-[50] pointer-events-auto" />
-      
-      {/* Force hide via injected style to bypass Next.js CSS scoping edge cases */}
-      <style dangerouslySetInnerHTML={{__html: `
-        spline-viewer, canvas { outline: none; }
-        #logo, a[href*="spline.design"], .spline-watermark { display: none !important; opacity: 0 !important; pointer-events: none !important; }
-      `}} />
-
-      {/* Dark overlay to suppress any Spline embedded text/UI (Removed for performance, using Spline opacity instead) */}
-
-      {/* Content Overlay */}
       <div className="relative z-10 w-full flex flex-col items-center text-center pt-52 px-6">
-
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.7 }}>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-[#02040A] text-sm text-[#94A3B8] mb-8">
-            <span className="w-2 h-2 rounded-full bg-[#00F0FF] animate-pulse" />
-            Automate. Innovate. Dominate.
-          </div>
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          <Link
+            href="/services/ai-automation"
+            className="group inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-[var(--color-electric-cyan)]/15 bg-white/[0.04] backdrop-blur-xl text-sm text-[#cbd5e1] mb-8 transition-all hover:border-[var(--color-electric-cyan)]/35 hover:bg-white/[0.07]"
+            style={{ boxShadow: "0 0 28px rgba(0,240,255,0.10), 0 8px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.14)" }}
+          >
+            <span
+              aria-hidden
+              className="w-1.5 h-1.5 rounded-full bg-[var(--color-electric-cyan)] animate-pulse"
+              style={{ boxShadow: "0 0 8px rgba(0,240,255,0.9)" }}
+            />
+            <span className="text-[11px] font-bold tracking-[0.18em] uppercase text-[var(--color-electric-cyan)]">
+              New
+            </span>
+            <span aria-hidden className="text-white/25">·</span>
+            <span className="text-white">AI Agent Workflows now live</span>
+            <ArrowRight className="w-3.5 h-3.5 text-[var(--color-electric-cyan)] group-hover:translate-x-0.5 transition-transform" />
+          </Link>
         </motion.div>
 
         <motion.h1
           className="text-6xl md:text-8xl lg:text-[110px] font-extrabold tracking-[-0.03em] leading-[0.9] text-white max-w-5xl mb-8"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, ease: "easeOut", delay: 0.85 }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          The Intelligence{" "}
-          <span className="bg-gradient-to-r from-white via-[#00F0FF] to-[#0047FF] text-transparent bg-clip-text">
-            Behind Your Growth.
-          </span>
+          The{" "}
+          <em
+            className="not-italic bg-gradient-to-r from-[#A0FFFF] via-[var(--color-electric-cyan)] to-[#0080FF] text-transparent bg-clip-text"
+            style={{ filter: "drop-shadow(0 0 20px rgba(0,240,255,0.32))" }}
+          >
+            Ecosystem
+          </em>{" "}
+          Behind Your Growth.
         </motion.h1>
 
         <motion.p
           className="text-xl md:text-2xl text-[#94A3B8] max-w-4xl mb-12 leading-relaxed"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 1.0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          We architect intelligent ecosystems integrating custom AI agents, high-performance web platforms, and data-driven marketing to turn your technical infrastructure into a growth engine.
+          Connected ecosystems for Malaysian businesses. AI agents, web platforms, and mobile apps — designed and built as one system, so you stop paying humans to do machine-level work.
         </motion.p>
 
         <motion.div
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 1.15 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
         >
           <Link
             href="/contact"
-            className="px-8 py-4 rounded-full bg-white text-black font-bold text-lg hover:bg-white/90 transition-all hover:-translate-y-0.5 shadow-[0_0_30px_rgba(255,255,255,0.25)]"
+            className="inline-flex items-center px-6 py-2.5 rounded-full bg-white text-black text-[15px] font-semibold transition-all hover:-translate-y-0.5 shadow-[0_4px_14px_rgba(0,0,0,0.25)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.3),0_0_24px_rgba(0,240,255,0.15)]"
           >
             Start Building
           </Link>
           <Link
             href="/services"
-            className="px-8 py-4 rounded-full border border-white/20 text-white font-bold text-lg hover:bg-white/5 transition-colors flex items-center gap-2 group"
+            className="group inline-flex items-center gap-1.5 px-6 py-2.5 rounded-full border border-[var(--color-electric-cyan)]/20 text-white text-[15px] font-semibold bg-white/[0.03] backdrop-blur-md transition-all hover:bg-white/[0.07] hover:border-[var(--color-electric-cyan)]/40"
           >
-            Explore Stack <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            Explore Stack
+            <ArrowRight className="w-4 h-4 text-[var(--color-electric-cyan)] group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </motion.div>
-
       </div>
     </section>
   );
 }
-

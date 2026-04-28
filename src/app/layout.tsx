@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Geist_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { ChatbotWidget } from "@/components/ui/ChatbotWidget";
 
@@ -11,6 +11,13 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  subsets: ["latin"],
+  weight: "400",
+  style: "italic",
 });
 
 import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
@@ -31,18 +38,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <head>
-        {/* Preload the Spline scene so download starts before JS parses — narrows
-            the overlap window between WebGL shader compilation and entry animations */}
-        <link
-          rel="preload"
-          href="https://prod.spline.design/Jk40Mo0ZdZwuYhtE/scene.splinecode"
-          as="fetch"
-          crossOrigin="anonymous"
-        />
-      </head>
       <body
-        className={`${plusJakartaSans.variable} ${geistMono.variable} antialiased font-sans flex flex-col min-h-screen`}
+        className={`${plusJakartaSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased font-sans flex flex-col min-h-screen`}
       >
         <SmoothScrollProvider>
           {children}

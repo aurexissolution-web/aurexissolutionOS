@@ -2,169 +2,358 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Facebook, Twitter, Instagram, Linkedin, Send, CheckCircle } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowUpRight, Send, Check } from "lucide-react";
 
-/* ── Newsletter inline ────────────────────────────────────────── */
-function FooterNewsletter() {
+function LinkedinGlyph({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      aria-hidden
+    >
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.852 3.37-1.852 3.601 0 4.267 2.37 4.267 5.455v6.288zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.063 2.063 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+    </svg>
+  );
+}
+
+function InstagramGlyph({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      aria-hidden
+    >
+      <path d="M12 2.163c3.204 0 3.584.012 4.849.07 3.26.149 4.771 1.691 4.919 4.919.058 1.265.07 1.645.07 4.849 0 3.205-.012 3.584-.07 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.849.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
+    </svg>
+  );
+}
+
+function YoutubeGlyph({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      aria-hidden
+    >
+      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+    </svg>
+  );
+}
+
+function TiktokGlyph({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      aria-hidden
+    >
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.1z" />
+    </svg>
+  );
+}
+
+const QUICK_LINKS = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Services", href: "/services" },
+  { label: "Portfolio", href: "/portfolio" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact" },
+];
+
+const SOCIAL_LINKS = [
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/aurexissolution/",
+    icon: LinkedinGlyph,
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/aurexissolution",
+    icon: InstagramGlyph,
+  },
+  {
+    label: "YouTube",
+    href: "#",
+    icon: YoutubeGlyph,
+  },
+  {
+    label: "TikTok",
+    href: "#",
+    icon: TiktokGlyph,
+  },
+];
+
+const COMPLIANCE = [
+  "LHDN-Ready",
+  "PDPA-Compliant",
+  "SST-Registered",
+  "Built in Malaysia",
+];
+
+const LEGAL_LINKS = [
+  { label: "Privacy", href: "/privacy-policy" },
+  { label: "Terms", href: "/terms-of-service" },
+  { label: "Cookie", href: "/cookie-policy" },
+];
+
+function ColumnHeader({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="text-[10px] font-mono font-medium uppercase tracking-[0.24em] text-white/45 mb-4">
+      {children}
+    </div>
+  );
+}
+
+function Hairline() {
+  return (
+    <div
+      aria-hidden
+      className="h-px w-full bg-gradient-to-r from-transparent via-white/[0.08] to-transparent"
+    />
+  );
+}
+
+function NewsletterForm() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email.includes("@")) return;
-    setSent(true);
-  };
-
-  if (sent) return (
-    <div className="flex items-center gap-2 text-sm text-[#00F0FF]">
-      <CheckCircle className="w-4 h-4" /> You're subscribed!
-    </div>
-  );
+  if (sent) {
+    return (
+      <div className="mt-3 inline-flex items-center gap-2 text-[13px] text-[var(--color-electric-cyan)]">
+        <Check className="w-4 h-4" />
+        <span>You&apos;re subscribed. Talk soon.</span>
+      </div>
+    );
+  }
 
   return (
-    <form onSubmit={submit} className="flex items-center gap-2 mt-4">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (!email.includes("@")) return;
+        setSent(true);
+      }}
+      className="mt-3 flex items-center gap-2 max-w-sm"
+    >
       <input
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        placeholder="Enter your email"
-        className="flex-1 h-10 px-4 rounded-full text-sm text-white bg-white/[0.05] border border-white/[0.08] placeholder:text-neutral-600 focus:outline-none focus:border-[rgba(0,240,255,0.3)] transition-colors min-w-0"
+        placeholder="you@email.com"
+        aria-label="Email address"
+        className="flex-1 min-w-0 h-10 px-4 rounded-full bg-white/[0.05] border border-white/[0.10] text-[13px] text-white placeholder:text-white/30 focus:border-[var(--color-electric-cyan)]/35 focus:outline-none transition-colors"
       />
       <button
         type="submit"
-        className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center border border-white/10 hover:border-[rgba(0,240,255,0.3)] hover:bg-[rgba(0,240,255,0.08)] transition-all duration-200"
+        aria-label="Subscribe"
+        className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-[var(--color-electric-cyan)]/15 border border-[var(--color-electric-cyan)]/35 text-[var(--color-electric-cyan)] hover:bg-[var(--color-electric-cyan)]/25 hover:border-[var(--color-electric-cyan)]/50 transition-colors"
       >
-        <Send className="w-3.5 h-3.5 text-neutral-400" />
+        <Send className="w-3.5 h-3.5" strokeWidth={2.25} />
       </button>
     </form>
   );
 }
 
-/* ── Footer ───────────────────────────────────────────────────── */
-const quickLinks = [
-  { label: "Home",             href: "/" },
-  { label: "About Us",         href: "/about" },
-  { label: "Services",         href: "/services" },
-  { label: "Portfolio",        href: "/portfolio" },
-  { label: "Blog",             href: "/blog" },
-  { label: "Contact",          href: "/contact" },
-];
-
-const socials = [
-  { icon: Instagram, href: "https://www.instagram.com/aurexissolution?igsh=eTJsb3J3aG9wcHc4&utm_source=qr", label: "Instagram" },
-  { icon: Facebook,  href: "https://www.facebook.com/share/18HRuAqL75/?mibextid=wwXIfr", label: "Facebook" },
-  { icon: Linkedin,  href: "https://www.linkedin.com/company/aurexissolution/", label: "LinkedIn" },
-  { icon: Twitter,   href: "https://x.com/aurexissolution?s=21", label: "X (Twitter)" },
-];
-
 export function Footer() {
+  const year = new Date().getFullYear();
+
   return (
-    <footer className="bg-[#02040A] border-t border-white/[0.06]">
-      <div className="container mx-auto px-6 max-w-7xl">
+    <footer className="relative bg-[var(--color-background)] overflow-hidden">
+      {/* Ambient cyan halos behind the glass surface */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-56 rounded-full bg-[var(--color-electric-cyan)]/10 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute bottom-0 right-0 w-[360px] h-48 rounded-full bg-[var(--color-electric-cyan)]/6 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute bottom-12 left-0 w-[280px] h-40 rounded-full bg-[var(--color-electric-cyan)]/4 blur-3xl"
+      />
 
-        {/* ── Main grid ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 pt-14 pb-10">
+      {/* ── Full-bleed glass surface ──────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="relative bg-gradient-to-b from-white/[0.045] to-white/[0.015] backdrop-blur-2xl"
+        style={{
+          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)",
+        }}
+      >
+        {/* Top rim-light highlight (premium glass detail) */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/[0.18] to-transparent"
+        />
 
-          {/* Col 1 – Brand + Newsletter */}
-          <div className="sm:col-span-2 lg:col-span-1 flex flex-col gap-4">
-            {/* Logo */}
-            <Link href="/" className="inline-flex items-center gap-2 mb-1">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/logo.svg"
-                alt="AUREXIS SOLUTION"
-                className="h-[64px] w-auto object-contain"
-              />
-              <span className="text-white font-bold text-[15px] tracking-wide">AUREXIS SOLUTION</span>
-            </Link>
+        <div className="relative mx-auto max-w-7xl px-6 py-7 lg:py-9">
+          {/* ── 4-column dense grid: brand+newsletter | links | contact | social ── */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1.3fr_1fr] gap-8 lg:gap-10">
+            {/* Col 1: Brand + Tagline + Newsletter */}
+            <div className="lg:max-w-sm">
+              <Link
+                href="/"
+                className="inline-block group"
+                aria-label="Aurexis Solution — home"
+              >
+                <h2 className="text-xl md:text-2xl font-extrabold tracking-[-0.02em] leading-tight text-white transition-colors group-hover:text-white/90">
+                  Aurexis{" "}
+                  <span className="text-white/55 group-hover:text-white/65 transition-colors">
+                    Solution
+                  </span>
+                </h2>
+              </Link>
+              <p className="mt-2 text-[10px] font-mono uppercase tracking-[0.26em] text-white/40">
+                AI · Web · Apps · Growth — Built in Malaysia
+              </p>
 
-            <h3 className="text-lg font-semibold text-white leading-snug">
-              Stay<br />Connected
-            </h3>
-            <p className="text-sm text-neutral-500 leading-relaxed">
-              Join our newsletter for the latest updates on AI, web, and growth strategy.
-            </p>
-            <FooterNewsletter />
+              <div className="mt-5">
+                <ColumnHeader>Stay in the loop</ColumnHeader>
+                <p className="text-[12px] leading-[1.55] text-white/55 max-w-[30ch] -mt-1.5">
+                  Monthly notes on what we&apos;re shipping. No spam.
+                </p>
+                <NewsletterForm />
+              </div>
+            </div>
+
+            {/* Col 2: Quick Links */}
+            <div>
+              <ColumnHeader>Quick Links</ColumnHeader>
+              <ul className="flex flex-col gap-1.5 text-[13px]">
+                {QUICK_LINKS.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="text-white/65 hover:text-white transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Col 3: Contact */}
+            <div>
+              <ColumnHeader>Contact</ColumnHeader>
+              <ul className="flex flex-col gap-1.5 text-[13px] text-white/65">
+                <li>Sungai Petani, Kedah</li>
+                <li>Kuala Lumpur, Malaysia</li>
+                <li className="pt-1">
+                  <a
+                    href="https://wa.me/60164071129"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white transition-colors"
+                  >
+                    +60 16 407 1129
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="mailto:aurexissolution@gmail.com"
+                    className="hover:text-white transition-colors break-all"
+                  >
+                    aurexissolution@gmail.com
+                  </a>
+                </li>
+                <li className="pt-1.5">
+                  <span className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.22em] text-[var(--color-electric-cyan)]/85">
+                    <span
+                      aria-hidden
+                      className="w-1.5 h-1.5 rounded-full bg-[var(--color-electric-cyan)] animate-pulse shadow-[0_0_8px_rgba(0,240,255,0.7)]"
+                    />
+                    Available for new projects
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Col 4: Social */}
+            <div>
+              <ColumnHeader>Social</ColumnHeader>
+              <ul className="flex flex-col gap-1.5">
+                {SOCIAL_LINKS.map(({ label, href, icon: Icon }) => (
+                  <li key={label}>
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group inline-flex items-center gap-2.5 text-[13px] text-white/65 hover:text-white transition-colors"
+                    >
+                      <Icon className="w-4 h-4 text-white/45 group-hover:text-[var(--color-electric-cyan)] transition-colors" />
+                      <span>{label}</span>
+                      <ArrowUpRight
+                        className="w-3 h-3 text-white/30 group-hover:text-[var(--color-electric-cyan)] transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                        aria-hidden
+                      />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
-          {/* Col 2 – Quick Links */}
-          <div>
-            <h4 className="text-[11px] font-bold tracking-[0.18em] uppercase text-neutral-500 mb-5">Quick Links</h4>
-            <ul className="flex flex-col gap-3">
-              {quickLinks.map(({ label, href }) => (
-                <li key={label}>
+          <div className="my-6 lg:my-7">
+            <Hairline />
+          </div>
+
+          {/* ── Compliance row ────────────────────────────── */}
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2.5">
+            {COMPLIANCE.map((label, i) => (
+              <motion.span
+                key={label}
+                initial={{ opacity: 0, x: -4 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.3, delay: 0.3 + i * 0.05 }}
+                className="flex items-center gap-2 text-[10px] md:text-[11px] font-mono uppercase tracking-[0.22em] text-white/55"
+              >
+                <span
+                  aria-hidden
+                  className="text-[var(--color-electric-cyan)]/80 text-[13px] leading-none -translate-y-px"
+                >
+                  +
+                </span>
+                {label}
+              </motion.span>
+            ))}
+          </div>
+
+          <div className="my-5 lg:my-6">
+            <Hairline />
+          </div>
+
+          {/* ── Bottom legal row ──────────────────────────── */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-baseline justify-between gap-3">
+            <span className="text-[10px] font-mono uppercase tracking-[0.22em] text-white/40">
+              © {year} Aurexis Solution · All rights reserved
+            </span>
+            <ul className="flex flex-wrap gap-x-5 gap-y-2 text-[10px] font-mono uppercase tracking-[0.22em] text-white/40">
+              {LEGAL_LINKS.map((link) => (
+                <li key={link.label}>
                   <Link
-                    href={href}
-                    className="text-sm text-neutral-400 hover:text-white transition-colors duration-200"
+                    href={link.href}
+                    className="hover:text-white/75 transition-colors"
                   >
-                    {label}
+                    {link.label}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
-
-          {/* Col 3 – Contact */}
-          <div>
-            <h4 className="text-[11px] font-bold tracking-[0.18em] uppercase text-neutral-500 mb-5">Contact Us</h4>
-            <ul className="flex flex-col gap-3 text-sm text-neutral-400">
-              <li>Kuala Lumpur, Malaysia</li>
-              <li>Sungai Petani, Kedah</li>
-              <li>
-                <a href="tel:+60164071129" className="hover:text-white transition-colors duration-200">
-                  +60 164071129
-                </a>
-              </li>
-              <li>
-                <a href="mailto:aurexissolution@gmail.com" className="hover:text-white transition-colors duration-200">
-                  aurexissolution@gmail.com
-                </a>
-              </li>
-              <li className="mt-1">
-                <span
-                  className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full border"
-                  style={{ borderColor: "rgba(0,240,255,0.2)", color: "rgba(0,240,255,0.7)", background: "rgba(0,240,255,0.05)" }}
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00F0FF] animate-pulse" />
-                  Available for new projects
-                </span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Col 4 – Follow Us + Theme */}
-          <div>
-            <h4 className="text-[11px] font-bold tracking-[0.18em] uppercase text-neutral-500 mb-5">Follow Us</h4>
-            <div className="grid grid-cols-2 gap-2 mb-8">
-              {socials.map(({ icon: Icon, href, label }) => (
-                <a
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-xl border border-white/[0.07] bg-white/[0.02] flex items-center justify-center hover:border-[rgba(0,240,255,0.25)] hover:bg-[rgba(0,240,255,0.06)] transition-all duration-200 group"
-                >
-                  <Icon className="w-4 h-4 text-neutral-500 group-hover:text-[#00F0FF] transition-colors duration-200" />
-                </a>
-              ))}
-            </div>
-
-          </div>
-
         </div>
-
-        {/* ── Bottom bar ── */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 py-5 border-t border-white/[0.05] text-[12px] text-neutral-600">
-          <span>© {new Date().getFullYear()} AUREXIS SOLUTION. All rights reserved.</span>
-          <div className="flex gap-5">
-            <Link href="/privacy-policy" className="hover:text-neutral-400 transition-colors">Privacy Policy</Link>
-            <Link href="/terms-of-service" className="hover:text-neutral-400 transition-colors">Terms of Service</Link>
-            <Link href="/cookie-policy" className="hover:text-neutral-400 transition-colors">Cookie Policy</Link>
-          </div>
-        </div>
-
-      </div>
+      </motion.div>
     </footer>
   );
 }

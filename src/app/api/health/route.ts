@@ -26,8 +26,9 @@ export async function GET() {
       message: "Database pinged successfully", 
       timestamp: new Date().toISOString() 
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Health check failed:", error);
-    return NextResponse.json({ status: "error", message: error.message }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ status: "error", message }, { status: 500 });
   }
 }

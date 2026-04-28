@@ -2,8 +2,11 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { TechStackMarquee } from "@/components/sections/TechStackMarquee";
-import { ProblemStatement } from "@/components/sections/ProblemStatement";
-import { CoreInfrastructure } from "@/components/sections/CoreInfrastructure";
+import { TheShift } from "@/components/sections/TheShift";
+import { TheArchitecture } from "@/components/sections/TheArchitecture";
+import { WhatWeBuild } from "@/components/sections/WhatWeBuild";
+import { TheMath } from "@/components/sections/TheMath";
+import { Calculator } from "@/components/sections/Calculator";
 import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 import { StatsSection } from "@/components/sections/StatsSection";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
@@ -17,8 +20,11 @@ export default function Home() {
       <main className="flex-1">
         <HeroSection />
         <TechStackMarquee />
-        <ProblemStatement />
-        <CoreInfrastructure />
+        <TheShift />
+        <TheArchitecture />
+        <WhatWeBuild />
+        <TheMath />
+        <Calculator />
         <ProcessTimeline />
         <StatsSection />
         <TestimonialsSection />

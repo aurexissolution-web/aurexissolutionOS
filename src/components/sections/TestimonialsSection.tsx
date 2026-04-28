@@ -69,7 +69,7 @@ export function TestimonialsSection({
   return (
     <section
       className={cn(
-        "relative py-20 bg-[#000000] border-t border-white/[0.04] overflow-hidden",
+        "relative py-20 bg-[var(--color-background)] overflow-hidden",
         className
       )}
     >
@@ -94,21 +94,30 @@ export function TestimonialsSection({
         {/* Marquee track */}
         <div className="relative w-full flex flex-col items-center overflow-hidden">
           <div
-            className="group flex overflow-hidden [--gap:1.25rem] [gap:var(--gap)] flex-row [--duration:45s]"
+            className="group flex w-full overflow-hidden [--gap:1.25rem] [gap:var(--gap)] flex-row [--duration:45s]"
           >
-            {/* Duplicated set × 4 for seamless loop */}
-            <div className="flex shrink-0 justify-around [gap:var(--gap)] animate-marquee flex-row group-hover:[animation-play-state:paused]">
-              {[...Array(4)].map((_, setIndex) =>
-                testimonials.map((t, i) => (
-                  <TestimonialCard key={`${setIndex}-${i}`} {...t} />
-                ))
-              )}
+            {/* Two sibling animated tracks for a seamless loop:
+                each holds one copy of testimonials; both translate by
+                -100% - gap simultaneously, so when track A reaches the end
+                of its travel, track B has landed exactly where A started. */}
+            <div className="flex shrink-0 [gap:var(--gap)] animate-marquee flex-row group-hover:[animation-play-state:paused]">
+              {testimonials.map((t, i) => (
+                <TestimonialCard key={`a-${i}`} {...t} />
+              ))}
+            </div>
+            <div
+              aria-hidden
+              className="flex shrink-0 [gap:var(--gap)] animate-marquee flex-row group-hover:[animation-play-state:paused]"
+            >
+              {testimonials.map((t, i) => (
+                <TestimonialCard key={`b-${i}`} {...t} />
+              ))}
             </div>
           </div>
 
-          {/* Fade edges */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-32 md:w-64 bg-gradient-to-r from-black to-transparent z-10" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-32 md:w-64 bg-gradient-to-l from-black to-transparent z-10" />
+          {/* Fade edges — match the new section bg, not pure black */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-32 md:w-64 bg-gradient-to-r from-[var(--color-background)] to-transparent z-10" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-32 md:w-64 bg-gradient-to-l from-[var(--color-background)] to-transparent z-10" />
         </div>
       </div>
     </section>

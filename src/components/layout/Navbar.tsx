@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -55,16 +55,24 @@ export function Navbar() {
 >
         <div className="mx-auto flex h-[72px] max-w-[1280px] items-center justify-between px-6 lg:px-8">
 
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 outline-none flex-shrink-0">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/logo.svg"
-              alt="AUREXIS SOLUTION"
-              className="h-[48px] w-auto object-contain"
-            />
-            <span className="text-white font-semibold text-[15px] tracking-[-0.01em]">
-              AUREXIS SOLUTION
+          {/* Logo lockup — wordmark only */}
+          <Link
+            href="/"
+            className="group inline-flex items-baseline gap-2 outline-none flex-shrink-0"
+            aria-label="Aurexis Solution — Home"
+          >
+            <span className="text-[16px] font-bold text-white tracking-[-0.015em] leading-none transition-colors duration-200 group-hover:text-white">
+              AUREXIS
+            </span>
+            <span
+              aria-hidden
+              className="text-[16px] leading-none text-[var(--color-electric-cyan)]"
+              style={{ textShadow: "0 0 8px rgba(0,240,255,0.6)" }}
+            >
+              ·
+            </span>
+            <span className="text-[13.5px] font-semibold text-white/65 tracking-[0.2em] leading-none">
+              SOLUTION
             </span>
           </Link>
 
@@ -72,9 +80,12 @@ export function Navbar() {
           <nav
             className="hidden md:flex items-center gap-0"
             style={{
-              background: "rgba(255,255,255,0.06)",
-              border: "1px solid rgba(255,255,255,0.08)",
+              background: "rgba(15, 15, 20, 0.55)",
+              border: "1px solid rgba(255,255,255,0.10)",
               borderRadius: "999px",
+              backdropFilter: "blur(14px)",
+              WebkitBackdropFilter: "blur(14px)",
+              boxShadow: "0 4px 24px rgba(0,0,0,0.25)",
               padding: "4px 6px",
               gap: "2px",
             }}
