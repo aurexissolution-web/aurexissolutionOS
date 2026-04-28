@@ -48,7 +48,7 @@ export function HeroSection() {
         <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[var(--color-background)]/60 to-transparent z-[5]" />
       </div>
 
-      <div className="relative z-10 w-full flex flex-col items-center text-center pt-52 px-6">
+      <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-center text-center px-6 pt-24 pb-28 md:pt-28 md:pb-36">
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
