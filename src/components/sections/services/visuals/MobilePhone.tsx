@@ -62,7 +62,7 @@ export function MobilePhone() {
   return (
     <div
       ref={containerRef}
-      className="w-full max-w-[480px] flex items-center gap-8"
+      className="w-full max-w-[480px] flex flex-col md:flex-row items-center gap-8"
       style={{ perspective: "1000px" }}
     >
       <div

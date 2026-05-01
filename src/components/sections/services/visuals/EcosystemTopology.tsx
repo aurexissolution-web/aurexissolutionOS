@@ -1,9 +1,17 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function EcosystemTopology() {
   const wrapRef = useRef<HTMLDivElement | null>(null);
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    setReduced(
+      typeof window !== "undefined" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    );
+  }, []);
 
   function onMove(e: React.MouseEvent) {
     const el = wrapRef.current;
@@ -108,89 +116,63 @@ export function EcosystemTopology() {
           fill="none"
         />
 
-        {/* traveling data packets */}
-        <circle r="6" fill="#00F0FF">
-          <animateMotion dur="2.6s" repeatCount="indefinite">
-            <mpath href="#eco-path-ai" />
-          </animateMotion>
-          <animate
-            attributeName="opacity"
-            values="0;1;1;0"
-            dur="2.6s"
-            repeatCount="indefinite"
-          />
-        </circle>
-        <circle r="6" fill="#8B5CF6">
-          <animateMotion dur="2.9s" repeatCount="indefinite">
-            <mpath href="#eco-path-web" />
-          </animateMotion>
-          <animate
-            attributeName="opacity"
-            values="0;1;1;0"
-            dur="2.9s"
-            repeatCount="indefinite"
-          />
-        </circle>
-        <circle r="6" fill="#10B981">
-          <animateMotion dur="3.3s" repeatCount="indefinite">
-            <mpath href="#eco-path-mobile" />
-          </animateMotion>
-          <animate
-            attributeName="opacity"
-            values="0;1;1;0"
-            dur="3.3s"
-            repeatCount="indefinite"
-          />
-        </circle>
+        {/* traveling data packets — gated on reduced motion */}
+        {!reduced && (
+          <>
+            <circle r="6" fill="#00F0FF">
+              <animateMotion dur="2.6s" repeatCount="indefinite">
+                <mpath href="#eco-path-ai" />
+              </animateMotion>
+              <animate attributeName="opacity" values="0;1;1;0" dur="2.6s" repeatCount="indefinite" />
+            </circle>
+            <circle r="6" fill="#8B5CF6">
+              <animateMotion dur="2.9s" repeatCount="indefinite">
+                <mpath href="#eco-path-web" />
+              </animateMotion>
+              <animate attributeName="opacity" values="0;1;1;0" dur="2.9s" repeatCount="indefinite" />
+            </circle>
+            <circle r="6" fill="#10B981">
+              <animateMotion dur="3.3s" repeatCount="indefinite">
+                <mpath href="#eco-path-mobile" />
+              </animateMotion>
+              <animate attributeName="opacity" values="0;1;1;0" dur="3.3s" repeatCount="indefinite" />
+            </circle>
+          </>
+        )}
 
         {/* AI node (top, cyan) */}
         <circle cx="300" cy="90" r="11" fill="#00F0FF">
-          <animate
-            attributeName="r"
-            values="11;15;11"
-            dur="2.6s"
-            repeatCount="indefinite"
-          />
+          {!reduced && (
+            <animate attributeName="r" values="11;15;11" dur="2.6s" repeatCount="indefinite" />
+          )}
         </circle>
         <circle cx="300" cy="90" r="26" fill="#00F0FF" opacity="0.16" />
 
         {/* Web node (bottom-left, violet) */}
         <circle cx="80" cy="470" r="11" fill="#8B5CF6">
-          <animate
-            attributeName="r"
-            values="11;15;11"
-            dur="2.9s"
-            repeatCount="indefinite"
-          />
+          {!reduced && (
+            <animate attributeName="r" values="11;15;11" dur="2.9s" repeatCount="indefinite" />
+          )}
         </circle>
         <circle cx="80" cy="470" r="26" fill="#8B5CF6" opacity="0.16" />
 
         {/* Mobile node (bottom-right, emerald) */}
         <circle cx="520" cy="470" r="11" fill="#10B981">
-          <animate
-            attributeName="r"
-            values="11;15;11"
-            dur="3.3s"
-            repeatCount="indefinite"
-          />
+          {!reduced && (
+            <animate attributeName="r" values="11;15;11" dur="3.3s" repeatCount="indefinite" />
+          )}
         </circle>
         <circle cx="520" cy="470" r="26" fill="#10B981" opacity="0.16" />
 
         {/* hub */}
         <circle cx="300" cy="343" r="28" fill="#F59E0B" />
         <circle cx="300" cy="343" r="44" fill="#F59E0B" opacity="0.22">
-          <animate
-            attributeName="r"
-            values="44;64;44"
-            dur="2.4s"
-            repeatCount="indefinite"
-          />
-          <animate
-            attributeName="opacity"
-            values="0.22;0;0.22"
-            dur="2.4s"
-            repeatCount="indefinite"
-          />
+          {!reduced && (
+            <>
+              <animate attributeName="r" values="44;64;44" dur="2.4s" repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.22;0;0.22" dur="2.4s" repeatCount="indefinite" />
+            </>
+          )}
         </circle>
       </svg>
 

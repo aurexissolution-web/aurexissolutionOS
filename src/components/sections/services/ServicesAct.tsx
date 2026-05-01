@@ -1,8 +1,17 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import type { ServiceHubEntry } from "@/data/services-hub";
+
+// The detail-page route exists for these slugs (see src/app/services/[slug]/page.tsx).
+// `ecosystem` doesn't have a detail page yet — flagged as a follow-up — so route to /contact.
+const SLUGS_WITH_DETAIL: ReadonlySet<ServiceHubEntry["id"]> = new Set([
+  "ai-automation",
+  "web-engineering",
+  "mobile-ecosystems",
+]);
 
 type Props = {
   entry: ServiceHubEntry;
@@ -166,8 +175,8 @@ export function ServicesAct({ entry, visual }: Props) {
             ))}
           </div>
 
-          <a
-            href="#"
+          <Link
+            href={SLUGS_WITH_DETAIL.has(entry.id) ? `/services/${entry.id}` : "/contact"}
             className="inline-flex items-center gap-3.5 font-mono text-xs uppercase tracking-[0.22em] text-white border-b pb-2 transition-[opacity,gap] duration-[700ms] ease-out hover:gap-[18px]"
             style={{
               borderColor: entry.accent,
@@ -177,7 +186,7 @@ export function ServicesAct({ entry, visual }: Props) {
           >
             Continue reading
             <span style={{ color: entry.accent }}>→</span>
-          </a>
+          </Link>
         </div>
 
         {/* VISUAL block */}

@@ -9,12 +9,11 @@ export type ServiceHubEntry = {
   title: string;
   /** Optional substring of `title` that should render in the accent gradient (e.g. "AI" in "AI Automation."). */
   titleColored?: string;
-  what: string;
   pull: string;
   desc: string;
   /**
-   * 2-3 stat tiles shown under the body copy. `count` (when present) animates from 0 on scroll-into-view.
-   * `value` is what gets rendered (suffix + prefix included).
+   * 2-3 stat tiles shown under the body copy. When `count` is set, the displayed number animates
+   * from 0 to `count` on scroll-into-view; otherwise the literal `value` (e.g. "60 fps") is shown as-is.
    */
   stats: { value: string; label: string; count?: number; suffix?: string }[];
   accent: ServiceAccent;
@@ -30,7 +29,6 @@ export const servicesHub: ServiceHubEntry[] = [
     index: "01",
     label: "Full Stack",
     title: "Ecosystem.",
-    what: "Web, mobile, and AI engineered as one organism.",
     pull: "Web, mobile, and AI engineered as one organism — shared data, shared design, one team.",
     desc:
       "Most agencies hand you three vendors and call it a stack. We architect Web, Mobile, and AI Automation as a single intelligent system — the kind that compounds, not competes.",
@@ -50,7 +48,6 @@ export const servicesHub: ServiceHubEntry[] = [
     label: "AI & LLM",
     title: "AI Automation.",
     titleColored: "AI",
-    what: "Replace headcount with intelligent systems.",
     pull:
       "Custom LLMs, RAG pipelines, and autonomous workflow agents — engineered to replace repetitive ops, not just speed them up.",
     desc:
@@ -70,7 +67,6 @@ export const servicesHub: ServiceHubEntry[] = [
     label: "Web & SEO",
     title: "Web Engineering.",
     titleColored: "Engineering.",
-    what: "Performance is a feature, not an afterthought.",
     pull:
       "Ultra-fast, meticulously designed digital platforms — built for SEO dominance and conversion, not for the design awards reel.",
     desc:
@@ -91,7 +87,6 @@ export const servicesHub: ServiceHubEntry[] = [
     label: "Mobile & App",
     title: "Mobile Ecosystems.",
     titleColored: "Ecosystems.",
-    what: "Native performance. Zero compromise.",
     pull:
       "Seamless iOS and Android experiences built with React Native — designed to scale from zero to a hundred thousand users without friction.",
     desc:
