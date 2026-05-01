@@ -7,10 +7,22 @@ const ARC_CIRC = 2 * Math.PI * ARC_RADIUS; // ~502.65
 const TARGET_PCT = 0.99;
 const TARGET_NUM = 99;
 
+function prefersReduced() {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
 export function WebGauge() {
   const ref = useRef<HTMLDivElement | null>(null);
   const [inView, setInView] = useState(false);
   const [num, setNum] = useState(0);
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    setReduced(prefersReduced());
+  }, []);
 
   useEffect(() => {
     const el = ref.current;
@@ -33,10 +45,7 @@ export function WebGauge() {
 
   useEffect(() => {
     if (!inView) return;
-    if (
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
+    if (reduced) {
       setNum(TARGET_NUM);
       return;
     }
@@ -51,7 +60,7 @@ export function WebGauge() {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [inView]);
+  }, [inView, reduced]);
 
   const offset = inView ? ARC_CIRC * (1 - TARGET_PCT) : ARC_CIRC;
 
@@ -86,7 +95,9 @@ export function WebGauge() {
             strokeDasharray={ARC_CIRC}
             strokeDashoffset={offset}
             style={{
-              transition: "stroke-dashoffset 2.2s cubic-bezier(.2,.7,.2,1) .5s",
+              transition: reduced
+                ? "none"
+                : "stroke-dashoffset 2.2s cubic-bezier(.2,.7,.2,1) .5s",
               filter: "drop-shadow(0 0 14px rgba(139,92,246,0.5))",
             }}
           />
@@ -104,10 +115,10 @@ export function WebGauge() {
 
       {/* perf bars */}
       <div className="flex flex-col gap-3.5">
-        <Bar label="LCP" widthPct={88} value="0.92s" delay="1.0s" inView={inView} />
-        <Bar label="CLS" widthPct={96} value="0.01" delay="1.2s" inView={inView} />
-        <Bar label="FID" widthPct={92} value="12ms" delay="1.4s" inView={inView} />
-        <Bar label="TTFB" widthPct={90} value="98ms" delay="1.6s" inView={inView} />
+        <Bar label="LCP" widthPct={88} value="0.92s" delay="1.0s" inView={inView} reduced={reduced} />
+        <Bar label="CLS" widthPct={96} value="0.01" delay="1.2s" inView={inView} reduced={reduced} />
+        <Bar label="FID" widthPct={92} value="12ms" delay="1.4s" inView={inView} reduced={reduced} />
+        <Bar label="TTFB" widthPct={90} value="98ms" delay="1.6s" inView={inView} reduced={reduced} />
       </div>
     </div>
   );
@@ -119,12 +130,14 @@ function Bar({
   value,
   delay,
   inView,
+  reduced,
 }: {
   label: string;
   widthPct: number;
   value: string;
   delay: string;
   inView: boolean;
+  reduced: boolean;
 }) {
   return (
     <div className="grid grid-cols-[70px_1fr_60px] gap-4 items-center font-mono text-[11px]">
@@ -136,7 +149,9 @@ function Bar({
             width: inView ? `${widthPct}%` : "0%",
             background: "linear-gradient(90deg, #8B5CF6, #C4B5FD)",
             boxShadow: "0 0 12px rgba(139,92,246,0.45)",
-            transition: `width 1.6s cubic-bezier(.2,.7,.2,1) ${delay}`,
+            transition: reduced
+              ? "none"
+              : `width 1.6s cubic-bezier(.2,.7,.2,1) ${delay}`,
           }}
         />
       </div>
