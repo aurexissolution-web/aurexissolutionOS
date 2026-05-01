@@ -91,7 +91,7 @@ export function AIWorkshop() {
                 {tok.text}
               </span>
             ))}
-            <span className="text-[var(--color-electric-cyan)] [animation:services-cursor-blink_0.85s_step-end_infinite]">
+            <span className="services-anim-cursor-blink text-[var(--color-electric-cyan)] [animation:services-cursor-blink_0.85s_step-end_infinite]">
               ▌
             </span>
           </div>
@@ -102,7 +102,7 @@ export function AIWorkshop() {
       <Panel head={{ title: "ingest · vector store", right: "streaming" }}>
         <div className="px-4 py-3 min-h-[90px]">
           <div className="relative h-[60px] overflow-hidden">
-            <div className="[animation:services-stream-up_12s_linear_infinite]">
+            <div className="services-anim-stream-up [animation:services-stream-up_12s_linear_infinite]">
               {[
                 { tag: "CSV", tone: "cyan" as const, file: "customers_2026q3.csv", size: "42KB" },
                 { tag: "PDF", tone: "amber" as const, file: "contract_v4_redline.pdf", size: "1.2MB" },
@@ -148,7 +148,7 @@ function Panel({
       />
       <div className="px-3.5 py-2.5 border-b border-white/10 flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-[0.18em] text-[#6B7588]">
         <span
-          className="w-1.5 h-1.5 rounded-full bg-[var(--color-electric-cyan)] [box-shadow:0_0_8px_var(--color-electric-cyan)] [animation:services-pulse-soft_1.4s_ease-in-out_infinite]"
+          className="services-anim-pulse-soft w-1.5 h-1.5 rounded-full bg-[var(--color-electric-cyan)] [box-shadow:0_0_8px_var(--color-electric-cyan)] [animation:services-pulse-soft_1.4s_ease-in-out_infinite]"
         />
         {head.title}
         <span className="ml-auto">{head.right}</span>
