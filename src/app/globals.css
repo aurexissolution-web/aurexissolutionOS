@@ -176,30 +176,34 @@ input[type="number"].calc-input {
 }
 
 /* ====================================================================
-   /services hub redesign — page-local keyframes (2026-05-01)
+   /services hub roster — hover signals (2026-05-01 redesign)
+   Each .services-roster-row sets `--accent` inline. The `::after`
+   draws a glowing accent hairline along the bottom on hover, and the
+   `.services-roster-arrow` ring picks up the same accent.
    ==================================================================== */
-
-@keyframes services-stream-up {
-  0% { transform: translateY(60px); }
-  100% { transform: translateY(-160px); }
+.services-roster-row {
+  position: relative;
+  --accent: #00F0FF;
 }
-@keyframes services-scroll-feed {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-50%); }
+.services-roster-row::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 1px;
+  background: var(--accent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 50%, transparent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.55s cubic-bezier(.2,.7,.2,1);
 }
-@keyframes services-cursor-blink {
-  50% { opacity: 0; }
+.services-roster-row:hover::after {
+  transform: scaleX(1);
 }
-@keyframes services-pulse-soft {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+.services-roster-row:hover .services-roster-arrow {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--accent) 30%, transparent);
 }
-
-/* honor prefers-reduced-motion: freeze these animations at their initial state */
 @media (prefers-reduced-motion: reduce) {
-  .services-anim-stream-up,
-  .services-anim-scroll-feed,
-  .services-anim-cursor-blink,
-  .services-anim-pulse-soft { animation: none !important; }
+  .services-roster-row::after { transition: none; }
 }
-
