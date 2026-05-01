@@ -277,3 +277,35 @@ input[type="number"].calc-input {
   box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
   transform: scale(1.1);
 }
+
+/* ====================================================================
+   /services hub redesign — page-local keyframes (2026-05-01)
+   ==================================================================== */
+
+@keyframes services-stream-up {
+  0% { transform: translateY(60px); }
+  100% { transform: translateY(-160px); }
+}
+@keyframes services-scroll-feed {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+@keyframes services-cursor-blink {
+  50% { opacity: 0; }
+}
+@keyframes services-slow-spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@keyframes services-pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* honor prefers-reduced-motion: freeze these animations at their initial state */
+@media (prefers-reduced-motion: reduce) {
+  .services-anim-stream-up,
+  .services-anim-scroll-feed,
+  .services-anim-cursor-blink,
+  .services-anim-slow-spin,
+  .services-anim-pulse-soft { animation: none !important; }
+}
