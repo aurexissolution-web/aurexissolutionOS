@@ -391,7 +391,7 @@ function StackVisual({ reduce }: { reduce: boolean }) {
         <motion.g
           key={i}
           initial={
-            reduce ? false : { opacity: 0, x: c.ox - 14, y: c.oy - 6 }
+            reduce ? false : { x: c.ox - 14, y: c.oy - 6 }
           }
           whileInView={
             reduce ? undefined : { opacity: 1, x: c.ox, y: c.oy }
