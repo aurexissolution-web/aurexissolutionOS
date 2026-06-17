@@ -98,7 +98,7 @@ function ScatterVisual({ reduce }: { reduce: boolean }) {
           stroke={`rgba(255,255,255,${l.op})`}
           strokeWidth={0.7}
           strokeDasharray="3 4"
-          initial={reduce ? false : { pathLength: 0 }}
+          initial={false}
           whileInView={
             reduce ? undefined : { pathLength: 1, opacity: 1 }
           }
@@ -160,7 +160,7 @@ function ScatterVisual({ reduce }: { reduce: boolean }) {
         y2={tiles[1].y + tiles[1].h + 4}
         stroke="rgba(0,240,255,0.55)"
         strokeWidth={1}
-        initial={reduce ? false : { pathLength: 0 }}
+        initial={false}
         whileInView={
           reduce ? undefined : { pathLength: 1, opacity: 1 }
         }
@@ -256,7 +256,7 @@ function BridgeVisual({ reduce }: { reduce: boolean }) {
         strokeWidth={0.9}
         strokeDasharray="3 3"
         fill="none"
-        initial={reduce ? false : { pathLength: 0 }}
+        initial={false}
         whileInView={reduce ? undefined : { pathLength: 1 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 1.0, ease: EASE, delay: 0.5 }}
@@ -534,7 +534,7 @@ function PainColumn({
             aria-hidden
             className="absolute left-0 top-1.5 w-px h-8"
             style={{ background: CYAN, opacity: 0.7 }}
-            initial={{ scaleY: 0 }}
+            initial={false}
             whileInView={{ scaleY: 1 }}
             viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.6, ease: EASE, delay: 0.18 }}

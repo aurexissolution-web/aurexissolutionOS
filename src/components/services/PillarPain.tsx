@@ -190,7 +190,7 @@ function PainColumn({
             aria-hidden
             className="absolute left-0 top-1.5 w-px h-9"
             style={{ background: accent.hex, opacity: 0.7 }}
-            initial={{ scaleY: 0 }}
+            initial={false}
             whileInView={{ scaleY: 1 }}
             viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.6, ease: EASE, delay: 0.18 }}
@@ -437,7 +437,7 @@ function TaskStackVisual({ accent, reduce }: VisualProps) {
         strokeWidth={1}
         strokeDasharray="3 3"
         fill="none"
-        initial={reduce ? false : { pathLength: 0 }}
+        initial={false}
         whileInView={reduce ? undefined : { pathLength: 1 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.9, ease: EASE, delay: 0.55 }}
@@ -451,7 +451,7 @@ function TaskStackVisual({ accent, reduce }: VisualProps) {
         y2={stackTop + rowH + 2}
         stroke={`rgba(${accent.rgb}, 0.55)`}
         strokeWidth={0.8}
-        initial={reduce ? false : { pathLength: 0 }}
+        initial={false}
         whileInView={reduce ? undefined : { pathLength: 1, opacity: 1 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.6, ease: EASE, delay: 1.2 }}
@@ -700,7 +700,7 @@ function CostCurveVisual({ accent, reduce }: VisualProps) {
         stroke="rgba(255,255,255,0.55)"
         strokeWidth={0.8}
         strokeDasharray="3 3"
-        initial={reduce ? false : { pathLength: 0 }}
+        initial={false}
         whileInView={reduce ? undefined : { pathLength: 1 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.7, ease: EASE, delay: 0.3 }}
@@ -723,7 +723,7 @@ function CostCurveVisual({ accent, reduce }: VisualProps) {
         stroke="rgba(255,255,255,0.9)"
         strokeWidth={1}
         fill="none"
-        initial={reduce ? false : { pathLength: 0 }}
+        initial={false}
         whileInView={reduce ? undefined : { pathLength: 1 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 1.1, ease: EASE, delay: 0.5 }}
@@ -807,7 +807,7 @@ function WaterfallVisual({ accent, reduce }: VisualProps) {
               : `rgba(255,255,255,${b.op})`
           }
           strokeWidth={0.6}
-          initial={reduce ? false : { scaleX: 0 }}
+          initial={false}
           whileInView={reduce ? undefined : { scaleX: 1, opacity: 1 }}
           style={{ transformOrigin: `${b.x1}px ${b.y}px` }}
           viewport={{ once: true, amount: 0.05 }}
@@ -841,7 +841,7 @@ function WaterfallVisual({ accent, reduce }: VisualProps) {
         stroke="rgba(255,255,255,0.3)"
         strokeWidth={0.5}
         strokeDasharray="2 3"
-        initial={reduce ? false : { pathLength: 0 }}
+        initial={false}
         whileInView={reduce ? undefined : { pathLength: 1 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.6, ease: EASE, delay: 0.9 }}
@@ -1407,7 +1407,7 @@ function StarsVisual({ accent, reduce }: VisualProps) {
                 : `rgba(255,255,255,${0.6 - i * 0.07})`
             }
             strokeWidth={0.5}
-            initial={reduce ? false : { scaleY: 0 }}
+            initial={false}
             whileInView={reduce ? undefined : { scaleY: 1, opacity: 1 }}
             viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.5, ease: EASE, delay: 0.7 + i * 0.08 }}
@@ -1480,7 +1480,7 @@ function ForkVisual({ accent, reduce }: VisualProps) {
         stroke="rgba(255,255,255,0.3)"
         strokeWidth={0.6}
         strokeDasharray="3 3"
-        initial={reduce ? false : { pathLength: 0 }}
+        initial={false}
         whileInView={reduce ? undefined : { pathLength: 1 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.55, ease: EASE, delay: 0.5 }}
@@ -1492,7 +1492,7 @@ function ForkVisual({ accent, reduce }: VisualProps) {
         y2={70}
         stroke={`rgba(${accent.rgb}, 0.85)`}
         strokeWidth={0.9}
-        initial={reduce ? false : { pathLength: 0 }}
+        initial={false}
         whileInView={reduce ? undefined : { pathLength: 1 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.55, ease: EASE, delay: 0.7 }}
