@@ -56,7 +56,7 @@ export function PillarPain({ pillar }: { pillar: Pillar }) {
       : {
           initial: { opacity: 0, y: 12 },
           whileInView: { opacity: 1, y: 0 },
-          viewport: { once: true, amount: 0.4 },
+          viewport: { once: true, amount: 0.05 },
           transition: { duration: 0.7, ease: EASE, delay },
         };
 
@@ -159,7 +159,7 @@ function PainColumn({
       : {
           initial: { opacity: 0, y: 10 },
           whileInView: { opacity: 1, y: 0 },
-          viewport: { once: true, amount: 0.25 },
+          viewport: { once: true, amount: 0.05 },
           transition: { duration: 0.55, ease: EASE, delay },
         };
 
@@ -192,7 +192,7 @@ function PainColumn({
             style={{ background: accent.hex, opacity: 0.7 }}
             initial={{ scaleY: 0 }}
             whileInView={{ scaleY: 1 }}
-            viewport={{ once: true, amount: 0.5 }}
+            viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.6, ease: EASE, delay: 0.18 }}
           />
         ) : (
@@ -335,7 +335,7 @@ function TaskStackVisual({ accent, reduce }: VisualProps) {
             key={i}
             initial={reduce ? false : { opacity: 0, x: -8 }}
             whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.45, ease: EASE, delay: 0.1 + i * 0.07 }}
           >
             <rect
@@ -378,7 +378,7 @@ function TaskStackVisual({ accent, reduce }: VisualProps) {
       <motion.g
         initial={reduce ? false : { opacity: 0, y: 6 }}
         whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.6, ease: EASE, delay: 0.95 }}
       >
         <text
@@ -439,7 +439,7 @@ function TaskStackVisual({ accent, reduce }: VisualProps) {
         fill="none"
         initial={reduce ? false : { pathLength: 0 }}
         whileInView={reduce ? undefined : { pathLength: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.9, ease: EASE, delay: 0.55 }}
       />
 
@@ -453,7 +453,7 @@ function TaskStackVisual({ accent, reduce }: VisualProps) {
         strokeWidth={0.8}
         initial={reduce ? false : { pathLength: 0, opacity: 0 }}
         whileInView={reduce ? undefined : { pathLength: 1, opacity: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.6, ease: EASE, delay: 1.2 }}
       />
     </svg>
@@ -470,7 +470,7 @@ function ChatMissVisual({ accent, reduce }: VisualProps) {
       key={key}
       initial={reduce ? false : { opacity: 0, x: -8 }}
       whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
+      viewport={{ once: true, amount: 0.05 }}
       transition={{ duration: 0.5, ease: EASE, delay: 0.2 }}
     >
       <rect
@@ -507,7 +507,7 @@ function ChatMissVisual({ accent, reduce }: VisualProps) {
       key={key}
       initial={reduce ? false : { opacity: 0, x: 8 }}
       whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
+      viewport={{ once: true, amount: 0.05 }}
       transition={{ duration: 0.5, ease: EASE, delay: 0.4 }}
     >
       <rect
@@ -582,7 +582,7 @@ function ChatMissVisual({ accent, reduce }: VisualProps) {
       <motion.g
         initial={reduce ? false : { opacity: 0 }}
         whileInView={reduce ? undefined : { opacity: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.5, ease: EASE, delay: 1.0 }}
       >
         <text
@@ -687,7 +687,7 @@ function CostCurveVisual({ accent, reduce }: VisualProps) {
         stroke="none"
         initial={reduce ? false : { opacity: 0 }}
         whileInView={reduce ? undefined : { opacity: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.7, ease: EASE, delay: 0.7 }}
       />
 
@@ -702,7 +702,7 @@ function CostCurveVisual({ accent, reduce }: VisualProps) {
         strokeDasharray="3 3"
         initial={reduce ? false : { pathLength: 0 }}
         whileInView={reduce ? undefined : { pathLength: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.7, ease: EASE, delay: 0.3 }}
       />
       <text
@@ -725,7 +725,7 @@ function CostCurveVisual({ accent, reduce }: VisualProps) {
         fill="none"
         initial={reduce ? false : { pathLength: 0 }}
         whileInView={reduce ? undefined : { pathLength: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 1.1, ease: EASE, delay: 0.5 }}
       />
 
@@ -733,7 +733,7 @@ function CostCurveVisual({ accent, reduce }: VisualProps) {
       <motion.g
         initial={reduce ? false : { opacity: 0 }}
         whileInView={reduce ? undefined : { opacity: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.4, ease: EASE, delay: 1.6 }}
       >
         <path
@@ -810,7 +810,7 @@ function WaterfallVisual({ accent, reduce }: VisualProps) {
           initial={reduce ? false : { scaleX: 0, opacity: 0 }}
           whileInView={reduce ? undefined : { scaleX: 1, opacity: 1 }}
           style={{ transformOrigin: `${b.x1}px ${b.y}px` }}
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.6, ease: EASE, delay: 0.15 + i * 0.05 }}
         />
       ))}
@@ -826,7 +826,7 @@ function WaterfallVisual({ accent, reduce }: VisualProps) {
         textAnchor="end"
         initial={reduce ? false : { opacity: 0 }}
         whileInView={reduce ? undefined : { opacity: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.4, ease: EASE, delay: 0.7 }}
       >
         4.7s
@@ -843,7 +843,7 @@ function WaterfallVisual({ accent, reduce }: VisualProps) {
         strokeDasharray="2 3"
         initial={reduce ? false : { pathLength: 0 }}
         whileInView={reduce ? undefined : { pathLength: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.6, ease: EASE, delay: 0.9 }}
       />
       <text
@@ -910,7 +910,7 @@ function TemplateGridVisual({ accent, reduce }: VisualProps) {
             key={i}
             initial={reduce ? false : { opacity: 0, y: 6 }}
             whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.5, ease: EASE, delay: 0.2 + i * 0.07 }}
           >
             <rect
@@ -1026,7 +1026,7 @@ function CageVisual({ accent, reduce }: VisualProps) {
       <motion.g
         initial={reduce ? false : { opacity: 0, scale: 0.95 }}
         whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.55, ease: EASE, delay: 0.2 }}
       >
         <rect
@@ -1079,7 +1079,7 @@ function CageVisual({ accent, reduce }: VisualProps) {
           key={i}
           initial={reduce ? false : { opacity: 0 }}
           whileInView={reduce ? undefined : { opacity: 1 }}
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.4, ease: EASE, delay: 0.4 + i * 0.08 }}
         >
           <line
@@ -1105,7 +1105,7 @@ function CageVisual({ accent, reduce }: VisualProps) {
       <motion.g
         initial={reduce ? false : { opacity: 0, x: -8 }}
         whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.6, ease: EASE, delay: 1.0 }}
       >
         <line
@@ -1160,7 +1160,7 @@ function IslandsVisual({ accent, reduce }: VisualProps) {
             key={`c-${i}`}
             initial={reduce ? false : { opacity: 0 }}
             whileInView={reduce ? undefined : { opacity: 1 }}
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.4, ease: EASE, delay: 0.6 + i * 0.06 }}
           >
             <line
@@ -1201,7 +1201,7 @@ function IslandsVisual({ accent, reduce }: VisualProps) {
           key={`s-${i}`}
           initial={reduce ? false : { opacity: 0, y: 6 }}
           whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.5, ease: EASE, delay: 0.2 + i * 0.06 }}
         >
           <rect
@@ -1232,7 +1232,7 @@ function IslandsVisual({ accent, reduce }: VisualProps) {
       <motion.g
         initial={reduce ? false : { opacity: 0, scale: 0.92 }}
         whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.6, ease: EASE, delay: 0.9 }}
       >
         <rect
@@ -1322,7 +1322,7 @@ function StarsVisual({ accent, reduce }: VisualProps) {
           fill="rgba(255,255,255,0.85)"
           initial={reduce ? false : { opacity: 0, scale: 0.7 }}
           whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.4, ease: EASE, delay: 0.15 + i * 0.08 }}
           style={{ transformOrigin: `${startX + i * gap}px ${cy}px` }}
         />
@@ -1336,7 +1336,7 @@ function StarsVisual({ accent, reduce }: VisualProps) {
         strokeWidth={0.7}
         initial={reduce ? false : { opacity: 0, scale: 0.7 }}
         whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.4, ease: EASE, delay: 0.4 }}
         style={{ transformOrigin: `${halfStarCx}px ${cy}px` }}
       />
@@ -1346,7 +1346,7 @@ function StarsVisual({ accent, reduce }: VisualProps) {
         clipPath="url(#halfStarClip)"
         initial={reduce ? false : { opacity: 0 }}
         whileInView={reduce ? undefined : { opacity: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.5, ease: EASE, delay: 0.6 }}
       />
 
@@ -1358,7 +1358,7 @@ function StarsVisual({ accent, reduce }: VisualProps) {
         strokeWidth={0.6}
         initial={reduce ? false : { opacity: 0, scale: 0.7 }}
         whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.4, ease: EASE, delay: 0.5 }}
         style={{ transformOrigin: `${startX + 4 * gap}px ${cy}px` }}
       />
@@ -1409,7 +1409,7 @@ function StarsVisual({ accent, reduce }: VisualProps) {
             strokeWidth={0.5}
             initial={reduce ? false : { scaleY: 0, opacity: 0 }}
             whileInView={reduce ? undefined : { scaleY: 1, opacity: 1 }}
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.5, ease: EASE, delay: 0.7 + i * 0.08 }}
             style={{ transformOrigin: `${x}px 172px` }}
           />
@@ -1445,7 +1445,7 @@ function ForkVisual({ accent, reduce }: VisualProps) {
       <motion.g
         initial={reduce ? false : { opacity: 0, y: -6 }}
         whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.5, ease: EASE, delay: 0.2 }}
       >
         <rect
@@ -1482,7 +1482,7 @@ function ForkVisual({ accent, reduce }: VisualProps) {
         strokeDasharray="3 3"
         initial={reduce ? false : { pathLength: 0 }}
         whileInView={reduce ? undefined : { pathLength: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.55, ease: EASE, delay: 0.5 }}
       />
       <motion.line
@@ -1494,7 +1494,7 @@ function ForkVisual({ accent, reduce }: VisualProps) {
         strokeWidth={0.9}
         initial={reduce ? false : { pathLength: 0 }}
         whileInView={reduce ? undefined : { pathLength: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.55, ease: EASE, delay: 0.7 }}
       />
 
@@ -1516,7 +1516,7 @@ function ForkVisual({ accent, reduce }: VisualProps) {
             key={`rn-${i}`}
             initial={reduce ? false : { opacity: 0, y: 4 }}
             whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.45, ease: EASE, delay: 0.8 + i * 0.07 }}
           >
             <rect
@@ -1562,7 +1562,7 @@ function ForkVisual({ accent, reduce }: VisualProps) {
             key={`n-${i}`}
             initial={reduce ? false : { opacity: 0, y: 4 }}
             whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.45, ease: EASE, delay: 1.0 + i * 0.07 }}
           >
             <rect
