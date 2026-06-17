@@ -54,7 +54,7 @@ export function PillarPain({ pillar }: { pillar: Pillar }) {
     reduce
       ? { initial: false, animate: { opacity: 1, y: 0 } }
       : {
-          initial: { opacity: 0, y: 12 },
+          initial: { y: 12 },
           whileInView: { opacity: 1, y: 0 },
           viewport: { once: true, amount: 0.05 },
           transition: { duration: 0.7, ease: EASE, delay },
@@ -157,7 +157,7 @@ function PainColumn({
     reduce
       ? { initial: false, animate: { opacity: 1, y: 0 } }
       : {
-          initial: { opacity: 0, y: 10 },
+          initial: { y: 10 },
           whileInView: { opacity: 1, y: 0 },
           viewport: { once: true, amount: 0.05 },
           transition: { duration: 0.55, ease: EASE, delay },
@@ -333,7 +333,7 @@ function TaskStackVisual({ accent, reduce }: VisualProps) {
         return (
           <motion.g
             key={i}
-            initial={reduce ? false : { opacity: 0, x: -8 }}
+            initial={reduce ? false : { x: -8 }}
             whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.45, ease: EASE, delay: 0.1 + i * 0.07 }}
@@ -376,7 +376,7 @@ function TaskStackVisual({ accent, reduce }: VisualProps) {
 
       {/* AI · DONE card on the upper right (the lifted task) */}
       <motion.g
-        initial={reduce ? false : { opacity: 0, y: 6 }}
+        initial={reduce ? false : { y: 6 }}
         whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.6, ease: EASE, delay: 0.95 }}
@@ -451,7 +451,7 @@ function TaskStackVisual({ accent, reduce }: VisualProps) {
         y2={stackTop + rowH + 2}
         stroke={`rgba(${accent.rgb}, 0.55)`}
         strokeWidth={0.8}
-        initial={reduce ? false : { pathLength: 0, opacity: 0 }}
+        initial={reduce ? false : { pathLength: 0 }}
         whileInView={reduce ? undefined : { pathLength: 1, opacity: 1 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.6, ease: EASE, delay: 1.2 }}
@@ -468,7 +468,7 @@ function ChatMissVisual({ accent, reduce }: VisualProps) {
   const qBubble = (y: number, key: string) => (
     <motion.g
       key={key}
-      initial={reduce ? false : { opacity: 0, x: -8 }}
+      initial={reduce ? false : { x: -8 }}
       whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
       viewport={{ once: true, amount: 0.05 }}
       transition={{ duration: 0.5, ease: EASE, delay: 0.2 }}
@@ -505,7 +505,7 @@ function ChatMissVisual({ accent, reduce }: VisualProps) {
   const aBubble = (y: number, key: string) => (
     <motion.g
       key={key}
-      initial={reduce ? false : { opacity: 0, x: 8 }}
+      initial={reduce ? false : { x: 8 }}
       whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
       viewport={{ once: true, amount: 0.05 }}
       transition={{ duration: 0.5, ease: EASE, delay: 0.4 }}
@@ -580,7 +580,7 @@ function ChatMissVisual({ accent, reduce }: VisualProps) {
 
       {/* Violet escalation arrow at bottom */}
       <motion.g
-        initial={reduce ? false : { opacity: 0 }}
+        initial={false}
         whileInView={reduce ? undefined : { opacity: 1 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.5, ease: EASE, delay: 1.0 }}
@@ -685,7 +685,7 @@ function CostCurveVisual({ accent, reduce }: VisualProps) {
         d={fillPath}
         fill={`rgba(${accent.rgb}, 0.1)`}
         stroke="none"
-        initial={reduce ? false : { opacity: 0 }}
+        initial={false}
         whileInView={reduce ? undefined : { opacity: 1 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.7, ease: EASE, delay: 0.7 }}
@@ -731,7 +731,7 @@ function CostCurveVisual({ accent, reduce }: VisualProps) {
 
       {/* Cost arrowhead at end */}
       <motion.g
-        initial={reduce ? false : { opacity: 0 }}
+        initial={false}
         whileInView={reduce ? undefined : { opacity: 1 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.4, ease: EASE, delay: 1.6 }}
@@ -807,7 +807,7 @@ function WaterfallVisual({ accent, reduce }: VisualProps) {
               : `rgba(255,255,255,${b.op})`
           }
           strokeWidth={0.6}
-          initial={reduce ? false : { scaleX: 0, opacity: 0 }}
+          initial={reduce ? false : { scaleX: 0 }}
           whileInView={reduce ? undefined : { scaleX: 1, opacity: 1 }}
           style={{ transformOrigin: `${b.x1}px ${b.y}px` }}
           viewport={{ once: true, amount: 0.05 }}
@@ -824,7 +824,7 @@ function WaterfallVisual({ accent, reduce }: VisualProps) {
         fontFamily="ui-monospace, monospace"
         letterSpacing="0.22em"
         textAnchor="end"
-        initial={reduce ? false : { opacity: 0 }}
+        initial={false}
         whileInView={reduce ? undefined : { opacity: 1 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.4, ease: EASE, delay: 0.7 }}
@@ -908,7 +908,7 @@ function TemplateGridVisual({ accent, reduce }: VisualProps) {
         return (
           <motion.g
             key={i}
-            initial={reduce ? false : { opacity: 0, y: 6 }}
+            initial={reduce ? false : { y: 6 }}
             whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.5, ease: EASE, delay: 0.2 + i * 0.07 }}
@@ -1024,7 +1024,7 @@ function CageVisual({ accent, reduce }: VisualProps) {
     <svg viewBox="0 0 360 200" className="w-full h-auto" aria-hidden="true" role="img">
       {/* The "feature" card */}
       <motion.g
-        initial={reduce ? false : { opacity: 0, scale: 0.95 }}
+        initial={reduce ? false : { scale: 0.95 }}
         whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.55, ease: EASE, delay: 0.2 }}
@@ -1077,7 +1077,7 @@ function CageVisual({ accent, reduce }: VisualProps) {
       {corners.map((c, i) => (
         <motion.g
           key={i}
-          initial={reduce ? false : { opacity: 0 }}
+          initial={false}
           whileInView={reduce ? undefined : { opacity: 1 }}
           viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.4, ease: EASE, delay: 0.4 + i * 0.08 }}
@@ -1103,7 +1103,7 @@ function CageVisual({ accent, reduce }: VisualProps) {
 
       {/* Blue arrow trying to escape on the right, blocked by bracket */}
       <motion.g
-        initial={reduce ? false : { opacity: 0, x: -8 }}
+        initial={reduce ? false : { x: -8 }}
         whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.6, ease: EASE, delay: 1.0 }}
@@ -1158,7 +1158,7 @@ function IslandsVisual({ accent, reduce }: VisualProps) {
         return (
           <motion.g
             key={`c-${i}`}
-            initial={reduce ? false : { opacity: 0 }}
+            initial={false}
             whileInView={reduce ? undefined : { opacity: 1 }}
             viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.4, ease: EASE, delay: 0.6 + i * 0.06 }}
@@ -1199,7 +1199,7 @@ function IslandsVisual({ accent, reduce }: VisualProps) {
       {systems.map((s, i) => (
         <motion.g
           key={`s-${i}`}
-          initial={reduce ? false : { opacity: 0, y: 6 }}
+          initial={reduce ? false : { y: 6 }}
           whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.5, ease: EASE, delay: 0.2 + i * 0.06 }}
@@ -1230,7 +1230,7 @@ function IslandsVisual({ accent, reduce }: VisualProps) {
 
       {/* Centre app — phone-shaped, emerald accent */}
       <motion.g
-        initial={reduce ? false : { opacity: 0, scale: 0.92 }}
+        initial={reduce ? false : { scale: 0.92 }}
         whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.6, ease: EASE, delay: 0.9 }}
@@ -1320,7 +1320,7 @@ function StarsVisual({ accent, reduce }: VisualProps) {
           key={`f-${i}`}
           d={starPath(startX + i * gap, cy, r)}
           fill="rgba(255,255,255,0.85)"
-          initial={reduce ? false : { opacity: 0, scale: 0.7 }}
+          initial={reduce ? false : { scale: 0.7 }}
           whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
           viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.4, ease: EASE, delay: 0.15 + i * 0.08 }}
@@ -1334,7 +1334,7 @@ function StarsVisual({ accent, reduce }: VisualProps) {
         fill="rgba(255,255,255,0.04)"
         stroke="rgba(255,255,255,0.55)"
         strokeWidth={0.7}
-        initial={reduce ? false : { opacity: 0, scale: 0.7 }}
+        initial={reduce ? false : { scale: 0.7 }}
         whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.4, ease: EASE, delay: 0.4 }}
@@ -1344,7 +1344,7 @@ function StarsVisual({ accent, reduce }: VisualProps) {
         d={starPath(halfStarCx, cy, r)}
         fill={`rgba(${accent.rgb}, 0.85)`}
         clipPath="url(#halfStarClip)"
-        initial={reduce ? false : { opacity: 0 }}
+        initial={false}
         whileInView={reduce ? undefined : { opacity: 1 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.5, ease: EASE, delay: 0.6 }}
@@ -1356,7 +1356,7 @@ function StarsVisual({ accent, reduce }: VisualProps) {
         fill="none"
         stroke="rgba(255,255,255,0.3)"
         strokeWidth={0.6}
-        initial={reduce ? false : { opacity: 0, scale: 0.7 }}
+        initial={reduce ? false : { scale: 0.7 }}
         whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.4, ease: EASE, delay: 0.5 }}
@@ -1407,7 +1407,7 @@ function StarsVisual({ accent, reduce }: VisualProps) {
                 : `rgba(255,255,255,${0.6 - i * 0.07})`
             }
             strokeWidth={0.5}
-            initial={reduce ? false : { scaleY: 0, opacity: 0 }}
+            initial={reduce ? false : { scaleY: 0 }}
             whileInView={reduce ? undefined : { scaleY: 1, opacity: 1 }}
             viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.5, ease: EASE, delay: 0.7 + i * 0.08 }}
@@ -1443,7 +1443,7 @@ function ForkVisual({ accent, reduce }: VisualProps) {
     <svg viewBox="0 0 360 200" className="w-full h-auto" aria-hidden="true" role="img">
       {/* Top decision node */}
       <motion.g
-        initial={reduce ? false : { opacity: 0, y: -6 }}
+        initial={reduce ? false : { y: -6 }}
         whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.05 }}
         transition={{ duration: 0.5, ease: EASE, delay: 0.2 }}
@@ -1514,7 +1514,7 @@ function ForkVisual({ accent, reduce }: VisualProps) {
         {rnLayers.map((l, i) => (
           <motion.g
             key={`rn-${i}`}
-            initial={reduce ? false : { opacity: 0, y: 4 }}
+            initial={reduce ? false : { y: 4 }}
             whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.45, ease: EASE, delay: 0.8 + i * 0.07 }}
@@ -1560,7 +1560,7 @@ function ForkVisual({ accent, reduce }: VisualProps) {
         {nativeLayers.map((l, i) => (
           <motion.g
             key={`n-${i}`}
-            initial={reduce ? false : { opacity: 0, y: 4 }}
+            initial={reduce ? false : { y: 4 }}
             whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.45, ease: EASE, delay: 1.0 + i * 0.07 }}
