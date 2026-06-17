@@ -10,19 +10,11 @@ const SANS = 'var(--font-plus-jakarta), system-ui, sans-serif';
 export function ContactCommittee() {
   return (
     <section
-      style={{
-        padding: '96px 0',
-        borderBottom: '1px solid rgba(255,255,255,0.06)',
-      }}
+      className="py-16 md:py-24"
+      style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}
     >
-      {/* Section header */}
       <header
-        className="grid items-end"
-        style={{
-          gridTemplateColumns: '1fr 1.5fr',
-          gap: 56,
-          marginBottom: 56,
-        }}
+        className="grid items-end grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-8 lg:gap-14 mb-10 md:mb-14"
       >
         <div>
           <p
@@ -76,7 +68,7 @@ export function ContactCommittee() {
             margin: 0,
           }}
         >
-          No SDRs. No &ldquo;discovery&rdquo; reps. The three of us split the room — one of us will be on your call, and the same person will be on the project if you proceed.{' '}
+          No SDRs. No &ldquo;discovery&rdquo; reps. The two of us split the room — one of us will be on your call, and the same person will be on the project if you proceed.{' '}
           <em
             style={{
               color: '#f5f5f7',
@@ -91,16 +83,8 @@ export function ContactCommittee() {
       </header>
 
       <div
-        className="grid"
-        style={{
-          gridTemplateColumns: '1fr 1fr',
-          gap: 20,
-          marginBottom: 48,
-          maxWidth: 760,
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          width: '100%',
-        }}
+        className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-12 mx-auto w-full"
+        style={{ maxWidth: 760 }}
       >
         {FOUNDERS.map((f) => (
           <ContactFounderCard key={f.name} founder={f} />

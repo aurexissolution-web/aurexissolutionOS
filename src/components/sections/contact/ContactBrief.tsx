@@ -15,12 +15,10 @@ export function ContactBrief() {
   return (
     <section
       id="brief"
-      style={{
-        padding: '96px 0',
-        borderBottom: '1px solid rgba(255,255,255,0.06)',
-      }}
+      className="py-16 md:py-24"
+      style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}
     >
-      <div className="grid items-start" style={{ gridTemplateColumns: '1fr 1.4fr', gap: 56 }}>
+      <div className="grid items-start grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-10 lg:gap-14">
         <aside>
           <h2
             style={{
@@ -93,13 +91,12 @@ export function ContactBrief() {
         </aside>
 
         <div
-          className="relative overflow-hidden"
+          className="relative overflow-hidden p-5 sm:p-8"
           style={{
             background:
               'linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005)), rgba(255,255,255,0.01)',
             border: '1px solid rgba(255,255,255,0.10)',
             borderRadius: 16,
-            padding: 32,
             boxShadow: '0 24px 60px rgba(0,0,0,0.3)',
           }}
         >

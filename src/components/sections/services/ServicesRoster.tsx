@@ -54,7 +54,7 @@ function RosterRow({ entry }: { entry: ServiceHubEntry }) {
       {/* title col */}
       <div>
         <div
-          className="hidden lg:inline-flex items-center gap-2 mb-2.5 font-mono text-[10px] uppercase tracking-[0.32em]"
+          className="inline-flex items-center gap-2 mb-2.5 font-mono text-[10px] uppercase tracking-[0.32em]"
           style={{ color: entry.accent }}
         >
           <span
@@ -66,7 +66,7 @@ function RosterRow({ entry }: { entry: ServiceHubEntry }) {
           />
           {entry.label}
         </div>
-        <h2 className="font-serif italic font-normal text-[clamp(28px,3.6vw,56px)] leading-none tracking-[-0.025em] text-white">
+        <h2 className="font-serif italic font-normal text-[clamp(26px,3.6vw,56px)] leading-[1.05] tracking-[-0.025em] text-white">
           {before}
           {colored && (
             <em
@@ -84,9 +84,13 @@ function RosterRow({ entry }: { entry: ServiceHubEntry }) {
           )}
           {after}
         </h2>
+        {/* pull quote — inline on mobile, separate column on lg */}
+        <p className="lg:hidden mt-3 font-serif italic text-[15px] leading-[1.5] text-[#C4CCD9]">
+          {entry.pull}
+        </p>
       </div>
 
-      {/* pull */}
+      {/* pull (lg column) */}
       <div className="hidden lg:block font-serif italic text-[clamp(15px,1.25vw,19px)] leading-[1.45] text-[#C4CCD9]">
         {entry.pull}
       </div>

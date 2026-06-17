@@ -11,12 +11,8 @@ const RISE = 'motion-safe:opacity-0 motion-safe:animate-[contactRosterRise_0.8s_
 export function ContactHero() {
   return (
     <section
-      className="grid items-end gap-16"
-      style={{
-        gridTemplateColumns: '1fr auto',
-        padding: '88px 0 80px',
-        borderBottom: '1px solid rgba(255,255,255,0.06)',
-      }}
+      className="grid items-end gap-8 md:gap-16 grid-cols-1 md:grid-cols-[1fr_auto] pt-16 pb-14 md:pt-[88px] md:pb-20"
+      style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}
     >
       <div>
         <p
@@ -93,11 +89,11 @@ export function ContactHero() {
       </div>
 
       <aside
-        className={`${RISE} flex flex-col items-end`}
+        className={`${RISE} flex flex-col items-start md:items-end`}
         style={{ animationDelay: '0.32s', gap: 16, paddingBottom: 6 }}
       >
         <ContactStatusPill />
-        <div className="text-right">
+        <div className="text-left md:text-right">
           <div
             style={{
               fontFamily: SERIF,

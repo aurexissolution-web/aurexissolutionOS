@@ -9,18 +9,11 @@ const SANS = 'var(--font-plus-jakarta), system-ui, sans-serif';
 export function ContactStudios() {
   return (
     <section
-      style={{
-        padding: '96px 0',
-        borderBottom: '1px solid rgba(255,255,255,0.06)',
-      }}
+      className="py-16 md:py-24"
+      style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}
     >
       <header
-        className="grid items-end"
-        style={{
-          gridTemplateColumns: '1fr 1.5fr',
-          gap: 56,
-          marginBottom: 56,
-        }}
+        className="grid items-end grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-8 lg:gap-14 mb-10 md:mb-14"
       >
         <div>
           <p
@@ -79,7 +72,7 @@ export function ContactStudios() {
         </p>
       </header>
 
-      <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 22 }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-[22px]">
         {STUDIOS.map((s) => (
           <ContactStudioCard key={s.city} studio={s} />
         ))}

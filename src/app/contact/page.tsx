@@ -21,7 +21,7 @@ export default function ContactPage() {
     >
       <Navbar />
       <main className="flex-1">
-        <div className="mx-auto" style={{ maxWidth: 1240, padding: '0 40px' }}>
+        <div className="mx-auto w-full max-w-[1240px] px-5 sm:px-8 lg:px-10">
           <ContactHero />
           <ContactCommittee />
           <ContactStudios />

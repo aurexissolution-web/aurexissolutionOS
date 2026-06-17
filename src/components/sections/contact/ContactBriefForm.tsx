@@ -182,7 +182,7 @@ export function ContactBriefForm() {
         </div>
       </div>
 
-      <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
         <div className="flex flex-col" style={{ gap: 7 }}>
           <label style={labelBase}>
             Your name <span style={{ color: '#00F0FF', marginLeft: 3 }}>*</span>
@@ -215,7 +215,7 @@ export function ContactBriefForm() {
         </div>
       </div>
 
-      <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
         <div className="flex flex-col" style={{ gap: 7 }}>
           <label style={labelBase}>Company</label>
           <input

@@ -7,11 +7,8 @@ const SANS = 'var(--font-plus-jakarta), system-ui, sans-serif';
 
 export function ContactFAQ() {
   return (
-    <section
-      className="contact-roster-faq"
-      style={{ padding: '96px 0' }}
-    >
-      <div className="grid" style={{ gridTemplateColumns: '1fr 1.6fr', gap: 56 }}>
+    <section className="contact-roster-faq py-16 md:py-24">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.6fr] gap-10 lg:gap-14">
         <h2
           style={{
             fontFamily: SANS,
@@ -90,8 +87,6 @@ export function ContactFAQ() {
                   color: '#94a3b8',
                   maxWidth: 660,
                   margin: '14px 0 0',
-                  paddingRight: 40,
-                  paddingLeft: 'calc(10.5px * 5)',
                 }}
               >
                 {item.a}
