@@ -19,10 +19,12 @@ const GLOBE_CONFIG: COBEOptions = {
   markerColor: [0 / 255, 240 / 255, 255 / 255], // #00F0FF
   glowColor: [0 / 255, 71 / 255, 255 / 255],    // #0047FF
   markers: [
-    // Sungai Petani, Kedah
-    { location: [5.6538, 100.4873], size: 0.08 },
-    // Kuala Lumpur
-    { location: [3.139, 101.6869], size: 0.1 },
+    // Sungai Petani, Kedah — HQ
+    { location: [5.6538, 100.4873], size: 0.1 },
+    // Kuala Lumpur — working presence
+    { location: [3.139, 101.6869], size: 0.08 },
+    // Penang — on-site
+    { location: [5.4141, 100.3288], size: 0.07 },
   ],
 };
 

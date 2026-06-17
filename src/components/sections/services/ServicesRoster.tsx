@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { servicesHub, type ServiceHubEntry } from "@/data/services-hub";
 
-// The detail-page route exists for these slugs (see src/app/services/[slug]/page.tsx).
-// `ecosystem` doesn't have a detail page yet — link it to /contact instead.
+// `ecosystem` resolves to the dedicated /services/ecosystem flagship page.
+// The other three resolve to the [slug] detail-page template.
 const SLUGS_WITH_DETAIL: ReadonlySet<ServiceHubEntry["id"]> = new Set([
+  "ecosystem",
   "ai-automation",
   "web-engineering",
   "mobile-ecosystems",

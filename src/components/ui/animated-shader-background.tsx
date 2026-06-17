@@ -23,16 +23,15 @@ export function AnimatedShaderBackground({
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // cap pixel ratio for performance
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.setSize(container.clientWidth, container.clientHeight);
-    
-    // Explicitly style the canvas so it fills the container and doesn't collapse or align weirdly
+
     renderer.domElement.style.position = "absolute";
     renderer.domElement.style.top = "0";
     renderer.domElement.style.left = "0";
     renderer.domElement.style.width = "100%";
     renderer.domElement.style.height = "100%";
-    
+
     container.appendChild(renderer.domElement);
 
     const material = new THREE.ShaderMaterial({
@@ -138,19 +137,48 @@ export function AnimatedShaderBackground({
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    let frameId: number;
-    const animate = () => {
+    let frameId: number | null = null;
+    let active = true;
+    let visible = true;
+
+    const tick = () => {
+      if (!active || !visible) {
+        frameId = null;
+        return;
+      }
       material.uniforms.iTime.value += 0.016;
       renderer.render(scene, camera);
-      frameId = requestAnimationFrame(animate);
+      frameId = requestAnimationFrame(tick);
     };
-    animate();
+
+    const start = () => {
+      if (frameId !== null) return;
+      frameId = requestAnimationFrame(tick);
+    };
+
+    start();
+
+    const intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          visible = entry.isIntersecting;
+        }
+        if (visible && active) start();
+      },
+      { threshold: 0 },
+    );
+    intersectionObserver.observe(container);
+
+    const onVisibility = () => {
+      active = !document.hidden;
+      if (active && visible) start();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
 
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const { width, height } = entry.contentRect;
         renderer.setSize(width, height);
-        // Keep canvas filling exactly
         renderer.domElement.style.width = "100%";
         renderer.domElement.style.height = "100%";
         material.uniforms.iResolution.value.set(width, height);
@@ -160,8 +188,10 @@ export function AnimatedShaderBackground({
     resizeObserver.observe(container);
 
     return () => {
-      cancelAnimationFrame(frameId);
+      if (frameId !== null) cancelAnimationFrame(frameId);
+      intersectionObserver.disconnect();
       resizeObserver.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }

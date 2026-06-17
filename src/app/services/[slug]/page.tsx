@@ -13,11 +13,12 @@ import { ServiceFAQ } from "@/components/services/ServiceFAQ";
 import { ServiceConversion } from "@/components/services/ServiceConversion";
 
 export function generateStaticParams() {
-  return [
-    { slug: "ai-automation" },
-    { slug: "web-engineering" },
-    { slug: "mobile-ecosystems" },
-  ];
+  // Pillar pages now live as dedicated static routes:
+  //   /services/ai-automation, /services/web-engineering, /services/mobile-ecosystems
+  // Those static routes override this dynamic [slug] route in Next.js. Keep
+  // this function present (returning []) so the dynamic route still compiles
+  // for any future slugs, without pre-generating the three pillar paths twice.
+  return [];
 }
 
 export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {

@@ -14,12 +14,14 @@ const navLinks = [
     label: "Services", 
     href: "/services",
     subItems: [
+      { label: "Ecosystem", href: "/services/ecosystem" },
       { label: "AI & Agentic Workflows", href: "/services/ai-automation" },
       { label: "Web Engineering", href: "/services/web-engineering" },
       { label: "Mobile Ecosystems", href: "/services/mobile-ecosystems" },
     ]
   },
   { label: "Blog", href: "/blog" },
+  { label: "The Lab", href: "/the-lab" },
   { label: "Portfolio", href: "/portfolio" },
   { label: "Contact", href: "/contact" },
 ];

@@ -1,164 +1,169 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { motion } from "framer-motion";
+import { Check, X } from "lucide-react";
 
-const criteria = [
+const easeOut = [0.16, 1, 0.3, 1] as const;
+
+interface FitItem {
+  headline: string;
+  body: string;
+}
+
+const BUILT_FOR: FitItem[] = [
   {
-    id: "speed",
-    num: "01",
     headline: "Speed is a strategy.",
-    body: "You ship, then refine. You don't wait for perfect specs to come down from a committee. We're built for founders and operators who treat velocity as a competitive weapon.",
-    tag: "Move fast. Ship faster.",
+    body: "You ship, then refine. You don't wait for perfect specs from a committee — velocity is your competitive weapon.",
   },
   {
-    id: "partner",
-    num: "02",
     headline: "You want a partner, not a pair of hands.",
-    body: "We push back when something won't work, bring strategy to every sprint, and care about your users as much as you do. We don't disappear after delivery.",
-    tag: "Strategic. Opinionated. Invested.",
+    body: "We push back when something won't work, bring strategy to every sprint, and don't disappear after delivery.",
   },
   {
-    id: "automation",
-    num: "03",
     headline: "You're done doing things manually.",
-    body: "You see AI and automation for what they really are — a permanent lever on your capacity. You want an infrastructure that learns, adapts, and scales without you babysitting it.",
-    tag: "Leverage over labor.",
+    body: "You see AI as a permanent lever on capacity — infrastructure that learns and scales without babysitting.",
   },
 ];
 
-export function CulturalFit() {
-  const [expanded, setExpanded] = useState<string | null>(null);
+const NOT_BUILT_FOR: FitItem[] = [
+  {
+    headline: "Slow committees and six-month roadmaps.",
+    body: "If five rounds of stakeholder review are required before kickoff, we're not the fit. Decision speed is a precondition.",
+  },
+  {
+    headline: "Vendors who take a brief and disappear.",
+    body: "If you want a body shop that bills hours and ships exactly the spec — no challenge, no second opinion — we're the wrong call.",
+  },
+  {
+    headline: "Teams who treat AI as a feature.",
+    body: "If AI is a checkbox to bolt on after the rest is built, we'll over-engineer for you. We design AI as the spine, not the sprinkle.",
+  },
+];
+
+interface ColumnProps {
+  label: string;
+  items: FitItem[];
+  variant: "yes" | "no";
+}
+
+function Column({ label, items, variant }: ColumnProps) {
+  const isYes = variant === "yes";
 
   return (
-    <section className="container mx-auto px-6 max-w-7xl mb-0 pt-8">
-      {/* Section label */}
+    <div className="relative p-6 sm:p-8 lg:p-10">
+      <div className="mb-8 flex items-center gap-3">
+        <span
+          className="flex h-9 w-9 items-center justify-center rounded-full border"
+          style={{
+            borderColor: isYes
+              ? "rgba(0,240,255,0.30)"
+              : "rgba(248,113,113,0.30)",
+            background: isYes
+              ? "rgba(0,240,255,0.08)"
+              : "rgba(248,113,113,0.06)",
+            boxShadow: isYes
+              ? "inset 0 0 12px rgba(0,240,255,0.15)"
+              : "inset 0 0 12px rgba(248,113,113,0.10)",
+          }}
+        >
+          {isYes ? (
+            <Check
+              className="h-[18px] w-[18px] text-[var(--color-electric-cyan)]"
+              strokeWidth={2}
+            />
+          ) : (
+            <X
+              className="h-[18px] w-[18px] text-[#f87171]"
+              strokeWidth={2}
+            />
+          )}
+        </span>
+        <span
+          className="font-mono text-[10.5px] uppercase tracking-[0.42em]"
+          style={{
+            color: isYes
+              ? "var(--color-electric-cyan)"
+              : "rgba(248,113,113,0.85)",
+          }}
+        >
+          {label}
+        </span>
+      </div>
+
+      <ul className="space-y-7">
+        {items.map((item, i) => (
+          <motion.li
+            key={i}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{
+              duration: 0.6,
+              delay: 0.1 + i * 0.08,
+              ease: easeOut,
+            }}
+            className="relative"
+          >
+            <h4
+              className={`whitespace-pre-line font-serif text-[22px] italic leading-[1.15] tracking-[-0.01em] md:text-[24px] ${
+                isYes ? "text-white" : "text-white/70"
+              }`}
+            >
+              {item.headline}
+            </h4>
+            <p
+              className={`mt-2 max-w-[42ch] text-[13px] leading-[1.6] ${
+                isYes ? "text-white/55" : "text-white/40"
+              }`}
+            >
+              {item.body}
+            </p>
+          </motion.li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export function CulturalFit() {
+  return (
+    <section className="container mx-auto max-w-7xl px-6 py-12 md:py-16 lg:py-16">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        className="mb-16 flex items-center justify-between"
+        transition={{ duration: 0.7, ease: easeOut }}
+        className="mb-10 lg:mb-14"
       >
-        <div className="flex items-center gap-4">
-          <div className="h-px w-10 bg-[#00F0FF]" />
-          <p className="text-xs font-semibold tracking-[0.35em] text-[#00F0FF] uppercase">
+        <div className="mb-6 flex items-center gap-4">
+          <div className="h-px w-10 bg-[var(--color-electric-cyan)]" />
+          <p className="font-mono text-[11px] uppercase tracking-[0.42em] text-[var(--color-electric-cyan)]">
             The Right Fit
           </p>
         </div>
+        <h3 className="text-4xl font-medium leading-[1.05] tracking-tight text-white md:text-6xl lg:text-7xl">
+          We&apos;re built for
+          <br />
+          <span className="text-neutral-600">a certain kind of client.</span>
+        </h3>
       </motion.div>
 
-      <motion.h3
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        className="text-5xl md:text-7xl font-medium text-white tracking-tight leading-[1.05] mb-12"
-      >
-        We're built for
-        <br />
-        <span className="text-neutral-600">a certain kind of client.</span>
-      </motion.h3>
+      <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.025] via-white/[0.01] to-transparent backdrop-blur-sm">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-50"
+          style={{
+            background:
+              "radial-gradient(ellipse at 0% 0%, rgba(0,240,255,0.05), transparent 45%), radial-gradient(ellipse at 100% 100%, rgba(248,113,113,0.04), transparent 45%)",
+          }}
+        />
 
-      {/* Accordion rows */}
-      <div className="relative">
-        {/* Vertical rail */}
-        <div className="absolute left-0 top-0 bottom-0 w-px bg-white/5" />
-
-        {criteria.map((item, i) => {
-          const isOpen = expanded === item.id;
-          return (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-            >
-              {/* Top border */}
-              <div className="h-px bg-white/8" />
-
-              <button
-                onClick={() => setExpanded(isOpen ? null : item.id)}
-                className="w-full text-left group pl-6 pr-4 py-6 md:py-8 flex items-start gap-8 md:gap-16 relative"
-              >
-                {/* Accent bar */}
-                <AnimatePresence>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ scaleY: 0 }}
-                      animate={{ scaleY: 1 }}
-                      exit={{ scaleY: 0 }}
-                      transition={{ duration: 0.35, ease: "circOut" }}
-                      className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#00F0FF] origin-top"
-                    />
-                  )}
-                </AnimatePresence>
-
-                {/* Number */}
-                <span
-                  className={`font-mono text-sm shrink-0 mt-1 transition-colors duration-300 ${
-                    isOpen ? "text-[#00F0FF]" : "text-white/20"
-                  }`}
-                >
-                  {item.num}
-                </span>
-
-                {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-6">
-                    <h4
-                      className={`text-2xl md:text-4xl font-medium tracking-tight leading-snug transition-colors duration-300 ${
-                        isOpen ? "text-white" : "text-white/50"
-                      }`}
-                    >
-                      {item.headline}
-                    </h4>
-
-                    {/* Plus / minus */}
-                    <div
-                      className={`shrink-0 w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 mt-2 ${
-                        isOpen
-                          ? "border-[#00F0FF]/50 bg-[#00F0FF]/10"
-                          : "border-white/10 bg-transparent"
-                      }`}
-                    >
-                      <motion.span
-                        animate={{ rotate: isOpen ? 45 : 0 }}
-                        transition={{ duration: 0.3 }}
-                        className={`text-lg leading-none ${isOpen ? "text-[#00F0FF]" : "text-white/40"}`}
-                      >
-                        +
-                      </motion.span>
-                    </div>
-                  </div>
-
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                        className="overflow-hidden"
-                      >
-                        <p className="text-[#94A3B8] text-lg font-light leading-relaxed mt-5 max-w-2xl">
-                          {item.body}
-                        </p>
-                        <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 text-xs font-semibold tracking-widest text-white/50 uppercase">
-                          {item.tag}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </button>
-            </motion.div>
-          );
-        })}
-
-        {/* Bottom border */}
-        <div className="h-px bg-white/8" />
+        <div className="relative grid grid-cols-1 lg:grid-cols-2">
+          <Column label="Built for" items={BUILT_FOR} variant="yes" />
+          <div className="border-t border-white/[0.08] lg:border-l lg:border-t-0">
+            <Column label="Not built for" items={NOT_BUILT_FOR} variant="no" />
+          </div>
+        </div>
       </div>
     </section>
   );

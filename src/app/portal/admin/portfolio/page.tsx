@@ -16,6 +16,7 @@ import {
   Upload,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
+import type { OutcomeMetric, PortfolioCategory } from "@/types/portal";
 
 interface PortfolioItemData {
   id: string;
@@ -28,6 +29,12 @@ interface PortfolioItemData {
   live_url: string | null;
   images: string[];
   created_at: string;
+  category: PortfolioCategory;
+  accent_word: string | null;
+  pull_quote: string | null;
+  outcome_metrics: OutcomeMetric[];
+  featured: boolean;
+  display_order: number;
 }
 
 const inputClass =
@@ -46,6 +53,12 @@ export default function PortfolioPage() {
     client_name: "",
     live_url: "",
     images: [] as string[],
+    category: "web-engineering" as PortfolioCategory,
+    accent_word: "",
+    pull_quote: "",
+    outcome_metrics: [] as OutcomeMetric[],
+    featured: false,
+    display_order: 0,
   });
 
   const loadItems = useCallback(async () => {
@@ -62,7 +75,21 @@ export default function PortfolioPage() {
 
   function openNew() {
     setEditingId(null);
-    setForm({ title: "", description: "", case_study: "", tech_tags: "", client_name: "", live_url: "", images: [] });
+    setForm({
+      title: "",
+      description: "",
+      case_study: "",
+      tech_tags: "",
+      client_name: "",
+      live_url: "",
+      images: [],
+      category: "web-engineering",
+      accent_word: "",
+      pull_quote: "",
+      outcome_metrics: [],
+      featured: false,
+      display_order: 0,
+    });
     setShowEditor(true);
   }
 
@@ -76,6 +103,12 @@ export default function PortfolioPage() {
       client_name: item.client_name || "",
       live_url: item.live_url || "",
       images: item.images || [],
+      category: item.category ?? "web-engineering",
+      accent_word: item.accent_word ?? "",
+      pull_quote: item.pull_quote ?? "",
+      outcome_metrics: item.outcome_metrics ?? [],
+      featured: item.featured ?? false,
+      display_order: item.display_order ?? 0,
     });
     setShowEditor(true);
   }
@@ -91,6 +124,12 @@ export default function PortfolioPage() {
       client_name: form.client_name || null,
       live_url: form.live_url || null,
       images: form.images,
+      category: form.category,
+      accent_word: form.accent_word.trim() || null,
+      pull_quote: form.pull_quote.trim() || null,
+      outcome_metrics: form.outcome_metrics,
+      featured: form.featured,
+      display_order: Number(form.display_order) || 0,
     };
 
     if (editingId) {
@@ -136,6 +175,27 @@ export default function PortfolioPage() {
 
   function removeImage(index: number) {
     setForm((prev) => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }));
+  }
+
+  function addMetric() {
+    setForm((prev) => ({
+      ...prev,
+      outcome_metrics: [...prev.outcome_metrics, { value: "", label: "" }],
+    }));
+  }
+  function updateMetric(idx: number, field: "value" | "label", val: string) {
+    setForm((prev) => ({
+      ...prev,
+      outcome_metrics: prev.outcome_metrics.map((m, i) =>
+        i === idx ? { ...m, [field]: val } : m
+      ),
+    }));
+  }
+  function removeMetric(idx: number) {
+    setForm((prev) => ({
+      ...prev,
+      outcome_metrics: prev.outcome_metrics.filter((_, i) => i !== idx),
+    }));
   }
 
   return (
@@ -204,6 +264,114 @@ export default function PortfolioPage() {
                   <div>
                     <label className="block text-sm font-medium text-[#94A3B8] mb-2">Tech Tags (comma-separated)</label>
                     <input className={inputClass} placeholder="Next.js, Supabase, AI" value={form.tech_tags} onChange={(e) => setForm({ ...form, tech_tags: e.target.value })} />
+                  </div>
+
+                  {/* Category + Order + Featured row */}
+                  <div className="grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-[#94A3B8] mb-2">Category</label>
+                      <select
+                        className={inputClass}
+                        value={form.category}
+                        onChange={(e) => setForm({ ...form, category: e.target.value as PortfolioCategory })}
+                      >
+                        <option value="ai-automation">AI Automation</option>
+                        <option value="web-engineering">Web Engineering</option>
+                        <option value="mobile-ecosystem">Mobile Ecosystem</option>
+                        <option value="ecosystem">Ecosystem</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-[#94A3B8] mb-2">Display order</label>
+                      <input
+                        type="number"
+                        className={inputClass}
+                        value={form.display_order}
+                        onChange={(e) => setForm({ ...form, display_order: Number(e.target.value) })}
+                      />
+                      <p className="text-[10px] text-[#64748B] mt-1">Lower numbers sort first.</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-[#94A3B8] mb-2">Featured?</label>
+                      <label className="flex items-center gap-2 h-[42px] px-4 rounded-lg border border-white/10 bg-[#02040A]">
+                        <input
+                          type="checkbox"
+                          checked={form.featured}
+                          onChange={(e) => setForm({ ...form, featured: e.target.checked })}
+                        />
+                        <span className="text-xs text-[#94A3B8]">Show in the featured spread</span>
+                      </label>
+                      <p className="text-[10px] text-[#64748B] mt-1">
+                        Only one row is shown as featured. Lowest display order wins.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Accent word */}
+                  <div>
+                    <label className="block text-sm font-medium text-[#94A3B8] mb-2">
+                      Accent word <span className="text-[#64748B]">(featured-spread title, line 2)</span>
+                    </label>
+                    <input
+                      className={inputClass}
+                      placeholder='e.g. "Treasury."'
+                      value={form.accent_word}
+                      onChange={(e) => setForm({ ...form, accent_word: e.target.value })}
+                    />
+                  </div>
+
+                  {/* Pull quote */}
+                  <div>
+                    <label className="block text-sm font-medium text-[#94A3B8] mb-2">
+                      Pull quote <span className="text-[#64748B]">(featured-spread only)</span>
+                    </label>
+                    <textarea
+                      rows={2}
+                      className={inputClass + " resize-none"}
+                      placeholder="One quotable line from the engagement..."
+                      value={form.pull_quote}
+                      onChange={(e) => setForm({ ...form, pull_quote: e.target.value })}
+                    />
+                  </div>
+
+                  {/* Outcome metrics repeater */}
+                  <div>
+                    <label className="block text-sm font-medium text-[#94A3B8] mb-2">
+                      Outcome metrics <span className="text-[#64748B]">(index uses [0]; featured uses [0] + [1])</span>
+                    </label>
+                    <div className="space-y-2">
+                      {form.outcome_metrics.map((m, i) => (
+                        <div key={i} className="flex gap-2 items-center">
+                          <input
+                            className={inputClass}
+                            placeholder="Value (e.g. +342%)"
+                            value={m.value}
+                            onChange={(e) => updateMetric(i, "value", e.target.value)}
+                          />
+                          <input
+                            className={inputClass}
+                            placeholder="Label (e.g. Conversion)"
+                            value={m.label}
+                            onChange={(e) => updateMetric(i, "label", e.target.value)}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeMetric(i)}
+                            className="px-3 py-2 rounded-lg border border-white/10 text-[#94A3B8] hover:text-red-400 hover:border-red-400/40"
+                            aria-label="Remove metric"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={addMetric}
+                        className="text-xs text-[#00F0FF] hover:text-white transition-colors"
+                      >
+                        + Add metric
+                      </button>
+                    </div>
                   </div>
 
                   {/* Image upload placeholder */}

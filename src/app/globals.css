@@ -207,3 +207,59 @@ input[type="number"].calc-input {
 @media (prefers-reduced-motion: reduce) {
   .services-roster-row::after { transition: none; }
 }
+
+@keyframes portfolioPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.portfolio-row:hover .portfolio-row-grid {
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: inset 3px 0 0 var(--row-accent, #00F0FF);
+}
+.portfolio-row:hover .portfolio-row-arrow {
+  color: #fff;
+  transform: translate(2px, -2px);
+}
+.portfolio-row:hover .portfolio-row-card {
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 3px 0 0 var(--row-accent, #00F0FF);
+}
+
+/* ── /contact (Studio Roster) ──────────────────────────── */
+@keyframes contactRosterRise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes contactRosterPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+
+/* FAQ native <details> accordion */
+.contact-roster-faq details summary { list-style: none; }
+.contact-roster-faq details summary::-webkit-details-marker { display: none; }
+.contact-roster-faq details summary .contact-roster-faq-toggle {
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+.contact-roster-faq details[open] summary .contact-roster-faq-toggle {
+  transform: rotate(45deg);
+  color: #00F0FF;
+}
+
+/* Founder card hover (the inline style uses var(--accent) set per card) */
+.contact-roster-founder:hover {
+  border-color: var(--accent, #00F0FF) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+.contact-roster-founder:hover .contact-roster-founder-initials {
+  color: var(--accent, #00F0FF) !important;
+  transform: scale(1.04);
+}
+
+.contact-roster-studio:hover {
+  border-color: var(--accent, #00F0FF) !important;
+  transform: translateY(-2px);
+}

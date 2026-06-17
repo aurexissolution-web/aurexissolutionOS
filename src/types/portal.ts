@@ -107,6 +107,17 @@ export interface BlogPost {
   updated_at: string;
 }
 
+export type PortfolioCategory =
+  | 'ai-automation'
+  | 'web-engineering'
+  | 'mobile-ecosystem'
+  | 'ecosystem';
+
+export interface OutcomeMetric {
+  value: string;
+  label: string;
+}
+
 export interface PortfolioItem {
   id: string;
   title: string;
@@ -118,6 +129,12 @@ export interface PortfolioItem {
   client_name: string | null;
   live_url: string | null;
   created_at: string;
+  category: PortfolioCategory;
+  accent_word: string | null;
+  pull_quote: string | null;
+  outcome_metrics: OutcomeMetric[];
+  featured: boolean;
+  display_order: number;
 }
 
 export interface IncomeEntry {
@@ -179,3 +196,52 @@ export const PROJECT_PHASES: { key: ProjectPhase; label: string; order: number }
   { key: "sprint", label: "Sprint", order: 2 },
   { key: "launch", label: "Launch", order: 3 },
 ];
+
+// ── /contact types ─────────────────────────────────────────
+export type ContactIntent =
+  | 'new-project'
+  | 'ai-agent'
+  | 'existing-client'
+  | 'press-partnerships'
+  | 'careers';
+
+export type ContactAccent = 'cyan' | 'violet' | 'cyan-mix';
+
+export interface Founder {
+  initials: string;
+  name: string;
+  role: string;
+  blurb: string;
+  brings: string;
+  accent: ContactAccent;
+  available: boolean;
+  imageSrc?: string;
+}
+
+export interface Studio {
+  city: string;
+  country: string;
+  role: string;
+  address: string;
+  addressNote: string;
+  accent: 'cyan' | 'violet';
+  skyline: 'kl' | 'sp';
+  imageSrc?: string;
+}
+
+export interface FAQ {
+  q: string;
+  a: string;
+}
+
+export interface ContactMessage {
+  id: string;
+  intent: ContactIntent;
+  name: string;
+  email: string;
+  company: string | null;
+  stage: string | null;
+  message: string;
+  created_at: string;
+  notified_at: string | null;
+}
