@@ -73,10 +73,7 @@ export default function InvitePage({ params }: { params: Promise<{ token: string
 
       setStatus("success");
 
-      // Redirect to login after short delay
-      const portalPath =
-        json.role === "admin" ? "/portal/admin" :
-        json.role === "sales" ? "/portal/sales" : "/portal/client";
+      const portalPath = json.role === "admin" ? "/portal/admin" : "/contact";
 
       setTimeout(() => {
         router.push(`/login?redirect=${encodeURIComponent(portalPath)}`);

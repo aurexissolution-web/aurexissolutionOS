@@ -2,8 +2,8 @@
 
 import { cn } from "@/lib/utils";
 import {
-  LAB_EXPLORATIONS,
   PILLAR_LABELS,
+  type LabExploration,
   type LabPillar,
 } from "@/data/lab-explorations";
 
@@ -18,16 +18,18 @@ const PILLARS: ("all" | LabPillar)[] = [
 export function LabPillarFilter({
   active,
   onChange,
+  explorations,
 }: {
   active: LabPillar | "all";
   onChange: (p: LabPillar | "all") => void;
+  explorations: LabExploration[];
 }) {
   const counts: Record<"all" | LabPillar, number> = {
-    all: LAB_EXPLORATIONS.length,
-    ecosystem: LAB_EXPLORATIONS.filter((e) => e.pillar === "ecosystem").length,
-    ai: LAB_EXPLORATIONS.filter((e) => e.pillar === "ai").length,
-    web: LAB_EXPLORATIONS.filter((e) => e.pillar === "web").length,
-    app: LAB_EXPLORATIONS.filter((e) => e.pillar === "app").length,
+    all: explorations.length,
+    ecosystem: explorations.filter((e) => e.pillar === "ecosystem").length,
+    ai: explorations.filter((e) => e.pillar === "ai").length,
+    web: explorations.filter((e) => e.pillar === "web").length,
+    app: explorations.filter((e) => e.pillar === "app").length,
   };
 
   return (

@@ -1,6 +1,6 @@
 // ── Portal Database Types ──────────────────────────────────────
 
-export type UserRole = "client" | "admin" | "sales";
+export type UserRole = "client" | "admin";
 
 export type ProjectPhase = "audit" | "blueprint" | "sprint" | "launch";
 export type TicketUrgency = "low" | "medium" | "high" | "critical";
@@ -9,6 +9,25 @@ export type InvoiceStatus = "draft" | "sent" | "paid" | "overdue" | "cancelled";
 export type LeadStage = "new" | "contacted" | "qualified" | "proposal" | "negotiation" | "closed_won" | "closed_lost";
 export type ExpenseCategory = "tech_infrastructure" | "operational" | "marketing" | "legal" | "admin";
 export type IncomeType = "one_time" | "recurring";
+export type CustomerStatus = "active" | "dormant" | "archived";
+
+export interface CustomerRecord {
+  id: string;
+  slug: string;
+  company_name: string;
+  contact_name: string;
+  contact_email: string;
+  contact_phone: string;
+  industry: string;
+  notes: string;
+  github_url: string | null;
+  hosting_provider: string | null;
+  live_url: string | null;
+  first_engaged_at: string | null;
+  status: CustomerStatus;
+  created_at: string;
+  updated_at: string;
+}
 
 export interface ClientProfile {
   id: string;
@@ -89,6 +108,7 @@ export interface Invoice {
   paid_at: string | null;
   bank_reference: string | null;
   receipt_url: string | null;
+  invoice_file_url: string | null;
   payment_method: string;
   created_at: string;
 }

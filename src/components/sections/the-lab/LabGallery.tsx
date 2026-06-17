@@ -1,17 +1,19 @@
 "use client";
 
 import { LabExplorationCard } from "./LabExplorationCard";
-import {
-  LAB_EXPLORATIONS,
-  LAB_FEATURED,
-  type LabPillar,
-} from "@/data/lab-explorations";
+import type { LabExploration, LabPillar } from "@/data/lab-explorations";
 
-export function LabGallery({ pillar }: { pillar: LabPillar | "all" }) {
+interface LabGalleryProps {
+  pillar: LabPillar | "all";
+  explorations: LabExploration[];
+  featuredCount?: number;
+}
+
+export function LabGallery({ pillar, explorations, featuredCount = 0 }: LabGalleryProps) {
   const filtered =
     pillar === "all"
-      ? LAB_EXPLORATIONS
-      : LAB_EXPLORATIONS.filter((e) => e.pillar === pillar);
+      ? explorations
+      : explorations.filter((e) => e.pillar === pillar);
 
   if (filtered.length === 0) {
     return (
@@ -25,7 +27,7 @@ export function LabGallery({ pillar }: { pillar: LabPillar | "all" }) {
     );
   }
 
-  const totalVisible = LAB_EXPLORATIONS.length + (LAB_FEATURED ? 1 : 0);
+  const totalVisible = explorations.length + featuredCount;
 
   return (
     <section className="relative px-6 lg:px-12 py-20 md:py-28 border-t border-white/[0.08]">

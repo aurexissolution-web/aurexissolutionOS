@@ -1,8 +1,8 @@
 import { LabNoteCard } from "./LabNoteCard";
-import { LAB_NOTES } from "@/data/lab-notes";
+import type { LabNote } from "@/data/lab-notes";
 
-export function LabNotes() {
-  if (LAB_NOTES.length === 0) return null;
+export function LabNotes({ notes }: { notes: LabNote[] }) {
+  if (notes.length === 0) return null;
 
   return (
     <section className="relative px-6 lg:px-12 py-20 md:py-32 border-t border-white/[0.08]">
@@ -40,7 +40,7 @@ export function LabNotes() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-px bg-white/[0.06] border border-white/[0.06] rounded-2xl overflow-hidden">
-          {LAB_NOTES.map((note) => (
+          {notes.map((note) => (
             <LabNoteCard key={note.slug} note={note} />
           ))}
         </div>

@@ -3,14 +3,13 @@
 import Link from "next/link";
 import { LiveStatusPill } from "./LiveStatusPill";
 import {
-  LAB_FEATURED,
   PILLAR_LABELS,
   TYPE_CTA_LABELS,
   TYPE_LABELS,
+  type LabExploration,
 } from "@/data/lab-explorations";
 
-export function LabFeaturedExploration() {
-  const exp = LAB_FEATURED;
+export function LabFeaturedExploration({ exp }: { exp: LabExploration | null }) {
   if (!exp) return null;
 
   const primaryLabel = exp.primaryCta.label || TYPE_CTA_LABELS[exp.type];

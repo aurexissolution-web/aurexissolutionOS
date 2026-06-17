@@ -10,6 +10,3 @@ export type LabNote = {
   readTime: string;
   href: string;
 };
-
-// Add lab notes here as they're written. Empty until the first one is published.
-export const LAB_NOTES: LabNote[] = [];

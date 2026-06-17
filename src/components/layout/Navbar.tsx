@@ -168,9 +168,7 @@ export function Navbar() {
                 <div className="w-[180px] rounded-xl p-1.5 flex flex-col gap-0.5 border border-white/10 bg-[rgba(15,15,20,0.98)] backdrop-blur-3xl shadow-[0_16px_40px_rgba(0,0,0,0.8)] relative overflow-hidden">
                   <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00F0FF]/30 to-transparent" />
                   {[
-                    { label: "Client Portal", href: "/login?redirect=/portal/client", color: "#00F0FF" },
                     { label: "Admin Portal", href: "/login?redirect=/portal/admin", color: "#F59E0B" },
-                    { label: "Sales Portal", href: "/login?redirect=/portal/sales", color: "#10B981" },
                   ].map((item) => (
                     <Link
                       key={item.label}
@@ -240,9 +238,7 @@ export function Navbar() {
             <p className="text-[10px] text-[#64748B] uppercase tracking-wider font-medium px-4 mb-2">Log in as</p>
             <div className="flex flex-col gap-1.5 px-2">
               {[
-                { label: "Client Portal", href: "/login?redirect=/portal/client", color: "#00F0FF" },
                 { label: "Admin Portal", href: "/login?redirect=/portal/admin", color: "#F59E0B" },
-                { label: "Sales Portal", href: "/login?redirect=/portal/sales", color: "#10B981" },
               ].map((item) => (
                 <Link
                   key={item.label}

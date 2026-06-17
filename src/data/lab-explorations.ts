@@ -31,7 +31,7 @@ export type LabExploration = {
   hook: string;
   title: string;
   description: string;
-  /** Image URL — admin portal will upload + populate */
+  /** Image URL — admin portal uploads + populates */
   thumbnail: string;
   /** Outcome metric or context line */
   outcome: string;
@@ -40,12 +40,6 @@ export type LabExploration = {
   note?: LabExplorationNote;
   isFeatured?: boolean;
 };
-
-// Add the featured exploration here when one is ready to ship.
-export const LAB_FEATURED: LabExploration | null = null;
-
-// Add explorations here as they ship. Empty until the first one is live.
-export const LAB_EXPLORATIONS: LabExploration[] = [];
 
 // Default primary CTA label per exploration type.
 // Cards can override via `exp.primaryCta.label` when needed.

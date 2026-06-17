@@ -14,35 +14,22 @@ const adminEmails = new Set<string>([
   ...parseEmailList(process.env.NEXT_PUBLIC_ADMIN_EMAILS),
 ]);
 
-const salesEmails = new Set<string>(parseEmailList(process.env.NEXT_PUBLIC_SALES_EMAILS));
-
 export function determineRoleFromEmail(email?: string | null): UserRole {
   const normalized = email?.toLowerCase();
   if (normalized && adminEmails.has(normalized)) {
     return "admin";
   }
-  if (normalized && salesEmails.has(normalized)) {
-    return "sales";
-  }
   return "client";
 }
 
-export type PortalSection = "client" | "admin" | "sales";
-
-export function portalSectionForRole(role: UserRole): PortalSection {
-  if (role === "admin") return "admin";
-  if (role === "sales") return "sales";
-  return "client";
+export function isAdminRole(role: UserRole): boolean {
+  return role === "admin";
 }
 
-export function allowedSectionsForRole(role: UserRole): PortalSection[] {
-  if (role === "admin") return ["admin", "sales", "client"];
-  if (role === "sales") return ["sales", "client"];
-  return ["client"];
-}
-
-export function portalRouteForRole(role: UserRole): string {
-  return `/portal/${portalSectionForRole(role)}`;
+// Where a user lands after login. Admins go to the portal, everyone else
+// gets bounced to the public contact page.
+export function postLoginRouteForRole(role: UserRole): string {
+  return role === "admin" ? "/portal/admin" : "/contact";
 }
 
 export async function ensureUserProfile(user: User): Promise<ClientProfile> {
@@ -80,10 +67,10 @@ export async function ensureUserProfile(user: User): Promise<ClientProfile> {
     return created as ClientProfile;
   }
 
-  if (desiredRole !== "client" && profile.role !== desiredRole) {
+  if (desiredRole === "admin" && profile.role !== "admin") {
     const { data: updated, error: updateError } = await supabase
       .from("client_profiles")
-      .update({ role: desiredRole })
+      .update({ role: "admin" })
       .eq("id", profile.id)
       .select("*")
       .single();

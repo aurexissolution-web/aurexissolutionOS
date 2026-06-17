@@ -33,8 +33,8 @@ export async function POST(request: NextRequest) {
     params.append("line_items[0][price_data][unit_amount]", String(Math.round(amount * 100))); // cents
     params.append("line_items[0][quantity]", "1");
     params.append("mode", "payment");
-    params.append("success_url", `${request.nextUrl.origin}/portal/client/invoices?paid=${invoice_id}`);
-    params.append("cancel_url", `${request.nextUrl.origin}/portal/client/invoices?cancelled=${invoice_id}`);
+    params.append("success_url", `${request.nextUrl.origin}/portal/admin/customers?paid=${invoice_id}`);
+    params.append("cancel_url", `${request.nextUrl.origin}/portal/admin/customers?cancelled=${invoice_id}`);
     if (client_email) {
       params.append("customer_email", client_email);
     }

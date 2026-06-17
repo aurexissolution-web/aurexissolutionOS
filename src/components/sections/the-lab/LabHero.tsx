@@ -1,24 +1,16 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import {
-  LAB_EXPLORATIONS,
-  LAB_FEATURED,
-} from "@/data/lab-explorations";
 
 const CYAN = "#00F0FF";
 
-export function LabHero() {
-  const reduceMotion = useReducedMotion();
+interface LabHeroProps {
+  total: number;
+  liveCount: number;
+}
 
-  const allExplorations = [
-    ...(LAB_FEATURED ? [LAB_FEATURED] : []),
-    ...LAB_EXPLORATIONS,
-  ];
-  const total = allExplorations.length;
-  const liveCount = allExplorations.filter(
-    (e) => e.status.tone === "live",
-  ).length;
+export function LabHero({ total, liveCount }: LabHeroProps) {
+  const reduceMotion = useReducedMotion();
   const hasAny = total > 0;
 
   const reveal = (delay: number) =>

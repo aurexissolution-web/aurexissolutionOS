@@ -3,17 +3,22 @@
 import { useState } from "react";
 import { LabPillarFilter } from "./LabPillarFilter";
 import { LabGallery } from "./LabGallery";
-import { LAB_EXPLORATIONS, type LabPillar } from "@/data/lab-explorations";
+import type { LabExploration, LabPillar } from "@/data/lab-explorations";
 
-export function LabExplorationsSection() {
+interface LabExplorationsSectionProps {
+  explorations: LabExploration[];
+  featuredCount?: number;
+}
+
+export function LabExplorationsSection({ explorations, featuredCount = 0 }: LabExplorationsSectionProps) {
   const [activePillar, setActivePillar] = useState<LabPillar | "all">("all");
 
-  if (LAB_EXPLORATIONS.length === 0) return null;
+  if (explorations.length === 0) return null;
 
   return (
     <>
-      <LabPillarFilter active={activePillar} onChange={setActivePillar} />
-      <LabGallery pillar={activePillar} />
+      <LabPillarFilter active={activePillar} onChange={setActivePillar} explorations={explorations} />
+      <LabGallery pillar={activePillar} explorations={explorations} featuredCount={featuredCount} />
     </>
   );
 }

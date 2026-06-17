@@ -5,25 +5,20 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Shield } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
-import { ensureUserProfile, portalRouteForRole, allowedSectionsForRole } from "@/lib/supabase/profile";
-import type { PortalSection } from "@/lib/supabase/profile";
-import { useRouter, useSearchParams } from "next/navigation";
+import { ensureUserProfile, postLoginRouteForRole } from "@/lib/supabase/profile";
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent, Suspense } from "react";
 import { CanvasRevealEffect } from "@/components/ui/canvas-reveal-effect";
 import { cn } from "@/lib/utils";
 
 function LoginForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/portal/client";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const portalLabel =
-    redirect.includes("/admin") ? "Admin Portal" :
-    redirect.includes("/sales") ? "Sales Portal" : "Client Portal";
+  const portalLabel = "Admin Portal";
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -51,21 +46,7 @@ function LoginForm() {
 
     try {
       const profile = await ensureUserProfile(userData.user);
-      const allowed = allowedSectionsForRole(profile.role);
-
-      const requestedSection: PortalSection =
-        redirect.includes("/admin") ? "admin" :
-        redirect.includes("/sales") ? "sales" : "client";
-
-      if (!allowed.includes(requestedSection)) {
-        await supabase.auth.signOut();
-        const roleLabel = profile.role.charAt(0).toUpperCase() + profile.role.slice(1);
-        setError(`This account is registered as ${roleLabel}. Please use the ${roleLabel} Portal login.`);
-        setSubmitting(false);
-        return;
-      }
-
-      const destination = portalRouteForRole(profile.role);
+      const destination = postLoginRouteForRole(profile.role);
       router.push(destination);
       router.refresh();
     } catch (profileError) {
