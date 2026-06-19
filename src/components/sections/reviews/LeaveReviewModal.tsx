@@ -64,6 +64,14 @@ export function LeaveReviewModal({ open, onClose }: LeaveReviewModalProps) {
     };
   }, [open, onClose]);
 
+  // Clear stale error as soon as the user edits any field — so they
+  // aren't staring at a "review too short" message after they've
+  // already lengthened it.
+  useEffect(() => {
+    if (error) setError(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name, role, rating, content, avatar, email]);
+
   if (!open) return null;
 
   function resetForm() {
