@@ -39,11 +39,6 @@ export async function ReviewsSection() {
           <p className="max-w-[520px] text-base font-light text-neutral-500">
             Real results from businesses that chose to build smarter.
           </p>
-
-          {/* OPTION A — Header CTA */}
-          <div className="mt-4">
-            <InlineReviewCta variant="header" />
-          </div>
         </div>
 
         {/* Reviews */}
@@ -71,12 +66,10 @@ export async function ReviewsSection() {
           </div>
         )}
 
-        {/* OPTION B — Tail CTA below the marquee */}
-        {reviews.length > 0 && (
-          <div className="mt-6">
-            <InlineReviewCta variant="tail" />
-          </div>
-        )}
+        {/* CTA below the marquee */}
+        <div className="mt-6">
+          <InlineReviewCta />
+        </div>
       </div>
     </section>
   );
