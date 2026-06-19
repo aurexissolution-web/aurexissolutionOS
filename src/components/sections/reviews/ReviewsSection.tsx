@@ -1,26 +1,44 @@
 import { fetchApprovedReviews } from "@/lib/portal/reviews-data";
-import { ReviewCard } from "./ReviewCard";
+import { ReviewCardEditorial } from "./ReviewCardEditorial";
+import { ReviewCardSpotlight } from "./ReviewCardSpotlight";
+import { ReviewCardDispatch } from "./ReviewCardDispatch";
 import { InlineReviewCta } from "./InlineReviewCta";
 import { AnimatedBadge } from "@/components/ui/animated-badge";
+import type { Review } from "@/types/portal";
 
-const STATIC_THRESHOLD = 5;
+const MONO = "var(--font-geist-mono), ui-monospace, monospace";
+const SERIF = "var(--font-instrument-serif), ui-serif, Georgia, serif";
 
-/**
- * Public reviews section (homepage).
- *
- * Visual mirrors the prior TestimonialsSection exactly — same heading,
- * description, AnimatedBadge, ambient glow, marquee animation, and fade
- * edges. The only change is that data now comes from approved reviews
- * in the DB instead of a hardcoded array.
- *
- * Display rules:
- *   - 0 reviews  → empty-state card
- *   - <5 reviews → static centered row, no animation
- *   - ≥5         → seamless marquee scroll (same animation as before)
- */
+interface VariantInfo {
+  key: "editorial" | "spotlight" | "dispatch";
+  label: string;
+  description: string;
+  Card: (props: { review: Review; index: number }) => React.ReactNode;
+}
+
+const VARIANTS: VariantInfo[] = [
+  {
+    key: "editorial",
+    label: "Option A · Editorial pull-quote",
+    description: "Magazine callout — quote dominates, no avatar, mono-caps attribution.",
+    Card: ({ review }) => <ReviewCardEditorial review={review} />,
+  },
+  {
+    key: "spotlight",
+    label: "Option B · Spotlight card",
+    description: "Centered with the brand orb as hero, halo glow, museum-label feel.",
+    Card: ({ review }) => <ReviewCardSpotlight review={review} />,
+  },
+  {
+    key: "dispatch",
+    label: "Option C · Editorial dispatch",
+    description: "Numbered index + cyan rule + dotted divider — matches /portfolio + /about.",
+    Card: ({ review, index }) => <ReviewCardDispatch review={review} index={index} />,
+  },
+];
+
 export async function ReviewsSection() {
   const reviews = await fetchApprovedReviews();
-  const useMarquee = reviews.length >= STATIC_THRESHOLD;
 
   return (
     <section className="relative overflow-hidden bg-[var(--color-background)] py-20">
@@ -29,9 +47,9 @@ export async function ReviewsSection() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(0,240,255,0.08)_0%,_transparent_70%)]" />
       </div>
 
-      <div className="mx-auto flex max-w-[1280px] flex-col items-center gap-12 text-center">
-        {/* Header — preserved from original TestimonialsSection */}
-        <div className="flex flex-col items-center gap-4 px-6">
+      <div className="relative mx-auto flex max-w-[1280px] flex-col gap-14 px-6">
+        {/* Section header */}
+        <div className="flex flex-col items-center gap-4 text-center">
           <AnimatedBadge text="Client Results" color="#00F0FF" />
           <h2 className="mt-2 max-w-[640px] text-3xl font-medium leading-tight tracking-tighter text-white md:text-5xl">
             Trusted by founders &amp; operators
@@ -41,12 +59,11 @@ export async function ReviewsSection() {
           </p>
         </div>
 
-        {/* Reviews */}
         {reviews.length === 0 ? (
           <div className="mx-auto max-w-md rounded-2xl border border-dashed border-white/[0.10] py-14 text-center">
             <p
               style={{
-                fontFamily: "var(--font-instrument-serif), ui-serif, Georgia, serif",
+                fontFamily: SERIF,
                 fontStyle: "italic",
                 fontSize: 20,
                 color: "rgba(255,255,255,0.55)",
@@ -56,48 +73,51 @@ export async function ReviewsSection() {
               First reviews shipping soon.
             </p>
           </div>
-        ) : useMarquee ? (
-          <MarqueeReviews reviews={reviews} />
         ) : (
-          <div className="flex flex-wrap justify-center gap-5 px-6">
-            {reviews.map((r) => (
-              <ReviewCard key={r.id} review={r} />
+          // PREVIEW MODE: render each variant in its own labelled row so
+          // the user can compare side by side. Once a pick is locked in,
+          // collapse this to a single marquee using the chosen card.
+          <div className="flex flex-col gap-16">
+            {VARIANTS.map((v) => (
+              <div key={v.key} className="flex flex-col gap-5">
+                <header className="flex flex-col items-center gap-2 text-center">
+                  <span
+                    style={{
+                      fontFamily: MONO,
+                      fontSize: 10,
+                      letterSpacing: "0.32em",
+                      textTransform: "uppercase",
+                      color: "rgba(0,240,255,0.85)",
+                    }}
+                  >
+                    {v.label}
+                  </span>
+                  <p
+                    style={{
+                      fontFamily: SERIF,
+                      fontStyle: "italic",
+                      fontSize: 15,
+                      color: "rgba(255,255,255,0.55)",
+                      margin: 0,
+                    }}
+                  >
+                    {v.description}
+                  </p>
+                </header>
+                <div className="flex flex-wrap justify-center gap-5">
+                  {reviews.slice(0, 3).map((r, i) => (
+                    <v.Card key={`${v.key}-${r.id}`} review={r} index={i + 1} />
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         )}
 
-        {/* CTA below the marquee */}
-        <div className="mt-6">
+        <div className="mt-2">
           <InlineReviewCta />
         </div>
       </div>
     </section>
-  );
-}
-
-function MarqueeReviews({ reviews }: { reviews: Awaited<ReturnType<typeof fetchApprovedReviews>> }) {
-  return (
-    <div className="relative w-full overflow-hidden">
-      <div className="group flex w-full flex-row overflow-hidden [--duration:45s] [--gap:1.25rem] [gap:var(--gap)]">
-        {/* Two sibling tracks for a seamless loop */}
-        <div className="flex shrink-0 flex-row [gap:var(--gap)] animate-marquee group-hover:[animation-play-state:paused]">
-          {reviews.map((r) => (
-            <ReviewCard key={`a-${r.id}`} review={r} />
-          ))}
-        </div>
-        <div
-          aria-hidden
-          className="flex shrink-0 flex-row [gap:var(--gap)] animate-marquee group-hover:[animation-play-state:paused]"
-        >
-          {reviews.map((r) => (
-            <ReviewCard key={`b-${r.id}`} review={r} />
-          ))}
-        </div>
-      </div>
-
-      {/* Fade edges */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-32 bg-gradient-to-r from-[var(--color-background)] to-transparent md:w-64" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-32 bg-gradient-to-l from-[var(--color-background)] to-transparent md:w-64" />
-    </div>
   );
 }
