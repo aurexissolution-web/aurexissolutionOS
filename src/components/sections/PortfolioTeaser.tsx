@@ -169,7 +169,7 @@ export async function PortfolioTeaser() {
         <div
           className={
             hasSecondary
-              ? "grid grid-cols-1 items-start gap-4 lg:grid-cols-[7fr_5fr]"
+              ? "grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]"
               : "grid grid-cols-1 gap-4"
           }
         >
