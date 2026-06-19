@@ -4,9 +4,13 @@ import type { ReviewAvatarKey } from "@/types/portal";
 
 export const runtime = "nodejs";
 
-// Per-IP rate limiter: 1 submission per hour
+// Per-IP rate limiter: up to 5 submissions per hour. Generous enough
+// for repeat testing / a small team submitting reviews at once, while
+// still cheap protection against spam bursts (real spam hits in dozens
+// per second, not 5 per hour).
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
-const submissionsByIp = new Map<string, number>();
+const RATE_LIMIT_MAX = 5;
+const submissionsByIp = new Map<string, number[]>();
 
 const VALID_AVATARS: ReviewAvatarKey[] = [
   "cyan",
@@ -29,13 +33,20 @@ function getClientIp(req: NextRequest): string {
 
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
-  const last = submissionsByIp.get(ip);
-  if (last && now - last < RATE_LIMIT_WINDOW_MS) return true;
-  submissionsByIp.set(ip, now);
-  // Opportunistic cleanup of old entries
+  const cutoff = now - RATE_LIMIT_WINDOW_MS;
+  const history = (submissionsByIp.get(ip) ?? []).filter((t) => t > cutoff);
+  if (history.length >= RATE_LIMIT_MAX) {
+    submissionsByIp.set(ip, history);
+    return true;
+  }
+  history.push(now);
+  submissionsByIp.set(ip, history);
+  // Opportunistic cleanup
   if (submissionsByIp.size > 1000) {
-    for (const [k, t] of submissionsByIp.entries()) {
-      if (now - t > RATE_LIMIT_WINDOW_MS) submissionsByIp.delete(k);
+    for (const [k, ts] of submissionsByIp.entries()) {
+      const filtered = ts.filter((t) => t > cutoff);
+      if (filtered.length === 0) submissionsByIp.delete(k);
+      else submissionsByIp.set(k, filtered);
     }
   }
   return false;
@@ -56,7 +67,10 @@ export async function POST(req: NextRequest) {
     const ip = getClientIp(req);
     if (isRateLimited(ip)) {
       return NextResponse.json(
-        { success: false, error: "Too many submissions. Please wait an hour and try again." },
+        {
+          success: false,
+          error: `Slow down — you've hit the limit of ${RATE_LIMIT_MAX} submissions per hour. Try again in a bit.`,
+        },
         { status: 429 },
       );
     }
