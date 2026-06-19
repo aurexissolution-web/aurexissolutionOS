@@ -6,8 +6,6 @@ const SERIF = "var(--font-instrument-serif), ui-serif, Georgia, serif";
 const MONO = "var(--font-geist-mono), ui-monospace, monospace";
 const SANS = "var(--font-plus-jakarta), system-ui, sans-serif";
 
-const SECTION_BG = "#05080F";
-
 async function fetchTeaserItems(): Promise<PortfolioItem[]> {
   try {
     const { data, error } = await supabaseAdmin
@@ -32,75 +30,21 @@ export async function PortfolioTeaser() {
   const items = await fetchTeaserItems();
   if (items.length === 0) return null;
 
-  const [featured, ...rest] = items;
-  const secondary = rest.slice(0, 2);
-  const hasSecondary = secondary.length > 0;
-
   return (
-    <section
-      className="relative overflow-hidden py-16 md:py-20"
-      style={{ background: SECTION_BG }}
-    >
-      {/* Atmospheric background */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px"
-        style={{
-          background:
-            "linear-gradient(to right, transparent 8%, rgba(167,139,250,0.30) 50%, transparent 92%)",
-        }}
-      />
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-px"
-        style={{
-          background:
-            "linear-gradient(to right, transparent 8%, rgba(167,139,250,0.30) 50%, transparent 92%)",
-        }}
-      />
+    <section className="relative overflow-hidden bg-[var(--color-background)] py-16 md:py-20">
+      {/* Subtle ambient glows — match the homepage's quiet feel, no elevated plate */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
-          maskImage:
-            "radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 80%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 80%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-24 -right-20 h-[400px] w-[600px] rounded-full opacity-50"
+        className="pointer-events-none absolute -top-32 left-1/2 h-[360px] w-[820px] -translate-x-1/2 opacity-30"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 50%, rgba(0,240,255,0.10), transparent 65%)",
+            "radial-gradient(ellipse at 50% 50%, rgba(167,139,250,0.08), transparent 70%)",
           filter: "blur(70px)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-32 -left-20 h-[340px] w-[500px] rounded-full opacity-60"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 50%, rgba(167,139,250,0.12), transparent 60%)",
-          filter: "blur(70px)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-[0.04]"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
         }}
       />
 
-      {/* Content */}
-      <div className="relative mx-auto flex max-w-[1200px] flex-col gap-9 px-6">
-        {/* Header — compact, single row on desktop */}
+      <div className="relative mx-auto flex max-w-[1200px] flex-col gap-10 px-6">
+        {/* Header — title left, archive button right */}
         <header className="flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
           <div className="flex flex-col gap-2.5">
             <span
@@ -165,22 +109,11 @@ export async function PortfolioTeaser() {
           </Link>
         </header>
 
-        {/* Grid */}
-        <div
-          className={
-            hasSecondary
-              ? "grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]"
-              : "grid grid-cols-1 gap-4"
-          }
-        >
-          <FeaturedCard item={featured} />
-          {hasSecondary && (
-            <div className="flex flex-col gap-4">
-              {secondary.map((item) => (
-                <SecondaryCard key={item.id} item={item} />
-              ))}
-            </div>
-          )}
+        {/* 3 equal cards — balanced row */}
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {items.map((item, i) => (
+            <TeaserCard key={item.id} item={item} index={i + 1} />
+          ))}
         </div>
       </div>
     </section>
@@ -188,32 +121,33 @@ export async function PortfolioTeaser() {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Featured card — compact 16/9 cover, single-row footer
+   3-up equal teaser card — cover + body, single design used
+   for all three slots. Featured row gets a small star pill.
    ───────────────────────────────────────────────────────────── */
-function FeaturedCard({ item }: { item: PortfolioItem }) {
+function TeaserCard({ item, index }: { item: PortfolioItem; index: number }) {
   const cover = item.images?.[0] ?? null;
   const titleParts = splitAccent(item.title, item.accent_word);
-  const topMetric = item.outcome_metrics?.[0];
+  const firstMetric = item.outcome_metrics?.[0];
   const tags = (item.tech_tags ?? []).slice(0, 3);
 
   return (
     <Link
       href={`/portfolio/${item.slug}`}
-      className="group relative flex flex-col overflow-hidden rounded-lg border border-white/[0.06] bg-[#02040A] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#A78BFA]/35"
+      className="group relative flex flex-col overflow-hidden rounded-lg border border-white/[0.06] bg-white/[0.015] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#A78BFA]/30"
     >
-      {/* top accent rule */}
+      {/* top accent rule — brightens on hover */}
       <span
         aria-hidden
-        className="absolute inset-x-0 top-0 h-px"
+        className="absolute inset-x-0 top-0 h-px opacity-60 transition-opacity duration-300 group-hover:opacity-100"
         style={{
           background:
             "linear-gradient(to right, transparent 8%, rgba(167,139,250,0.55) 50%, transparent 92%)",
         }}
       />
 
-      {/* Cover — wider, shorter (16/9) */}
+      {/* Cover */}
       <div
-        className="relative aspect-[16/9] w-full overflow-hidden"
+        className="relative aspect-[16/10] w-full overflow-hidden"
         style={{
           background:
             "linear-gradient(135deg, #1a0e2a 0%, #0a0e1a 50%, #02040A 100%)",
@@ -224,7 +158,7 @@ function FeaturedCard({ item }: { item: PortfolioItem }) {
           <img
             src={cover}
             alt={item.title}
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
           />
         )}
         <div
@@ -232,13 +166,13 @@ function FeaturedCard({ item }: { item: PortfolioItem }) {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(180deg, transparent 40%, rgba(2,4,10,0.7) 100%)",
+              "linear-gradient(180deg, transparent 45%, rgba(2,4,10,0.65) 100%)",
           }}
         />
-        {item.featured && (
+        {item.featured && index === 1 && (
           <span
             aria-hidden
-            className="absolute left-4 top-3.5 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 backdrop-blur-md"
+            className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 backdrop-blur-md"
             style={{
               background: "rgba(2,4,10,0.78)",
               border: "1px solid rgba(167,139,250,0.40)",
@@ -254,22 +188,23 @@ function FeaturedCard({ item }: { item: PortfolioItem }) {
         )}
         <span
           aria-hidden
-          className="absolute bottom-3 left-5"
+          className="absolute bottom-2.5 left-4"
           style={{
             fontFamily: SERIF,
             fontStyle: "italic",
-            fontSize: 56,
+            fontSize: 48,
             lineHeight: 0.8,
-            color: "rgba(167,139,250,0.85)",
-            textShadow: "0 4px 18px rgba(0,0,0,0.6)",
+            color: "rgba(255,255,255,0.85)",
+            textShadow: "0 4px 16px rgba(0,0,0,0.6)",
+            fontVariantNumeric: "tabular-nums",
           }}
         >
-          01
+          {String(index).padStart(2, "0")}
         </span>
       </div>
 
-      {/* Body — tight padding, compact stack */}
-      <div className="flex flex-col gap-3 p-5 md:p-6">
+      {/* Body */}
+      <div className="flex flex-1 flex-col gap-2.5 p-5">
         <p
           className="truncate"
           style={{
@@ -285,13 +220,15 @@ function FeaturedCard({ item }: { item: PortfolioItem }) {
             .filter(Boolean)
             .join(" · ")}
         </p>
+
         <h3
+          className="line-clamp-2"
           style={{
             fontFamily: SERIF,
             fontStyle: "italic",
-            fontSize: "clamp(22px, 2.2vw, 30px)",
-            lineHeight: 1.1,
-            letterSpacing: "-0.018em",
+            fontSize: 22,
+            lineHeight: 1.15,
+            letterSpacing: "-0.015em",
             color: "rgba(255,255,255,0.96)",
             margin: 0,
           }}
@@ -304,224 +241,97 @@ function FeaturedCard({ item }: { item: PortfolioItem }) {
           )}
           {titleParts.after}
         </h3>
+
         <p
-          className="line-clamp-2 max-w-[480px]"
+          className="line-clamp-2 flex-1"
           style={{
             fontFamily: SANS,
-            fontSize: 13.5,
-            lineHeight: 1.55,
-            color: "rgba(255,255,255,0.60)",
+            fontSize: 13,
+            lineHeight: 1.5,
+            color: "rgba(255,255,255,0.55)",
             margin: 0,
           }}
         >
           {item.description}
         </p>
 
-        {/* Compact footer row: top metric (if any) + tags + CTA */}
+        {/* Footer — metric (if any) + tags + arrow */}
         <div
-          className="mt-1 flex flex-wrap items-center gap-x-5 gap-y-2 pt-3"
+          className="mt-1 flex items-center gap-3 pt-3"
           style={{ borderTop: "1px dotted rgba(255,255,255,0.10)" }}
         >
-          {topMetric && (
-            <div className="flex items-baseline gap-2">
+          {firstMetric ? (
+            <span
+              className="flex items-baseline gap-1.5"
+              style={{ minWidth: 0 }}
+            >
               <span
                 style={{
                   fontFamily: SERIF,
                   fontStyle: "italic",
-                  fontSize: 22,
+                  fontSize: 18,
                   lineHeight: 1,
                   color: "#A78BFA",
                 }}
               >
-                {topMetric.value}
+                {firstMetric.value}
               </span>
               <span
+                className="truncate"
                 style={{
                   fontFamily: MONO,
                   fontSize: 8.5,
-                  letterSpacing: "0.20em",
+                  letterSpacing: "0.18em",
                   textTransform: "uppercase",
                   color: "rgba(255,255,255,0.40)",
                 }}
               >
-                {topMetric.label}
+                {firstMetric.label}
               </span>
-            </div>
-          )}
-
-          {tags.length > 0 && (
-            <div className="flex items-center gap-2">
-              {tags.map((tag, i) => (
-                <span key={tag} className="inline-flex items-center gap-2">
-                  <span
-                    style={{
-                      fontFamily: MONO,
-                      fontSize: 9,
-                      letterSpacing: "0.16em",
-                      textTransform: "uppercase",
-                      color: "rgba(255,255,255,0.40)",
-                    }}
-                  >
-                    {tag}
-                  </span>
-                  {i < tags.length - 1 && (
+            </span>
+          ) : (
+            tags.length > 0 && (
+              <span className="flex items-center gap-2 truncate">
+                {tags.slice(0, 2).map((tag, i) => (
+                  <span key={tag} className="inline-flex items-center gap-2">
                     <span
-                      aria-hidden
                       style={{
-                        width: 2,
-                        height: 2,
-                        borderRadius: 999,
-                        background: "rgba(255,255,255,0.20)",
-                        display: "inline-block",
+                        fontFamily: MONO,
+                        fontSize: 9,
+                        letterSpacing: "0.16em",
+                        textTransform: "uppercase",
+                        color: "rgba(255,255,255,0.45)",
                       }}
-                    />
-                  )}
-                </span>
-              ))}
-            </div>
+                    >
+                      {tag}
+                    </span>
+                    {i < Math.min(tags.length, 2) - 1 && (
+                      <span
+                        aria-hidden
+                        style={{
+                          width: 2,
+                          height: 2,
+                          borderRadius: 999,
+                          background: "rgba(255,255,255,0.20)",
+                          display: "inline-block",
+                        }}
+                      />
+                    )}
+                  </span>
+                ))}
+              </span>
+            )
           )}
 
           <span
-            className="ml-auto inline-flex items-center gap-2 transition-all group-hover:gap-3"
-            style={{
-              fontFamily: MONO,
-              fontSize: 10,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              color: "#A78BFA",
-            }}
+            aria-hidden
+            className="ml-auto text-white/30 transition-all group-hover:translate-x-0.5 group-hover:text-[#A78BFA]"
+            style={{ fontSize: 16, lineHeight: 1, flexShrink: 0 }}
           >
-            Read case <span aria-hidden>→</span>
+            →
           </span>
         </div>
       </div>
-    </Link>
-  );
-}
-
-/* ─────────────────────────────────────────────────────────────
-   Secondary card — small, fixed-height feel, no stretch
-   ───────────────────────────────────────────────────────────── */
-function SecondaryCard({ item }: { item: PortfolioItem }) {
-  const cover = item.images?.[0] ?? null;
-  const titleParts = splitAccent(item.title, item.accent_word);
-  const firstMetric = item.outcome_metrics?.[0];
-  const outcomeLine = firstMetric
-    ? `${firstMetric.value} · ${firstMetric.label.toLowerCase()}`
-    : item.description;
-  const firstTag = (item.tech_tags ?? [])[0];
-
-  return (
-    <Link
-      href={`/portfolio/${item.slug}`}
-      className="group relative flex items-center gap-4 overflow-hidden rounded-lg border border-white/[0.06] bg-[#02040A] p-3 transition-all duration-300 hover:-translate-y-px hover:border-[#00F0FF]/25"
-    >
-      <span
-        aria-hidden
-        className="absolute inset-x-0 top-0 h-px opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{
-          background:
-            "linear-gradient(to right, transparent, rgba(0,240,255,0.55), transparent)",
-        }}
-      />
-
-      {/* Square cover — sharper, more compact */}
-      <div
-        className="relative h-[92px] w-[92px] shrink-0 overflow-hidden rounded-md"
-        style={{
-          background:
-            "linear-gradient(135deg, #0c2030 0%, #02040A 100%)",
-        }}
-      >
-        {cover && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={cover}
-            alt={item.title}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        )}
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, rgba(2,4,10,0.45) 100%)",
-          }}
-        />
-      </div>
-
-      {/* Body */}
-      <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <p
-          className="truncate"
-          style={{
-            fontFamily: MONO,
-            fontSize: 9,
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-            color: "rgba(255,255,255,0.42)",
-            margin: 0,
-          }}
-        >
-          {[item.category?.replace(/-/g, " "), item.client_name]
-            .filter(Boolean)
-            .join(" · ") || "Case"}
-        </p>
-        <h3
-          className="truncate"
-          style={{
-            fontFamily: SERIF,
-            fontStyle: "italic",
-            fontSize: 17,
-            lineHeight: 1.2,
-            color: "rgba(255,255,255,0.96)",
-            margin: 0,
-          }}
-        >
-          {titleParts.before}
-          {titleParts.accent && (
-            <em style={{ fontStyle: "italic", color: "#00F0FF" }}>
-              {titleParts.accent}
-            </em>
-          )}
-          {titleParts.after}
-        </h3>
-        <p
-          className="truncate"
-          style={{
-            fontFamily: SANS,
-            fontSize: 12,
-            lineHeight: 1.45,
-            color: "rgba(255,255,255,0.50)",
-            margin: 0,
-          }}
-        >
-          {outcomeLine}
-        </p>
-        {firstTag && (
-          <span
-            className="mt-0.5"
-            style={{
-              fontFamily: MONO,
-              fontSize: 8.5,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "rgba(255,255,255,0.35)",
-            }}
-          >
-            {firstTag}
-          </span>
-        )}
-      </div>
-
-      <span
-        aria-hidden
-        className="shrink-0 text-white/30 transition-all group-hover:translate-x-0.5 group-hover:text-[#00F0FF]/70"
-        style={{ fontSize: 16, lineHeight: 1 }}
-      >
-        →
-      </span>
     </Link>
   );
 }
