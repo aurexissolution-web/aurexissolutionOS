@@ -9,9 +9,12 @@ import { TheMath } from "@/components/sections/TheMath";
 import { Calculator } from "@/components/sections/Calculator";
 import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 import { StatsSection } from "@/components/sections/StatsSection";
-import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
+import { ReviewsSection } from "@/components/sections/reviews/ReviewsSection";
 import { FAQSection } from "@/components/sections/FAQSection";
 import { FinalCTA } from "@/components/sections/FinalCTA";
+
+// Re-render on every request so newly-approved reviews show up immediately.
+export const dynamic = "force-dynamic";
 
 export default function Home() {
   return (
@@ -27,7 +30,7 @@ export default function Home() {
         <Calculator />
         <ProcessTimeline />
         <StatsSection />
-        <TestimonialsSection />
+        <ReviewsSection />
         <FAQSection />
         <FinalCTA />
       </main>

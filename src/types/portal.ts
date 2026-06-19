@@ -10,6 +10,32 @@ export type LeadStage = "new" | "contacted" | "qualified" | "proposal" | "negoti
 export type ExpenseCategory = "tech_infrastructure" | "operational" | "marketing" | "legal" | "admin";
 export type IncomeType = "one_time" | "recurring";
 export type CustomerStatus = "active" | "dormant" | "archived";
+export type ReviewStatus = "pending" | "approved" | "rejected";
+export type ReviewAvatarKey =
+  | "cyan"
+  | "violet"
+  | "emerald"
+  | "amber"
+  | "cyan-violet"
+  | "amber-emerald"
+  | "silver"
+  | "constellation";
+
+export interface Review {
+  id: string;
+  name: string;
+  role: string;
+  rating: number;
+  content: string;
+  avatar_key: ReviewAvatarKey;
+  email: string | null;
+  status: ReviewStatus;
+  featured: boolean;
+  admin_notes: string;
+  created_at: string;
+  approved_at: string | null;
+  updated_at: string;
+}
 
 export interface CustomerRecord {
   id: string;
