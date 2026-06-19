@@ -10,7 +10,6 @@ import { Calculator } from "@/components/sections/Calculator";
 import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 import { StatsSection } from "@/components/sections/StatsSection";
 import { ReviewsSection } from "@/components/sections/reviews/ReviewsSection";
-import { LeaveReviewWidget } from "@/components/sections/reviews/LeaveReviewWidget";
 import { FAQSection } from "@/components/sections/FAQSection";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 
@@ -36,7 +35,6 @@ export default function Home() {
         <FinalCTA />
       </main>
       <Footer />
-      <LeaveReviewWidget />
     </div>
   );
 }
