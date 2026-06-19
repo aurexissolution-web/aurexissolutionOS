@@ -5,6 +5,7 @@ import { TechStackMarquee } from "@/components/sections/TechStackMarquee";
 import { TheShift } from "@/components/sections/TheShift";
 import { TheArchitecture } from "@/components/sections/TheArchitecture";
 import { WhatWeBuild } from "@/components/sections/WhatWeBuild";
+import { PortfolioTeaser } from "@/components/sections/PortfolioTeaser";
 import { TheMath } from "@/components/sections/TheMath";
 import { Calculator } from "@/components/sections/Calculator";
 import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
@@ -26,6 +27,7 @@ export default function Home() {
         <TheShift />
         <TheArchitecture />
         <WhatWeBuild />
+        <PortfolioTeaser />
         <TheMath />
         <Calculator />
         <ProcessTimeline />
