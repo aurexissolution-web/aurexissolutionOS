@@ -32,17 +32,6 @@ export async function PortfolioTeaser() {
 
   return (
     <section className="relative overflow-hidden bg-[var(--color-background)] py-16 md:py-20">
-      {/* Subtle ambient glows — match the homepage's quiet feel, no elevated plate */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-32 left-1/2 h-[360px] w-[820px] -translate-x-1/2 opacity-30"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 50%, rgba(167,139,250,0.08), transparent 70%)",
-          filter: "blur(70px)",
-        }}
-      />
-
       <div className="relative mx-auto flex max-w-[1200px] flex-col gap-10 px-6">
         {/* Header — title left, archive button right */}
         <header className="flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
@@ -54,7 +43,7 @@ export async function PortfolioTeaser() {
                 fontSize: 10,
                 letterSpacing: "0.32em",
                 textTransform: "uppercase",
-                color: "rgba(167,139,250,0.85)",
+                color: "rgba(0,240,255,0.85)",
               }}
             >
               <span
@@ -63,8 +52,8 @@ export async function PortfolioTeaser() {
                   width: 5,
                   height: 5,
                   borderRadius: 999,
-                  background: "#A78BFA",
-                  boxShadow: "0 0 8px rgba(167,139,250,0.7)",
+                  background: "#00F0FF",
+                  boxShadow: "0 0 8px rgba(0,240,255,0.7)",
                   display: "inline-block",
                 }}
               />
@@ -81,7 +70,7 @@ export async function PortfolioTeaser() {
                   fontStyle: "italic",
                   fontWeight: 400,
                   backgroundImage:
-                    "linear-gradient(120deg, #C4B5FD, #A78BFA 60%, #7C3AED)",
+                    "linear-gradient(120deg, #A0FFFF, #00F0FF 60%, #5B8DFF)",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   color: "transparent",
@@ -93,7 +82,7 @@ export async function PortfolioTeaser() {
           </div>
           <Link
             href="/portfolio"
-            className="group inline-flex shrink-0 items-center gap-2 self-start rounded-full border border-white/[0.12] px-4 py-2 transition-all hover:border-[#A78BFA]/40 hover:bg-[#A78BFA]/[0.06] hover:text-[#A78BFA] sm:self-auto"
+            className="group inline-flex shrink-0 items-center gap-2 self-start rounded-full border border-white/[0.12] px-4 py-2 transition-all hover:border-[#00F0FF]/40 hover:bg-[#00F0FF]/[0.06] hover:text-[#00F0FF] sm:self-auto"
             style={{
               fontFamily: MONO,
               fontSize: 10.5,
@@ -133,7 +122,7 @@ function TeaserCard({ item, index }: { item: PortfolioItem; index: number }) {
   return (
     <Link
       href={`/portfolio/${item.slug}`}
-      className="group relative flex flex-col overflow-hidden rounded-lg border border-white/[0.06] bg-white/[0.015] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#A78BFA]/30"
+      className="group relative flex flex-col overflow-hidden rounded-lg border border-white/[0.06] bg-white/[0.015] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#00F0FF]/30"
     >
       {/* top accent rule — brightens on hover */}
       <span
@@ -141,7 +130,7 @@ function TeaserCard({ item, index }: { item: PortfolioItem; index: number }) {
         className="absolute inset-x-0 top-0 h-px opacity-60 transition-opacity duration-300 group-hover:opacity-100"
         style={{
           background:
-            "linear-gradient(to right, transparent 8%, rgba(167,139,250,0.55) 50%, transparent 92%)",
+            "linear-gradient(to right, transparent 8%, rgba(0,240,255,0.55) 50%, transparent 92%)",
         }}
       />
 
@@ -150,7 +139,7 @@ function TeaserCard({ item, index }: { item: PortfolioItem; index: number }) {
         className="relative aspect-[16/10] w-full overflow-hidden"
         style={{
           background:
-            "linear-gradient(135deg, #1a0e2a 0%, #0a0e1a 50%, #02040A 100%)",
+            "linear-gradient(135deg, #0a1525 0%, #050a15 50%, #030408 100%)",
         }}
       >
         {cover && (
@@ -175,12 +164,12 @@ function TeaserCard({ item, index }: { item: PortfolioItem; index: number }) {
             className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 backdrop-blur-md"
             style={{
               background: "rgba(2,4,10,0.78)",
-              border: "1px solid rgba(167,139,250,0.40)",
+              border: "1px solid rgba(0,240,255,0.40)",
               fontFamily: MONO,
               fontSize: 9,
               letterSpacing: "0.22em",
               textTransform: "uppercase",
-              color: "#A78BFA",
+              color: "#00F0FF",
             }}
           >
             ★ Featured
@@ -235,7 +224,7 @@ function TeaserCard({ item, index }: { item: PortfolioItem; index: number }) {
         >
           {titleParts.before}
           {titleParts.accent && (
-            <em style={{ fontStyle: "italic", color: "#A78BFA" }}>
+            <em style={{ fontStyle: "italic", color: "#00F0FF" }}>
               {titleParts.accent}
             </em>
           )}
@@ -271,7 +260,7 @@ function TeaserCard({ item, index }: { item: PortfolioItem; index: number }) {
                   fontStyle: "italic",
                   fontSize: 18,
                   lineHeight: 1,
-                  color: "#A78BFA",
+                  color: "#00F0FF",
                 }}
               >
                 {firstMetric.value}
@@ -325,7 +314,7 @@ function TeaserCard({ item, index }: { item: PortfolioItem; index: number }) {
 
           <span
             aria-hidden
-            className="ml-auto text-white/30 transition-all group-hover:translate-x-0.5 group-hover:text-[#A78BFA]"
+            className="ml-auto text-white/30 transition-all group-hover:translate-x-0.5 group-hover:text-[#00F0FF]"
             style={{ fontSize: 16, lineHeight: 1, flexShrink: 0 }}
           >
             →
