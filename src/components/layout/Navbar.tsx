@@ -155,34 +155,9 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Right: Log in dropdown + CTA */}
+          {/* Right: CTA (login is intentionally not exposed in the public nav —
+              admin access is via /admin or /portal/admin which auth-gates) */}
           <div className="hidden md:flex items-center gap-4">
-            <div className="relative group/login">
-              <button className="text-[13.5px] font-medium text-[#9ca3af] hover:text-white transition-colors duration-200 tracking-[-0.01em] flex items-center gap-1">
-                Log in
-                <svg width="10" height="10" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-60 group-hover/login:opacity-100 transition-opacity">
-                  <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-              <div className="absolute top-full right-0 pt-3 opacity-0 pointer-events-none group-hover/login:opacity-100 group-hover/login:pointer-events-auto transition-all duration-300">
-                <div className="w-[180px] rounded-xl p-1.5 flex flex-col gap-0.5 border border-white/10 bg-[rgba(15,15,20,0.98)] backdrop-blur-3xl shadow-[0_16px_40px_rgba(0,0,0,0.8)] relative overflow-hidden">
-                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00F0FF]/30 to-transparent" />
-                  {[
-                    { label: "Admin Portal", href: "/login?redirect=/portal/admin", color: "#F59E0B" },
-                  ].map((item) => (
-                    <Link
-                      key={item.label}
-                      href={item.href}
-                      className="group/sub relative px-3 py-2.5 rounded-lg flex items-center gap-2 text-[12.5px] font-medium text-[#c0c6d1] hover:text-white transition-colors overflow-hidden"
-                    >
-                      <div className="absolute inset-0 bg-white/[0.06] opacity-0 group-hover/sub:opacity-100 transition-opacity" />
-                      <div className="w-1.5 h-1.5 rounded-full relative z-10" style={{ backgroundColor: item.color }} />
-                      <span className="relative z-10">{item.label}</span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
             <GradientStartButton />
           </div>
 
@@ -234,22 +209,6 @@ export function Navbar() {
                 </div>
               );
             })}
-            <div className="h-px w-full bg-white/[0.08] my-4" />
-            <p className="text-[10px] text-[#64748B] uppercase tracking-wider font-medium px-4 mb-2">Log in as</p>
-            <div className="flex flex-col gap-1.5 px-2">
-              {[
-                { label: "Admin Portal", href: "/login?redirect=/portal/admin", color: "#F59E0B" },
-              ].map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className="flex items-center gap-2.5 px-4 py-2.5 rounded-lg text-[14px] font-medium text-[#c0c6d1] hover:text-white hover:bg-white/5 transition-colors"
-                >
-                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
-                  {item.label}
-                </Link>
-              ))}
-            </div>
             <div className="h-px w-full bg-white/[0.08] my-4" />
             <Link
               href="/contact#brief"
