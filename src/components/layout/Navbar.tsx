@@ -65,8 +65,16 @@ export function Navbar() {
             aria-label="Aurexis Solution — Home"
           >
             <span
-              className="inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-md border border-white/[0.08] bg-white/[0.03] transition-all duration-200 group-hover:border-[rgba(0,240,255,0.35)] group-hover:bg-[rgba(0,240,255,0.06)]"
-              style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)" }}
+              className="inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg transition-all duration-200 group-hover:border-[rgba(0,240,255,0.35)]"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 60%), rgba(12, 14, 22, 0.42)",
+                border: "1px solid rgba(255,255,255,0.12)",
+                backdropFilter: "blur(24px) saturate(180%)",
+                WebkitBackdropFilter: "blur(24px) saturate(180%)",
+                boxShadow:
+                  "inset 0 1px 0 rgba(255,255,255,0.10), inset 0 -1px 0 rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.30)",
+              }}
             >
               <Image
                 src="/logo.svg"
@@ -94,16 +102,18 @@ export function Navbar() {
             </span>
           </Link>
 
-          {/* Center Nav Pill */}
+          {/* Center Nav Pill — liquid glass */}
           <nav
             className="hidden md:flex items-center gap-0"
             style={{
-              background: "rgba(15, 15, 20, 0.55)",
-              border: "1px solid rgba(255,255,255,0.10)",
+              background:
+                "linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0) 60%), rgba(12, 14, 22, 0.42)",
+              border: "1px solid rgba(255,255,255,0.12)",
               borderRadius: "999px",
-              backdropFilter: "blur(14px)",
-              WebkitBackdropFilter: "blur(14px)",
-              boxShadow: "0 4px 24px rgba(0,0,0,0.25)",
+              backdropFilter: "blur(28px) saturate(180%)",
+              WebkitBackdropFilter: "blur(28px) saturate(180%)",
+              boxShadow:
+                "inset 0 1px 0 rgba(255,255,255,0.10), inset 0 -1px 0 rgba(0,0,0,0.20), 0 1px 0 rgba(255,255,255,0.04), 0 12px 36px rgba(0,0,0,0.45)",
               padding: "4px 6px",
               gap: "2px",
             }}
@@ -161,8 +171,8 @@ export function Navbar() {
                   className={cn(
                     "text-[13.5px] font-medium transition-colors duration-200 px-4 py-1.5 rounded-full",
                     isActive
-                      ? "text-white bg-white/[0.08]"
-                      : "text-[#9ca3af] hover:text-white"
+                      ? "text-white bg-white/[0.12] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+                      : "text-[#9ca3af] hover:text-white hover:bg-white/[0.04]"
                   )}
                 >
                   {link.label}
@@ -251,12 +261,14 @@ export function Navbar() {
         <nav
           className="hidden md:flex items-center"
           style={{
-            background: "rgba(15, 15, 20, 0.85)",
-            border: "1px solid rgba(255,255,255,0.10)",
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 60%), rgba(12, 14, 22, 0.55)",
+            border: "1px solid rgba(255,255,255,0.12)",
             borderRadius: "999px",
-            backdropFilter: "blur(16px)",
-            WebkitBackdropFilter: "blur(16px)",
-            boxShadow: "0 4px 32px rgba(0,0,0,0.35)",
+            backdropFilter: "blur(32px) saturate(180%)",
+            WebkitBackdropFilter: "blur(32px) saturate(180%)",
+            boxShadow:
+              "inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.25), 0 1px 0 rgba(255,255,255,0.04), 0 16px 48px rgba(0,0,0,0.50)",
             padding: "5px 6px",
             gap: "2px",
           }}
@@ -310,8 +322,8 @@ export function Navbar() {
                 className={cn(
                   "text-[13.5px] font-medium transition-colors duration-200 px-4 py-1.5 rounded-full whitespace-nowrap",
                   isActive
-                    ? "text-white"
-                    : "text-[#9ca3af] hover:text-white"
+                    ? "text-white bg-white/[0.10] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+                    : "text-[#9ca3af] hover:text-white hover:bg-white/[0.04]"
                 )}
               >
                 {link.label}
