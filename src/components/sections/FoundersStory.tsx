@@ -105,7 +105,7 @@ const NEMILA: FounderHalfData = {
   titleAccent: "second voice.",
   prose: (
     <>
-      I came to Aurexis from{" "}
+      I&rsquo;ve always been drawn to{" "}
       <em
         className="bg-gradient-to-r from-[#A0FFFF] via-[var(--color-electric-cyan)] to-[#0080FF] bg-clip-text font-serif text-transparent"
         style={{
@@ -113,13 +113,13 @@ const NEMILA: FounderHalfData = {
           filter: "drop-shadow(0 0 18px rgba(0,240,255,0.30))",
         }}
       >
-        [background]
+        systems
       </em>{" "}
-      — years of watching good work get lost between the tools and people meant
-      to carry it. At Aurexis I run operations — the part that turns
-      &ldquo;we shipped it&rdquo; into &ldquo;the client stayed.&rdquo; Five
-      years from now: same wedge, more verticals. The kind of company people
-      stay at.
+      &mdash; how things come together behind the scenes. At Aurexis I lead
+      operations: structure, clarity, seamless execution. I turn ideas into
+      actionable systems so everything runs smoothly and the work actually
+      ships. The vision is an environment people trust and rely on &mdash;
+      driven by smart operations, strong systems, and sustainable technology.
     </>
   ),
   signature: "Nemila Raj Selvaraj",
@@ -130,9 +130,9 @@ const NEMILA: FounderHalfData = {
   imageAlt: "Nemila Raj Selvaraj, COO of Aurexis Solution",
   vitals: [
     { label: "Location", value: "Kuala Lumpur" },
-    { label: "Trained", value: "[Background]" },
+    { label: "Focus", value: "Systems & Operations" },
     { label: "Now", value: "COO · Operations" },
-    { label: "Owns", value: "[Scope — edit]" },
+    { label: "Owns", value: "Delivery · Structure · Trust" },
   ],
 };
 
