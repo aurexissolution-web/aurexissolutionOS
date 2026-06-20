@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -57,24 +58,39 @@ export function Navbar() {
 >
         <div className="mx-auto flex h-[72px] max-w-[1280px] items-center justify-between px-6 lg:px-8">
 
-          {/* Logo lockup — wordmark only */}
+          {/* Logo lockup — mark + wordmark */}
           <Link
             href="/"
-            className="group inline-flex items-baseline gap-2 outline-none flex-shrink-0"
+            className="group inline-flex items-center gap-2.5 outline-none flex-shrink-0"
             aria-label="Aurexis Solution — Home"
           >
-            <span className="text-[16px] font-bold text-white tracking-[-0.015em] leading-none transition-colors duration-200 group-hover:text-white">
-              AUREXIS
-            </span>
             <span
-              aria-hidden
-              className="text-[16px] leading-none text-[var(--color-electric-cyan)]"
-              style={{ textShadow: "0 0 8px rgba(0,240,255,0.6)" }}
+              className="inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-md border border-white/[0.08] bg-white/[0.03] transition-all duration-200 group-hover:border-[rgba(0,240,255,0.35)] group-hover:bg-[rgba(0,240,255,0.06)]"
+              style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)" }}
             >
-              ·
+              <Image
+                src="/logo.svg"
+                alt=""
+                width={22}
+                height={22}
+                className="object-contain"
+                priority
+              />
             </span>
-            <span className="text-[13.5px] font-semibold text-white/65 tracking-[0.2em] leading-none">
-              SOLUTION
+            <span className="inline-flex items-baseline gap-1.5">
+              <span className="text-[16px] font-bold text-white tracking-[-0.015em] leading-none transition-colors duration-200">
+                AUREXIS
+              </span>
+              <span
+                aria-hidden
+                className="text-[16px] leading-none text-[var(--color-electric-cyan)]"
+                style={{ textShadow: "0 0 8px rgba(0,240,255,0.6)" }}
+              >
+                ·
+              </span>
+              <span className="text-[13.5px] font-semibold text-white/65 tracking-[0.2em] leading-none">
+                SOLUTION
+              </span>
             </span>
           </Link>
 
