@@ -8,7 +8,6 @@ import { AurexisStandard } from "@/components/sections/AurexisStandard";
 import { CulturalFit } from "@/components/sections/CulturalFit";
 import { AboutCTA } from "@/components/sections/AboutCTA";
 import { LocationSection } from "@/components/sections/LocationSection";
-import { OurApproach } from "@/components/sections/OurApproach";
 import { TheStack } from "@/components/sections/TheStack";
 
 export default function AboutPage() {
@@ -21,7 +20,6 @@ export default function AboutPage() {
         <FoundersStory />
         <WhatWeBelieve />
         <LocationSection />
-        <OurApproach />
         <TheStack />
         <ValueAdd />
         <AurexisStandard />
