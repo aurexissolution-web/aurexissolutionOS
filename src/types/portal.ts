@@ -285,9 +285,11 @@ export interface ContactMessage {
   intent: ContactIntent;
   name: string;
   email: string;
+  phone: string | null;
   company: string | null;
   stage: string | null;
   message: string;
   created_at: string;
   notified_at: string | null;
+  contacted_at: string | null;
 }

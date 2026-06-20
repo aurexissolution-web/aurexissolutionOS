@@ -14,6 +14,7 @@ interface FieldErrors {
   intent?: string;
   name?: string;
   email?: string;
+  phone?: string;
   message?: string;
 }
 
@@ -40,6 +41,7 @@ export function ContactBriefForm() {
   const [intent, setIntent] = useState<ContactIntent>('new-project');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [company, setCompany] = useState('');
   const [stage, setStage] = useState(COMPANY_STAGES[0]);
   const [message, setMessage] = useState('');
@@ -56,7 +58,7 @@ export function ContactBriefForm() {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ intent, name, email, company, stage, message }),
+        body: JSON.stringify({ intent, name, email, phone, company, stage, message }),
       });
       if (res.ok) {
         setState('sent');
@@ -217,6 +219,21 @@ export function ContactBriefForm() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
         <div className="flex flex-col" style={{ gap: 7 }}>
+          <label style={labelBase}>
+            Phone (WhatsApp) <span style={{ color: '#00F0FF', marginLeft: 3 }}>*</span>
+          </label>
+          <input
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="+60 12-345 6789"
+            style={inputBase}
+          />
+          {errors.phone && (
+            <span style={{ color: '#fca5a5', fontSize: 12 }}>{errors.phone}</span>
+          )}
+        </div>
+        <div className="flex flex-col" style={{ gap: 7 }}>
           <label style={labelBase}>Company</label>
           <input
             type="text"
@@ -226,18 +243,19 @@ export function ContactBriefForm() {
             style={inputBase}
           />
         </div>
-        <div className="flex flex-col" style={{ gap: 7 }}>
-          <label style={labelBase}>Stage</label>
-          <select
-            value={stage}
-            onChange={(e) => setStage(e.target.value)}
-            style={inputBase}
-          >
-            {COMPANY_STAGES.map((s) => (
-              <option key={s}>{s}</option>
-            ))}
-          </select>
-        </div>
+      </div>
+
+      <div className="flex flex-col" style={{ gap: 7 }}>
+        <label style={labelBase}>Stage</label>
+        <select
+          value={stage}
+          onChange={(e) => setStage(e.target.value)}
+          style={inputBase}
+        >
+          {COMPANY_STAGES.map((s) => (
+            <option key={s}>{s}</option>
+          ))}
+        </select>
       </div>
 
       <div className="flex flex-col" style={{ gap: 7 }}>

@@ -252,7 +252,7 @@ export function Navbar() {
             </div>
             <div className="h-px w-full bg-white/[0.08] my-4" />
             <Link
-              href="/contact"
+              href="/contact#brief"
               className="flex items-center justify-center w-full h-10 rounded-full text-[14px] font-semibold text-black bg-white"
             >
               Start Project
@@ -352,7 +352,7 @@ export function Navbar() {
 
           {/* CTA inside pill */}
           <Link
-            href="/contact"
+            href="/contact#brief"
             className="group flex items-center gap-1.5 text-[13.5px] font-medium transition-all duration-200 px-4 py-1.5 rounded-full whitespace-nowrap flex-shrink-0"
             style={{
               color: "#00F0FF",

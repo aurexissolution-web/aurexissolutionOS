@@ -19,13 +19,19 @@ interface Errors {
   intent?: string;
   name?: string;
   email?: string;
+  phone?: string;
   message?: string;
 }
+
+// Accept anything that looks like a phone — digits, spaces, dashes, parens,
+// optional leading +. We sanitize to digits-only when generating wa.me links
+// in the admin, so storage can keep the user's original formatting.
+const PHONE_RE = /^[+\d][\d\s\-().]{6,24}$/;
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { intent, name, email, company, stage, message } = body as Record<string, unknown>;
+    const { intent, name, email, phone, company, stage, message } = body as Record<string, unknown>;
 
     const errors: Errors = {};
     if (typeof intent !== 'string' || !VALID_INTENTS.has(intent)) {
@@ -36,6 +42,9 @@ export async function POST(request: NextRequest) {
     }
     if (typeof email !== 'string' || !EMAIL_RE.test(email.trim())) {
       errors.email = 'Please give us a working email address.';
+    }
+    if (typeof phone !== 'string' || !PHONE_RE.test(phone.trim())) {
+      errors.phone = 'Please give us a phone number we can WhatsApp.';
     }
     if (typeof message !== 'string' || message.trim().length === 0) {
       errors.message = 'Please write a short message.';
@@ -51,6 +60,7 @@ export async function POST(request: NextRequest) {
         intent,
         name: (name as string).trim(),
         email: (email as string).trim(),
+        phone: (phone as string).trim(),
         company: typeof company === 'string' && company.trim() ? company.trim() : null,
         stage: typeof stage === 'string' && stage.trim() ? stage.trim() : null,
         message: (message as string).trim(),
@@ -74,6 +84,7 @@ export async function POST(request: NextRequest) {
         `*Intent:* ${intent}`,
         `*Name:* ${(name as string).trim()}`,
         `*Email:* ${(email as string).trim()}`,
+        `*Phone:* ${(phone as string).trim()}`,
         `*Company:* ${(company as string)?.trim?.() || '—'}`,
         `*Stage:* ${(stage as string)?.trim?.() || '—'}`,
         ``,
