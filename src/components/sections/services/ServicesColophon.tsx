@@ -18,7 +18,7 @@ export function ServicesColophon() {
       </div>
       <div className="flex flex-col md:items-end items-start gap-3.5 md:text-right">
         <Link
-          href="/contact"
+          href="/contact#brief"
           className="inline-flex items-center gap-3.5 px-7 py-4 rounded-full bg-white text-[#02030A]
                      font-mono text-[12px] uppercase tracking-[0.22em] font-semibold
                      transition-all duration-[250ms]

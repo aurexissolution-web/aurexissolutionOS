@@ -105,7 +105,7 @@ export function HeroSection() {
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
           <Link
-            href="/contact"
+            href="/contact#brief"
             className="inline-flex items-center px-6 py-2.5 rounded-full bg-white text-black text-[15px] font-semibold transition-all hover:-translate-y-0.5 shadow-[0_4px_14px_rgba(0,0,0,0.25)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.3),0_0_24px_rgba(0,240,255,0.15)]"
           >
             Start Building

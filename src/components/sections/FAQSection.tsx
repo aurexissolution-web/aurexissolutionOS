@@ -392,7 +392,7 @@ export function FAQSection() {
               {String(counterTotal).padStart(2, "0")}
             </span>
             <Link
-              href="/contact"
+              href="/contact#brief"
               className="group inline-flex items-center gap-2 text-[14px] text-white/55 hover:text-white transition-colors"
             >
               Still have questions? Talk to us

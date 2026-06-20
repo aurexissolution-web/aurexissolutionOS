@@ -58,7 +58,7 @@ export function PortfolioColophon() {
           Forty-five minutes. Tell us what you&apos;re building. We&apos;ll tell you what it actually needs.
         </p>
         <Link
-          href="/contact"
+          href="/contact#brief"
           className="inline-flex items-center gap-2.5 rounded-full font-semibold transition-opacity hover:opacity-90"
           style={{ background: '#fff', color: '#02040A', padding: '13px 24px', fontSize: 13 }}
         >

@@ -97,7 +97,7 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
                    </h3>
                    <div className="text-center">
                      <p className="text-white/80 font-medium mb-8">Ready to see similar results?</p>
-                     <NeonButton href="/contact" className="w-full">Book a Session</NeonButton>
+                     <NeonButton href="/contact#brief" className="w-full">Book a Session</NeonButton>
                      {project.live_url && (
                        <a href={project.live_url} target="_blank" rel="noreferrer" className="block mt-4 text-sm text-[#00F0FF] hover:text-white transition-colors">
                          View Live Project →

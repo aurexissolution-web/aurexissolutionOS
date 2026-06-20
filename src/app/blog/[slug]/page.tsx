@@ -86,7 +86,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
           <div className="mt-24 p-8 glass rounded-2xl text-center border-[#00F0FF]/20 bg-[#00F0FF]/5">
             <h3 className="text-xl font-bold text-white mb-4">Want to implement this in your own stack?</h3>
             <p className="mb-6 text-sm text-[#94A3B8]">Let our architecture team audit your current database.</p>
-            <Link href="/contact" className="inline-flex items-center justify-center font-bold tracking-wide transition-all duration-300 rounded-lg bg-[#00F0FF] text-[#02040A] px-6 py-3 hover:shadow-[0_0_15px_rgba(0,240,255,0.4)]">
+            <Link href="/contact#brief" className="inline-flex items-center justify-center font-bold tracking-wide transition-all duration-300 rounded-lg bg-[#00F0FF] text-[#02040A] px-6 py-3 hover:shadow-[0_0_15px_rgba(0,240,255,0.4)]">
               Book an Audit
             </Link>
           </div>

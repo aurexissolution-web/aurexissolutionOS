@@ -46,7 +46,7 @@ export function PricingTable({ tiers }: { tiers: PricingTier[] }) {
             <div className="w-full mt-auto pt-8 border-t border-white/10">
               <NeonButton 
                 variant={tier.popular ? 'primary' : 'secondary'} 
-                href="/contact" 
+                href="/contact#brief" 
                 className="w-full"
               >
                 Check Availability

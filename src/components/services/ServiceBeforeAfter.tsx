@@ -103,7 +103,7 @@ export function ServiceBeforeAfter({ data }: ServiceBeforeAfterProps) {
             </p>
           </div>
           <a
-            href="/contact"
+            href="/contact#brief"
             className="shrink-0 inline-flex items-center gap-3 px-7 py-3.5 rounded-full text-sm font-semibold tracking-wide transition-all duration-300"
             style={{
               backgroundColor: `${data.themeColor}15`,

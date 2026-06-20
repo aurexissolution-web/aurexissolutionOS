@@ -427,7 +427,7 @@ export function FinalCTA() {
               </a>
 
               <Link
-                href="/contact"
+                href="/contact#brief"
                 className="group inline-flex items-center gap-1.5 text-[13px] text-white/55 hover:text-white transition-colors"
               >
                 Or book a 30-min discovery call
