@@ -29,6 +29,7 @@ const VISUALS_BY_PILLAR: Record<
   "ai-automation": ["taskstack", "chatmiss", "costcurve"],
   "web-engineering": ["waterfall", "templategrid", "cage"],
   "mobile-ecosystems": ["islands", "stars", "fork"],
+  "data-engineering": ["islands", "taskstack", "cage"],
 };
 
 /**

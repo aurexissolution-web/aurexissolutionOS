@@ -8,7 +8,6 @@ type ComponentOffering = {
   number: string;
   title: string;
   description: string;
-  price: string;
   href: string;
 };
 
@@ -18,24 +17,28 @@ const components: ComponentOffering[] = [
     title: "AI Workflows",
     description:
       "Custom agents that automate the repetitive judgment calls. Slot into your stack or run standalone.",
-    price: "RM 15–60k",
-    href: "/services#ai",
+    href: "/services/ai-automation",
   },
   {
     number: "03",
     title: "Web Platforms",
     description:
       "High-performance Next.js web platforms — marketing sites, customer portals, internal tools.",
-    price: "RM 15–50k",
-    href: "/services#web",
+    href: "/services/web-engineering",
   },
   {
     number: "04",
     title: "Mobile Apps",
     description:
       "iOS and Android apps that ship and stay shipped. React Native ecosystems with backends that talk.",
-    price: "RM 30–120k",
-    href: "/services#app",
+    href: "/services/mobile-ecosystems",
+  },
+  {
+    number: "05",
+    title: "Data Pipelines",
+    description:
+      "Centralize your data, then surface it in dashboards that update themselves. Stripe + CRM + spreadsheets → one source of truth.",
+    href: "/services/data-engineering",
   },
 ];
 
@@ -132,17 +135,8 @@ export function WhatWeBuild() {
               </div>
 
               <div className="flex flex-col gap-5 lg:items-start">
-                <div>
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-white/45 mb-2">
-                    Investment
-                  </div>
-                  <div className="font-mono text-[16px] md:text-[18px] text-white/85">
-                    RM 50–300k <span className="text-white/45">+ retainer/month</span>
-                  </div>
-                </div>
-
                 <Link
-                  href="/services#ecosystem"
+                  href="/services/ecosystem"
                   className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-white text-black text-[15px] font-semibold transition-all hover:-translate-y-0.5 shadow-[0_4px_14px_rgba(0,0,0,0.25),0_0_24px_rgba(0,240,255,0.18)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.3),0_0_32px_rgba(0,240,255,0.28)] w-fit"
                 >
                   Explore the ecosystem
@@ -153,7 +147,7 @@ export function WhatWeBuild() {
           </div>
         </motion.div>
 
-        <div className="mx-auto max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="mx-auto max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {components.map((c, i) => (
             <motion.article
               key={c.number}
@@ -186,11 +180,7 @@ export function WhatWeBuild() {
                 {c.description}
               </p>
 
-              <div className="mt-auto flex flex-col gap-4">
-                <div className="font-mono text-[13px] md:text-[14px] text-white/65">
-                  {c.price}
-                </div>
-
+              <div className="mt-auto">
                 <Link
                   href={c.href}
                   className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-white/85 hover:text-white transition-colors w-fit"

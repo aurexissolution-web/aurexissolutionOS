@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -9,6 +10,7 @@ type Surface = {
   name: string;
   tag: string;
   description: string;
+  href: string;
 };
 
 const SURFACES: Surface[] = [
@@ -18,6 +20,7 @@ const SURFACES: Surface[] = [
     tag: "Public",
     description:
       "Public website, customer portal, lead capture — the first surface your customers ever touch.",
+    href: "/services/web-engineering",
   },
   {
     index: "02",
@@ -25,6 +28,7 @@ const SURFACES: Surface[] = [
     tag: "Internal",
     description:
       "Internal staff app for daily work — web or mobile. Where your team actually runs the business.",
+    href: "/services/mobile-ecosystems",
   },
   {
     index: "03",
@@ -32,6 +36,7 @@ const SURFACES: Surface[] = [
     tag: "Automated",
     description:
       "Receptionists, automations, document and quote generators. The part of the system that never sleeps.",
+    href: "/services/ai-automation",
   },
   {
     index: "04",
@@ -39,6 +44,7 @@ const SURFACES: Surface[] = [
     tag: "Integrations",
     description:
       "WhatsApp, LHDN e-invoice, payment gateways, and the integrations that hold every system together.",
+    href: "/services/data-engineering",
   },
 ];
 
@@ -63,7 +69,11 @@ function QuietCard({
   return (
     <motion.article
       {...reveal}
-      className="wwb-card group relative grid grid-rows-[auto_1fr_auto] min-h-[180px] lg:min-h-[200px] p-6 sm:p-7 lg:px-8 lg:py-7 overflow-hidden"
+      className="wwb-card group relative"
+    >
+    <Link
+      href={surface.href}
+      className="grid grid-rows-[auto_1fr_auto] min-h-[180px] lg:min-h-[200px] p-6 sm:p-7 lg:px-8 lg:py-7 overflow-hidden no-underline h-full"
     >
       {/* Top row: numeral + tag */}
       <div className="flex items-baseline justify-between gap-4">
@@ -118,6 +128,7 @@ function QuietCard({
           View →
         </span>
       </div>
+    </Link>
     </motion.article>
   );
 }

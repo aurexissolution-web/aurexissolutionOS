@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-export type ServiceSlug = "ai-automation" | "web-engineering" | "mobile-ecosystems";
+export type ServiceSlug = "ai-automation" | "web-engineering" | "mobile-ecosystems" | "data-engineering";
 
 export interface ServiceFeature {
   title: string;
@@ -400,6 +400,119 @@ export const servicesData: Record<ServiceSlug, ServiceData> = {
     ],
     conversion: {
       headline: "Ready to launch a mobile experience that your users refuse to delete?",
+    },
+  },
+  "data-engineering": {
+    slug: "data-engineering",
+    themeColor: "#F59E0B",
+    hero: {
+      title: "One Source of Truth. Dashboards That Update Themselves.",
+      agitation: "Stop running your business out of eight disconnected spreadsheets. We centralize your data — Stripe, your CRM, your website, your POS — and surface it in live dashboards built directly into your tools.",
+      ctaText: "Book a Strategy Session",
+    },
+    beforeAfter: {
+      oldWay: [
+        "Numbers scattered across spreadsheets and SaaS tools",
+        "Hours per week spent in manual data entry",
+        "Decisions made on month-old PDF reports",
+        "No single view of the actual business",
+      ],
+      aurexisStandard: [
+        "One unified database — the source of truth",
+        "Automated pipelines that pull data without manual entry",
+        "Live dashboards updating in real time",
+        "Role-based access — CEO sees everything, team sees their slice",
+      ],
+    },
+    techStack: {
+      microCopy: "Built on enterprise-grade data infrastructure — designed for security, scale, and zero-downtime pipelines.",
+      logos: [
+        { name: "Supabase", url: "https://cdn.simpleicons.org/supabase/white" },
+        { name: "PostgreSQL", url: "https://cdn.simpleicons.org/postgresql/white" },
+        { name: "Stripe", url: "https://cdn.simpleicons.org/stripe/white" },
+        { name: "Next.js", url: "https://cdn.simpleicons.org/nextdotjs/white" },
+        { name: "Python", url: "https://cdn.simpleicons.org/python/white" },
+        { name: "Vercel", url: "https://cdn.simpleicons.org/vercel/white" },
+        { name: "Tailwind CSS", url: "https://cdn.simpleicons.org/tailwindcss/white" },
+        { name: "Google Cloud", url: "https://cdn.simpleicons.org/googlecloud/white" },
+      ],
+    },
+    features: [
+      {
+        title: "API & System Integration",
+        description: "We connect the scattered tools — CRM, Stripe, website forms, POS — so they speak to each other automatically. No more copy-pasting between systems.",
+      },
+      {
+        title: "Database Architecture",
+        description: "Secure, scalable PostgreSQL or Supabase databases designed to house all historical and real-time business data with proper access controls.",
+      },
+      {
+        title: "Live BI Dashboards",
+        description: "Custom-coded analytics portals built directly into your existing web app — KPIs, revenue tracking, lead conversion, team metrics — updating in real time.",
+      },
+      {
+        title: "Automated Data Pipelines",
+        description: "Invisible workflows that pull new sales, leads, and operational data into your database without anyone lifting a finger.",
+      },
+    ],
+    process: [
+      {
+        step: "01",
+        title: "Audit & Mapping",
+        description: "We catalog every data source you're running — spreadsheets, SaaS tools, manual processes — and map what should flow where.",
+      },
+      {
+        step: "02",
+        title: "Architecture & Migration",
+        description: "We build the database, design the pipelines, and migrate your messy legacy data — cleaned and normalized — into the new source of truth.",
+      },
+      {
+        step: "03",
+        title: "Dashboards & DaaS",
+        description: "We launch the live dashboards into your portal, then act as your outsourced data department — monitoring pipelines, adding metrics, interpreting numbers monthly.",
+      },
+    ],
+    pricing: [
+      {
+        tier: "Infrastructure",
+        price: "Custom Scope",
+        description: "Centralized database, pipeline setup for up to 3 data sources, and a deployment-ready BI dashboard.",
+        features: ["Database setup (Supabase or Postgres)", "3 data source connectors", "Looker Studio / Power BI dashboard", "Data migration from legacy systems"],
+      },
+      {
+        tier: "Dashboard Ecosystem",
+        price: "Custom Scope",
+        description: "Full data architecture and a custom-coded Next.js dashboard integrated directly into your existing portal.",
+        features: ["Custom database schema", "Unlimited data source integrations", "Custom-built Next.js dashboards", "Role-based access portals"],
+        isRecommended: true,
+      },
+      {
+        tier: "DaaS Retainer",
+        price: "Custom Scope",
+        description: "Recurring partnership — we run your data department, keep pipelines healthy, and expand the dashboard as you grow.",
+        features: ["Pipeline monitoring & error resolution", "Monthly strategy & interpretation call", "Dashboard expansion as needed", "Automated PDF reporting"],
+      },
+    ],
+    faq: [
+      {
+        question: "How is my business data kept secure?",
+        answer: "Your data lives in your own database, isolated and encrypted at rest. We follow row-level security best practices and sign DPAs. PDPA-compliant by design.",
+      },
+      {
+        question: "What if my data is currently scattered across messy Excel files?",
+        answer: "That's the normal starting point. We handle data cleaning and migration as part of the Infrastructure phase — taking your legacy files, normalizing the formats, and importing them cleanly into the new database.",
+      },
+      {
+        question: "How long until I see my first live dashboard?",
+        answer: "Infrastructure + first dashboard typically lands in 3-5 weeks depending on how many data sources we're connecting. Subsequent dashboard expansions take days, not weeks.",
+      },
+      {
+        question: "What does the DaaS retainer actually cover?",
+        answer: "Monitoring your data pipelines so they don't silently break, monthly strategy calls where we sit down with you to interpret what the numbers mean, and ongoing dashboard expansion as your business evolves.",
+      },
+    ],
+    conversion: {
+      headline: "Ready to stop running your business out of eight spreadsheets and start running it out of one dashboard?",
     },
   },
 };

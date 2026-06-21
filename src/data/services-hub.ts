@@ -1,6 +1,6 @@
 export type ServiceHubEntry = {
-  id: "ecosystem" | "ai-automation" | "web-engineering" | "mobile-ecosystems";
-  index: "01" | "02" | "03" | "04";
+  id: "ecosystem" | "ai-automation" | "web-engineering" | "mobile-ecosystems" | "data-engineering";
+  index: "01" | "02" | "03" | "04" | "05";
   label: string;
   title: string;
   /** Optional substring of `title` that should render in the accent gradient (e.g. "AI" in "AI Automation."). */
@@ -71,5 +71,20 @@ export const servicesHub: ServiceHubEntry[] = [
       "App Store launch support included",
     ],
     accent: "#10B981",
+  },
+  {
+    id: "data-engineering",
+    index: "05",
+    label: "Data & BI",
+    title: "Data Engineering.",
+    titleColored: "Engineering.",
+    pull:
+      "Stripe, your CRM, and three messy spreadsheets — unified into one live source of truth, then surfaced in dashboards that update themselves.",
+    outcomes: [
+      "One source of truth across every tool",
+      "Live BI dashboards built into your portal",
+      "Automated pipelines — no manual entry",
+    ],
+    accent: "#F59E0B",
   },
 ];

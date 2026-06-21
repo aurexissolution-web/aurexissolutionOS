@@ -19,6 +19,7 @@ const navLinks = [
       { label: "AI & Agentic Workflows", href: "/services/ai-automation" },
       { label: "Web Engineering", href: "/services/web-engineering" },
       { label: "Mobile Ecosystems", href: "/services/mobile-ecosystems" },
+      { label: "Data Engineering", href: "/services/data-engineering" },
     ]
   },
   { label: "Blog", href: "/blog" },

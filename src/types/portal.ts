@@ -157,7 +157,8 @@ export type PortfolioCategory =
   | 'ai-automation'
   | 'web-engineering'
   | 'mobile-ecosystem'
-  | 'ecosystem';
+  | 'ecosystem'
+  | 'data-engineering';
 
 export interface OutcomeMetric {
   value: string;
@@ -293,3 +294,50 @@ export interface ContactMessage {
   notified_at: string | null;
   contacted_at: string | null;
 }
+
+// ── Planner ────────────────────────────────────────────────
+export type PlannerEventType =
+  | "blog"
+  | "task"
+  | "meeting"
+  | "invoice"
+  | "launch"
+  | "other";
+
+export type PlannerEventStatus = "pending" | "done" | "cancelled";
+export type PlannerEventPriority = "low" | "med" | "high";
+
+export type PlannerLinkedEntityType =
+  | "customer"
+  | "blog_post"
+  | "project"
+  | "contact_message"
+  | "invoice";
+
+export interface PlannerEvent {
+  id: string;
+  title: string;
+  event_date: string;          // ISO date (YYYY-MM-DD)
+  event_time: string | null;   // HH:MM:SS or null for all-day
+  duration_minutes: number | null;
+  type: PlannerEventType;
+  notes: string;
+  status: PlannerEventStatus;
+  priority: PlannerEventPriority;
+  linked_entity_type: PlannerLinkedEntityType | null;
+  linked_entity_id: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export const PLANNER_EVENT_TYPE_META: Record<
+  PlannerEventType,
+  { label: string; color: string; bg: string; border: string }
+> = {
+  blog:    { label: "Blog",     color: "#00F0FF", bg: "rgba(0,240,255,0.10)",  border: "rgba(0,240,255,0.35)" },
+  task:    { label: "Task",     color: "#FFFFFF", bg: "rgba(255,255,255,0.06)", border: "rgba(255,255,255,0.20)" },
+  meeting: { label: "Meeting",  color: "#A78BFA", bg: "rgba(167,139,250,0.12)", border: "rgba(167,139,250,0.40)" },
+  invoice: { label: "Invoice",  color: "#F59E0B", bg: "rgba(245,158,11,0.12)",  border: "rgba(245,158,11,0.40)" },
+  launch:  { label: "Launch",   color: "#10B981", bg: "rgba(16,185,129,0.12)",  border: "rgba(16,185,129,0.40)" },
+  other:   { label: "Other",    color: "#9CA3AF", bg: "rgba(156,163,175,0.10)", border: "rgba(156,163,175,0.30)" },
+};

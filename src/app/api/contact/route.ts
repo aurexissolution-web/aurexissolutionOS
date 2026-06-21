@@ -76,6 +76,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Auto-create a "Reply to X" task in the admin planner for tomorrow (SLA).
+    // Silent-fail — don't block the contact response if this insert errors.
+    try {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      await supabaseAdmin.from('planner_events').insert({
+        title: `Reply to ${(name as string).trim()}`,
+        event_date: tomorrow.toISOString().slice(0, 10),
+        type: 'task',
+        priority: 'high',
+        notes: `Intent: ${intent}\n\n${(message as string).trim()}`,
+        linked_entity_type: 'contact_message',
+        linked_entity_id: insertData.id,
+      });
+    } catch (err) {
+      console.error('[/api/contact] planner auto-create failed:', err);
+    }
+
     // Fire-and-forget Telegram notification if configured
     if (TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID) {
       const text = [

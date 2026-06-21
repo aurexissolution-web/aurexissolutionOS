@@ -10,6 +10,7 @@ export const CATEGORY_ACCENT: Record<PortfolioCategory, string> = {
   'web-engineering': '#00F0FF',
   'mobile-ecosystem': '#10B981',
   ecosystem: '#F59E0B',
+  'data-engineering': '#0047FF',
 };
 
 export const CATEGORY_LABEL: Record<PortfolioCategory, string> = {
@@ -17,6 +18,7 @@ export const CATEGORY_LABEL: Record<PortfolioCategory, string> = {
   'web-engineering': 'Web Engineering',
   'mobile-ecosystem': 'Mobile Ecosystem',
   ecosystem: 'Ecosystem',
+  'data-engineering': 'Data Engineering',
 };
 
 export function todayDispatchDate(): string {

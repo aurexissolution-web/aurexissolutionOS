@@ -255,6 +255,25 @@ export async function createInvoiceForCustomer(input: NewInvoiceInput): Promise<
     .single();
 
   if (error) throw error;
+
+  // Auto-create a follow-up event in the planner 14 days out.
+  // Silent-fail — don't break invoice creation if the planner insert errors.
+  try {
+    const followUp = new Date();
+    followUp.setDate(followUp.getDate() + 14);
+    await supabase.from("planner_events").insert({
+      title: `Follow up on ${input.invoice_number}`,
+      event_date: followUp.toISOString().slice(0, 10),
+      type: "invoice",
+      priority: "med",
+      notes: `Auto-created from invoice ${input.invoice_number} · ${input.currency ?? "MYR"} ${input.amount}`,
+      linked_entity_type: "invoice",
+      linked_entity_id: (data as Invoice).id,
+    });
+  } catch (err) {
+    console.error("[planner] invoice auto-create failed:", err);
+  }
+
   return data as Invoice;
 }
 

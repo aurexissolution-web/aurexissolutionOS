@@ -13,6 +13,7 @@ import { ProjectFunnel } from "@/components/portal/dashboard/ProjectFunnel";
 import { RecentInvoices } from "@/components/portal/dashboard/RecentInvoices";
 import { ContentPulse } from "@/components/portal/dashboard/ContentPulse";
 import { InboundMessages } from "@/components/portal/dashboard/InboundMessages";
+import { TodaysAgenda } from "@/components/portal/dashboard/TodaysAgenda";
 
 const SERIF = "var(--font-instrument-serif), ui-serif, Georgia, serif";
 const MONO = "var(--font-geist-mono), ui-monospace, monospace";
@@ -106,6 +107,16 @@ export default function AdminDashboard() {
           <YTDStrip data={data} />
         </div>
       </motion.header>
+
+      {/* 00 — Today */}
+      <motion.section
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: easeOut, delay: 0.03 }}
+      >
+        <SectionHeader index="00" label="Agenda" accent="cyan" />
+        <TodaysAgenda />
+      </motion.section>
 
       {/* 01 — Hero band */}
       <motion.section

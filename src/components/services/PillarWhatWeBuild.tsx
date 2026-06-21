@@ -1,8 +1,9 @@
 "use client";
 
 import { Fragment } from "react";
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import type { CaptionPart, Pillar, PillarBuildItem } from "@/data/pillars";
+import type { CaptionPart, Pillar, PillarBuildItem, PillarSlug } from "@/data/pillars";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -149,6 +150,7 @@ export function PillarWhatWeBuild({ pillar }: { pillar: Pillar }) {
               index={i}
               isCapstone={i === whatWeBuild.items.length - 1}
               reduce={reduce}
+              pillarSlug={pillar.slug}
             />
           ))}
         </div>
@@ -214,6 +216,7 @@ export function PillarWhatWeBuild({ pillar }: { pillar: Pillar }) {
 }
 
 function PillarBuildCard({
+  pillarSlug,
   item,
   index,
   isCapstone,
@@ -223,6 +226,7 @@ function PillarBuildCard({
   index: number;
   isCapstone: boolean;
   reduce: boolean;
+  pillarSlug: PillarSlug;
 }) {
   const reveal = reduce
     ? { initial: false, animate: { opacity: 1, y: 0 } }
@@ -237,10 +241,16 @@ function PillarBuildCard({
     <motion.article
       {...reveal}
       className={[
-        "pwwb-card group relative grid grid-rows-[auto_1fr_auto]",
-        "min-h-[140px] lg:min-h-[150px]",
-        "p-5 sm:p-5 lg:px-6 lg:py-5 overflow-hidden",
+        "pwwb-card group relative",
         isCapstone ? "lg:col-span-2" : "",
+      ].join(" ")}
+    >
+    <Link
+      href={`/services/${pillarSlug}/${item.detail.slug}`}
+      className={[
+        "grid grid-rows-[auto_1fr_auto]",
+        "min-h-[140px] lg:min-h-[150px]",
+        "p-5 sm:p-5 lg:px-6 lg:py-5 overflow-hidden no-underline h-full",
       ].join(" ")}
     >
       {/* Top row: numeral + tag */}
@@ -299,6 +309,7 @@ function PillarBuildCard({
           View →
         </span>
       </div>
+    </Link>
     </motion.article>
   );
 }
