@@ -1,0 +1,88 @@
+- generic [active] [ref=f4e1]:
+  - main [ref=f4e2]:
+    - img "Aurexis Solution" [ref=f4e5]
+    - generic [ref=f4e7]:
+      - heading "From scattered operations to one clear, connected business system." [level=1] [ref=f4e8]
+      - paragraph [ref=f4e9]: Aurexis helps growing businesses reduce manual work, improve visibility and operate with greater control.
+    - region "Sanjay Gunabalan, Founder & CEO, Aurexis Solution" [ref=f4e11]:
+      - img "Portrait of Sanjay Gunabalan, Founder & CEO of Aurexis Solution" [ref=f4e13]
+      - generic [ref=f4e14]:
+        - heading "Sanjay Gunabalan" [level=2] [ref=f4e15]
+        - paragraph [ref=f4e16]: Founder & CEO · Aurexis Solution
+        - paragraph [ref=f4e17]: Malaysia · Serving Malaysia & Singapore
+    - region "Primary actions" [ref=f4e19]:
+      - link "Book a discovery call with Sanjay Gunabalan" [ref=f4e20] [cursor=pointer]:
+        - /url: https://cal.com/aurexis-solution/45min
+        - text: Book a Discovery Call
+      - generic [ref=f4e27]:
+        - link "Message Sanjay on WhatsApp" [ref=f4e28] [cursor=pointer]:
+          - /url: https://wa.me/60164071129?text=Hi%20Sanjay%2C%20I%20found%20your%20Aurexis%20digital%20card%20and%20would%20like%20to%20discuss%20a%20business%20systems%20requirement.
+          - text: WhatsApp
+        - link "Save Sanjay Gunabalan's contact card" [ref=f4e31] [cursor=pointer]:
+          - /url: /api/vcard
+          - text: Save Contact
+    - region "About Aurexis" [ref=f4e36]:
+      - paragraph [ref=f4e37]: About Aurexis
+      - paragraph [ref=f4e38]: Aurexis designs connected business systems that reduce manual work, improve visibility and give growing businesses more control over daily operations.
+    - region "Capabilities" [ref=f4e40]:
+      - paragraph [ref=f4e41]: Capabilities
+      - generic [ref=f4e42]:
+        - generic [ref=f4e44]:
+          - generic [ref=f4e45]: "01"
+          - generic [ref=f4e46]:
+            - heading "Business Systems Assessment" [level=3] [ref=f4e47]
+            - paragraph [ref=f4e48]: Find gaps across workflows, tools, data and reporting.
+        - generic [ref=f4e50]:
+          - generic [ref=f4e51]: "02"
+          - generic [ref=f4e52]:
+            - heading "Workflow Improvement" [level=3] [ref=f4e53]
+            - paragraph [ref=f4e54]: Simplify repetitive processes and connect disconnected work.
+        - generic [ref=f4e56]:
+          - generic [ref=f4e57]: "03"
+          - generic [ref=f4e58]:
+            - heading "Managed Operations" [level=3] [ref=f4e59]
+            - paragraph [ref=f4e60]: Monitor, optimise and improve the system after launch.
+    - region "Trust and ownership" [ref=f4e62]:
+      - paragraph [ref=f4e63]: Trust & Ownership
+      - list [ref=f4e64]:
+        - listitem [ref=f4e65]:
+          - generic [ref=f4e68]: Built around business outcomes.
+        - listitem [ref=f4e69]:
+          - generic [ref=f4e73]: Your systems, accounts and data remain yours.
+        - listitem [ref=f4e74]:
+          - generic [ref=f4e77]: Supported from assessment through ongoing improvement.
+    - region "Contact information" [ref=f4e79]:
+      - paragraph [ref=f4e80]: Contact
+      - generic [ref=f4e81]:
+        - generic [ref=f4e82]:
+          - generic [ref=f4e83]: Email
+          - link "aurexissolution@gmail.com" [ref=f4e84] [cursor=pointer]:
+            - /url: mailto:aurexissolution@gmail.com
+        - generic [ref=f4e85]:
+          - generic [ref=f4e86]: Website
+          - link "aurexissolution.com" [ref=f4e87] [cursor=pointer]:
+            - /url: https://aurexissolution.com
+        - generic [ref=f4e88]:
+          - generic [ref=f4e89]: LinkedIn
+          - link "Aurexis Solution" [ref=f4e90] [cursor=pointer]:
+            - /url: https://www.linkedin.com/company/aurexissolution/
+        - generic [ref=f4e91]:
+          - generic [ref=f4e92]: WhatsApp
+          - link "+60 16-407 1129" [ref=f4e93] [cursor=pointer]:
+            - /url: https://wa.me/60164071129?text=Hi%20Sanjay%2C%20I%20found%20your%20Aurexis%20digital%20card%20and%20would%20like%20to%20discuss%20a%20business%20systems%20requirement.
+        - generic [ref=f4e94]:
+          - generic [ref=f4e95]: Location
+          - generic [ref=f4e96]: Malaysia
+        - generic [ref=f4e97]:
+          - generic [ref=f4e98]: Serving
+          - generic [ref=f4e99]: Malaysia and Singapore
+    - generic [ref=f4e101]:
+      - img "Aurexis Solution" [ref=f4e102]
+      - generic [ref=f4e103]:
+        - link "aurexissolution.com" [ref=f4e104] [cursor=pointer]:
+          - /url: https://aurexissolution.com
+        - generic [ref=f4e105]: ·
+        - link "Privacy Policy" [ref=f4e106] [cursor=pointer]:
+          - /url: /privacy-policy
+      - paragraph [ref=f4e107]: © 2026 Aurexis Solution. All rights reserved.
+  - alert [ref=f4e108]

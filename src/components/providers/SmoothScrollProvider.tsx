@@ -2,8 +2,16 @@
 
 import { ReactLenis } from 'lenis/react';
 import { ReactNode } from 'react';
+import { usePathname } from 'next/navigation';
+import { isFounderCardRoute } from '@/lib/founder-card/routes';
 
 export default function SmoothScrollProvider({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+
+  if (isFounderCardRoute(pathname)) {
+    return children;
+  }
+
   return (
     <ReactLenis
       root

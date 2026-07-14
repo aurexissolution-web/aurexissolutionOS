@@ -20,9 +20,19 @@ const instrumentSerif = Instrument_Serif({
   style: "italic",
 });
 
+const instrumentSerifDisplay = Instrument_Serif({
+  variable: "--font-instrument-serif-display",
+  subsets: ["latin"],
+  weight: "400",
+  style: "normal",
+});
+
 import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://aurexissolution.com",
+  ),
   title: "AUREXIS SOLUTION | AI, Web & App Automation",
   description: "Building high-performance AI, Web, and App ecosystems for the next generation of industry leaders.",
 };
@@ -35,7 +45,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${plusJakartaSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased font-sans flex flex-col min-h-screen`}
+        className={`${plusJakartaSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${instrumentSerifDisplay.variable} antialiased font-sans flex flex-col min-h-screen`}
       >
         <SmoothScrollProvider>
           {children}

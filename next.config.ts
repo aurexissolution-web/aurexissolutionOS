@@ -62,6 +62,17 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      // Enforce a single canonical host: www -> non-www (301).
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.aurexissolution.com" }],
+        destination: "https://aurexissolution.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

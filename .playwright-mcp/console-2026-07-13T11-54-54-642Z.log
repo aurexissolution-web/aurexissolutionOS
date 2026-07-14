@@ -1,0 +1,12 @@
+[    1663ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[    3522ms] [LOG] [HMR] connected @ http://localhost:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[    3802ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[   21783ms] [LOG] [Fast Refresh] done in 18081ms @ http://localhost:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[   36604ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://aurexissolution.com/sanjay:0
+[   40650ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[   41044ms] [LOG] [HMR] connected @ http://localhost:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[   41703ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[   42068ms] [LOG] [Fast Refresh] done in 496ms @ http://localhost:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  155750ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  155902ms] [LOG] [Fast Refresh] done in 253ms @ http://localhost:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  279276ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://aurexissolution.com/sanjay:0

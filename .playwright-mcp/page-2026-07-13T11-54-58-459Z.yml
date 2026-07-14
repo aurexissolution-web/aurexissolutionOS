@@ -1,0 +1,144 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - img "Aurexis Solution" [ref=e4]
+      - paragraph [ref=e5]: Turning scattered operations into connected, visible and manageable business systems.
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - img "Sanjay Gunabalan, Founder & CEO of Aurexis Solution" [ref=e10]
+        - generic [ref=e12]: Available
+      - generic [ref=e14]:
+        - heading "Sanjay Gunabalan" [level=1] [ref=e15]
+        - paragraph [ref=e16]: Founder & CEO · Aurexis Solution
+        - paragraph [ref=e17]: Malaysia · Serving Malaysia and Singapore
+    - link "Book a discovery call with Sanjay Gunabalan" [ref=e18] [cursor=pointer]:
+      - /url: https://cal.com/aurexis-solution/45min
+      - generic [ref=e24]:
+        - heading "Book a Discovery Call" [level=2] [ref=e25]
+        - paragraph [ref=e26]: Discuss your business systems, workflows, data or operational challenges.
+    - generic [ref=e30]:
+      - heading "Identity Actions" [level=2] [ref=e33]
+      - generic [ref=e34]:
+        - link "Save Sanjay Gunabalan's contact card (vCard)" [ref=e35] [cursor=pointer]:
+          - /url: /api/vcard
+          - text: Save Contact
+        - button "Share this digital card" [ref=e39]: Share Card
+        - status [ref=e46]
+      - generic [ref=e47]:
+        - img "QR code that opens Sanjay Gunabalan's Aurexis digital card" [ref=e49]
+        - generic [ref=e50]:
+          - paragraph [ref=e51]: Scan to open my digital card
+          - link "aurexissolution.com/sanjay" [ref=e52] [cursor=pointer]:
+            - /url: https://aurexissolution.com/sanjay
+    - region "Contact and links" [ref=e53]:
+      - heading "Get in touch" [level=2] [ref=e56]
+      - generic [ref=e57]:
+        - link "Call +60 16-407 1129" [ref=e58] [cursor=pointer]:
+          - /url: tel:+60164071129
+          - generic [ref=e62]: Call
+        - link "Message Sanjay on WhatsApp" [ref=e63] [cursor=pointer]:
+          - /url: https://wa.me/60164071129?text=Hi%20Sanjay%2C%20I%20found%20your%20Aurexis%20digital%20card%20and%20would%20like%20to%20discuss%20a%20business%20systems%20requirement.
+          - generic [ref=e67]: WhatsApp
+        - link "Email aurexissolution@gmail.com" [ref=e68] [cursor=pointer]:
+          - /url: mailto:aurexissolution@gmail.com
+          - generic [ref=e73]: Email
+        - link "Visit aurexissolution.com" [ref=e74] [cursor=pointer]:
+          - /url: https://aurexissolution.com
+          - generic [ref=e79]: Website
+        - link "Aurexis Solution on LinkedIn" [ref=e80] [cursor=pointer]:
+          - /url: https://www.linkedin.com/company/aurexissolution/
+          - generic [ref=e86]: Aurexis LinkedIn
+    - region "What I help businesses solve" [ref=e87]:
+      - heading "What I help businesses solve" [level=2] [ref=e90]
+      - generic [ref=e91]:
+        - generic [ref=e97]:
+          - heading "Lost leads and slow follow-up" [level=3] [ref=e98]
+          - paragraph [ref=e99]: Enquiries falling through gaps or receiving inconsistent follow-up.
+        - generic [ref=e106]:
+          - heading "Manual work and disconnected processes" [level=3] [ref=e107]
+          - paragraph [ref=e108]: Teams repeating administrative work across WhatsApp, email, spreadsheets and separate tools.
+        - generic [ref=e115]:
+          - heading "Scattered data and limited visibility" [level=3] [ref=e116]
+          - paragraph [ref=e117]: Business information that does not provide management with a reliable operating picture.
+    - region "How Aurexis helps" [ref=e118]:
+      - heading "How Aurexis helps" [level=2] [ref=e121]
+      - generic [ref=e122]:
+        - generic [ref=e123]:
+          - text: "01"
+          - heading "Business Systems Assessment™" [level=3] [ref=e124]
+          - paragraph [ref=e125]: A structured review of leads, workflows, data, tools and reporting.
+        - generic [ref=e126]:
+          - text: "02"
+          - heading "Focused Improvement Projects" [level=3] [ref=e127]
+          - paragraph [ref=e128]: Controlled improvements to one important workflow, dashboard or operational problem.
+        - generic [ref=e129]:
+          - text: "03"
+          - heading "Aurexis Business Control System™" [level=3] [ref=e130]
+          - paragraph [ref=e131]: A connected business system designed to improve operational control and management visibility.
+        - generic [ref=e132]:
+          - text: "04"
+          - heading "Aurexis Managed Operations™" [level=3] [ref=e133]
+          - paragraph [ref=e134]: Ongoing support, monitoring, optimisation and controlled improvements after launch.
+    - region "The Aurexis approach" [ref=e135]:
+      - heading "The Aurexis approach" [level=2] [ref=e138]
+      - list [ref=e139]:
+        - listitem [ref=e140]:
+          - generic [ref=e141]: "01"
+          - generic [ref=e142]: Assess before building
+        - listitem [ref=e143]:
+          - generic [ref=e144]: "02"
+          - generic [ref=e145]: Design around business outcomes
+        - listitem [ref=e146]:
+          - generic [ref=e147]: "03"
+          - generic [ref=e148]: Build secure, client-owned systems
+        - listitem [ref=e149]:
+          - generic [ref=e150]: "04"
+          - generic [ref=e151]: Connect tools, workflows and trustworthy data
+        - listitem [ref=e152]:
+          - generic [ref=e153]: "05"
+          - generic [ref=e154]: Test through QA and client acceptance
+        - listitem [ref=e155]:
+          - generic [ref=e156]: "06"
+          - generic [ref=e157]: Support and improve after launch
+    - generic [ref=e158]:
+      - heading "Ownership & AI" [level=2] [ref=e161]
+      - generic [ref=e162]:
+        - paragraph [ref=e163]: Clients own their systems, accounts and data.
+        - paragraph [ref=e164]: Clients own their AI. Aurexis enables it.
+    - generic [ref=e165]:
+      - strong [ref=e166]: "Dev note:"
+      - text: the “Business Systems Health Checklist” section is hidden. Set
+      - code [ref=e167]: NEXT_PUBLIC_CHECKLIST_URL
+      - text: to a checklist URL or PDF to enable it in production.
+    - region "Business details" [ref=e168]:
+      - heading "Business details" [level=2] [ref=e171]
+      - generic [ref=e172]:
+        - generic [ref=e173]:
+          - term [ref=e174]: Email
+          - definition [ref=e175]:
+            - link "aurexissolution@gmail.com" [ref=e176] [cursor=pointer]:
+              - /url: mailto:aurexissolution@gmail.com
+        - generic [ref=e177]:
+          - term [ref=e178]: Website
+          - definition [ref=e179]:
+            - link "aurexissolution.com" [ref=e180] [cursor=pointer]:
+              - /url: https://aurexissolution.com
+        - generic [ref=e181]:
+          - term [ref=e182]: Location
+          - definition [ref=e183]: Malaysia
+        - generic [ref=e184]:
+          - term [ref=e185]: Service market
+          - definition [ref=e186]: Malaysia and Singapore
+    - generic [ref=e187]:
+      - img "Aurexis Solution" [ref=e188]
+      - generic [ref=e189]:
+        - link "aurexissolution.com" [ref=e190] [cursor=pointer]:
+          - /url: https://aurexissolution.com
+        - generic [ref=e191]: ·
+        - link "Privacy Policy" [ref=e192] [cursor=pointer]:
+          - /url: /privacy-policy
+      - paragraph [ref=e193]: © 2026 Aurexis Solution. All rights reserved.
+  - button "Open Aurexis AI chat" [ref=e197]:
+    - generic [ref=e201]: Ask Aurexis
+  - button "Open Next.js Dev Tools" [ref=e207] [cursor=pointer]
+  - alert [ref=e211]

@@ -1,13 +1,13 @@
 "use client";
 
 import { MorphPanel } from "@/components/ui/ai-input";
+import { shouldHideChatbot } from "@/components/ui/chatbot-visibility";
 import { usePathname } from "next/navigation";
 
 export function ChatbotWidget() {
   const pathname = usePathname();
 
-  // Hide the chatbot on the login page and any portal/dashboard routes
-  if (pathname === "/login" || pathname?.startsWith("/portal")) {
+  if (shouldHideChatbot(pathname)) {
     return null;
   }
 
