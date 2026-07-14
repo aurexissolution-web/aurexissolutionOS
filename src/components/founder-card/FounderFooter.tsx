@@ -5,13 +5,12 @@ export function FounderFooter() {
   return (
     <footer className="fc-footer">
       <Image
-        src="/brand/aurexis-logo-white.png"
+        src="/brand/aurexis-logo-transparent.png"
         alt="Aurexis Solution"
         width={1546}
         height={368}
         sizes="(min-width: 768px) 154px, 132px"
-        className="h-auto w-[132px] opacity-90 md:w-[154px]"
-        style={{ mixBlendMode: "screen" }}
+        className="h-auto w-[132px] object-contain opacity-90 md:w-[154px]"
       />
       <div className="fc-footer-links">
         <a

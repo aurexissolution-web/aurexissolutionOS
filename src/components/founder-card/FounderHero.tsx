@@ -9,14 +9,13 @@ export function FounderHero() {
       <div className="fc-hero-shell">
         <header className="fc-hero-logo fc-rise">
           <Image
-            src="/brand/aurexis-logo-white.png"
+            src="/brand/aurexis-logo-transparent.png"
             alt="Aurexis Solution"
             width={1546}
             height={368}
             priority
             sizes="(min-width: 768px) 190px, 142px"
-            className="h-auto w-[142px] md:w-[190px]"
-            style={{ mixBlendMode: "screen" }}
+            className="h-auto w-[142px] object-contain md:w-[190px]"
           />
         </header>
 
@@ -64,7 +63,7 @@ export function FounderHero() {
           </p>
 
           <p className="fc-value-statement">
-            Helping growing businesses operate with greater clarity, control and less manual work.
+            Helping growing businesses cut operational waste, recover valuable time and create room for <span className="fc-value-emphasis">more profitable growth</span>.
           </p>
 
           <div className="fc-hero-actions">

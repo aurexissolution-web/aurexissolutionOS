@@ -295,12 +295,17 @@ html.light {
 
 .fc-value-statement {
   max-width: 34rem;
-  margin: 1.5rem auto 0;
+  margin: 1.75rem auto 0;
   padding-left: 1rem;
   border-left: 1px solid var(--fc-accent);
-  color: var(--fc-text-2);
-  font-size: 0.84rem;
-  line-height: 1.65;
+  color: var(--fc-text);
+  font-size: clamp(1.125rem, 4.6vw, 1.25rem);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.fc-value-emphasis {
+  color: var(--fc-accent);
 }
 
 .fc-hero-actions {
@@ -648,10 +653,11 @@ html.light {
   }
 
   .fc-value-statement {
-    max-width: 31rem;
+    max-width: 34rem;
     margin: 2.1rem 0 0;
     padding-left: 1.25rem;
-    font-size: 0.92rem;
+    font-size: clamp(1.3125rem, 1.55vw, 1.5rem);
+    line-height: 1.45;
   }
 
   .fc-hero-actions {

@@ -65,7 +65,7 @@ function structuredData() {
       "@id": `${SITE_URL}#organization`,
       name: founderCard.company,
       url: SITE_URL,
-      logo: `${SITE_URL}/brand/aurexis-logo-white.png`,
+      logo: `${SITE_URL}/brand/aurexis-logo-transparent.png`,
       description: founderCard.positioning,
       email: founderCard.email,
       areaServed: ["Malaysia", "Singapore"],
