@@ -73,7 +73,7 @@ All are `NEXT_PUBLIC_` (safe to expose) — see `.env.example`:
 | Var | Purpose | If unset |
 |---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | Canonical origin for every absolute URL | `https://aurexissolution.com` |
-| `NEXT_PUBLIC_FOUNDER_BOOKING_URL` | "Book a Discovery Call" destination | `https://cal.com/aurexis-solution/45min` |
+| `NEXT_PUBLIC_FOUNDER_BOOKING_URL` | "Book a Discovery Call" destination | `https://cal.com/aurexis-solution/discoverycall` |
 | `NEXT_PUBLIC_FOUNDER_LINKEDIN_URL` | Sanjay's personal LinkedIn | Falls back to the company page, labelled "Aurexis LinkedIn" |
 | `NEXT_PUBLIC_CHECKLIST_URL` | Business Systems Health Checklist URL/PDF | **Section hidden in production** (dev shows a reminder) |
 | `NEXT_PUBLIC_GA_ID` | Google Analytics ID | Analytics events are no-ops; card still works |
@@ -96,7 +96,6 @@ Open `/sanjay` on a phone and confirm: Call dials the number · WhatsApp opens w
 
 ### Launch checklist
 - [ ] Set `NEXT_PUBLIC_SITE_URL` to the live origin.
-- [ ] Replace the interim booking URL (`NEXT_PUBLIC_FOUNDER_BOOKING_URL`) with the final one.
 - [ ] Add Sanjay's personal LinkedIn (`NEXT_PUBLIC_FOUNDER_LINKEDIN_URL`).
 - [ ] Add the checklist URL/PDF (`NEXT_PUBLIC_CHECKLIST_URL`) to reveal that section.
 - [ ] (Optional) Add `NEXT_PUBLIC_GA_ID` + the gtag snippet.

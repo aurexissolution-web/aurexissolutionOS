@@ -1,8 +1,7 @@
 // src/data/founder-card.ts
 // Central, typed content configuration for the /sanjay digital founder card.
-// Contact facts (email / phone / WhatsApp) are reused from contact-config.ts so
-// there is a single source of truth. Empty production values hide their action
-// rather than rendering a placeholder.
+// Shared phone / WhatsApp facts are reused from contact-config.ts. Sanjay's
+// dedicated email remains scoped to this card.
 import { CHANNELS, FOUNDERS } from "@/data/contact-config";
 
 const sanjay = FOUNDERS.find((f) => f.initials === "SG");
@@ -43,8 +42,8 @@ export const founderCard = {
   ownershipPrinciple: "Clients own their systems, accounts and data.",
   aiPrinciple: "Clients own their AI. Aurexis enables it.",
 
-  // ── Contact (single source of truth: contact-config CHANNELS) ─
-  email: CHANNELS.email,
+  // ── Contact ───────────────────────────────────────────────
+  email: "ceo.sanjay@aurexissolution.com",
   phoneDisplay: "+60 16-407 1129",
   phoneLink: CHANNELS.phone, // "+60164071129" (tel: value)
   whatsappUrl: `${CHANNELS.whatsappUrl}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`,
@@ -60,7 +59,7 @@ export const founderCard = {
   instagramDisplay: "@aurexissolution",
   bookingUrl:
     (process.env.NEXT_PUBLIC_FOUNDER_BOOKING_URL || "").trim() ||
-    "https://cal.com/aurexis-solution/45min",
+    "https://cal.com/aurexis-solution/discoverycall",
   checklistUrl: (process.env.NEXT_PUBLIC_CHECKLIST_URL || "").trim(), // empty => section hidden
   privacyUrl: "/privacy-policy",
 

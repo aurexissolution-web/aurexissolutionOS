@@ -42,3 +42,17 @@ test("uses Instagram instead of duplicating WhatsApp in the connect grid", () =>
     /https:\/\/www\.instagram\.com\/aurexissolution/,
   );
 });
+
+test("uses Sanjay's dedicated CEO email on the founder card", () => {
+  assert.match(
+    founderCardSource,
+    /email:\s*"ceo\.sanjay@aurexissolution\.com"/,
+  );
+});
+
+test("uses the approved discovery call booking route", () => {
+  assert.match(
+    founderCardSource,
+    /https:\/\/cal\.com\/aurexis-solution\/discoverycall/,
+  );
+});
