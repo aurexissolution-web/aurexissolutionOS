@@ -108,7 +108,7 @@ export function Calculator() {
 
   const formattedAnnual = new Intl.NumberFormat("en-MY").format(annualWaste);
   const whatsappMessage = encodeURIComponent(
-    `Hi Aurexis — I just calculated RM ${formattedAnnual} in machine-replaceable work. Can we talk?`,
+    `Hi Aurexis — I just calculated RM ${formattedAnnual} in repetitive admin work. Can we talk?`,
   );
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`;
 
@@ -155,20 +155,20 @@ export function Calculator() {
           transition={{ duration: 0.5 }}
         >
           <span className="inline-block text-[11px] font-semibold uppercase tracking-[0.28em] text-white/40 mb-3">
-            The Calculator
+            The Capacity Calculator
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-[-0.02em] leading-[1.05] text-white text-balance mb-3">
-            How much is your business paying for{" "}
+            How much is{" "}
             <em
               className="font-serif italic text-[var(--color-electric-cyan)] font-normal"
               style={{ filter: "drop-shadow(0 0 18px rgba(0,240,255,0.32))" }}
             >
-              machine-replaceable
+              repetitive admin work
             </em>{" "}
-            work?
+            costing your business?
           </h2>
           <p className="mx-auto max-w-xl text-[15px] leading-[1.6] text-white/55 text-balance">
-            Three inputs. One honest number. No fluff.
+            Three simple inputs. One clearer view of where your team&apos;s time goes.
           </p>
         </motion.div>
 
@@ -198,7 +198,7 @@ export function Calculator() {
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] gap-6 lg:gap-10">
               <div className="space-y-4">
                 <Field
-                  label="Admin Staff"
+                  label="Team Members Involved"
                   value={staff}
                   onChange={setStaff}
                   min={CALCULATOR_BOUNDS.staff.min}
@@ -206,7 +206,7 @@ export function Calculator() {
                   unit="people"
                 />
                 <Field
-                  label="Monthly Wage / Person"
+                  label="Average Monthly Salary"
                   value={wage}
                   onChange={setWage}
                   min={CALCULATOR_BOUNDS.wage.min}
@@ -215,7 +215,7 @@ export function Calculator() {
                   prefix="RM"
                 />
                 <Field
-                  label="Hours / Week on Routine Tasks"
+                  label="Hours per Week on Repetitive Tasks"
                   value={hours}
                   onChange={setHours}
                   min={CALCULATOR_BOUNDS.hours.min}
@@ -226,7 +226,7 @@ export function Calculator() {
 
               <div className="flex flex-col justify-center">
                 <div className="text-[11px] font-mono uppercase tracking-[0.22em] text-white/45 mb-2">
-                  Estimated annual waste
+                  Estimated annual cost of repetitive work
                 </div>
                 <div className="flex items-baseline gap-2 mb-2 flex-wrap">
                   <em
@@ -251,19 +251,19 @@ export function Calculator() {
                     <span className="text-white/35">≈</span>
                     <span>RM</span>
                     <NumberFlow value={monthlyWaste} locales="en-MY" />
-                    <span className="text-white/45">/ month wasted</span>
+                    <span className="text-white/45">per month</span>
                   </div>
                   <div className="flex items-baseline gap-1.5">
                     <span className="text-white/35">≈</span>
                     <NumberFlow value={percentTime} />
                     <span>%</span>
-                    <span className="text-white/45">of your team&apos;s hours</span>
+                    <span className="text-white/45">of your team&apos;s working hours</span>
                   </div>
                 </div>
 
                 <div className="h-px w-10 bg-[var(--color-electric-cyan)]/60 mt-4 mb-2" />
                 <p className="text-[13px] text-white/55">
-                  Machine-replaceable work is what AI agents do best.
+                  This is capacity that better systems and automation can help your team recover.
                 </p>
               </div>
             </div>
@@ -305,7 +305,7 @@ export function Calculator() {
                     disabled={isSubmitting}
                     className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-white text-black text-[15px] font-semibold transition-all hover:-translate-y-0.5 disabled:opacity-60 disabled:hover:translate-y-0 shadow-[0_4px_14px_rgba(0,0,0,0.25),0_0_24px_rgba(0,240,255,0.18)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.3),0_0_32px_rgba(0,240,255,0.28)]"
                   >
-                    {isSubmitting ? "Sending…" : "Send my breakdown"}
+                    {isSubmitting ? "Sending…" : "Send My Breakdown"}
                     {!isSubmitting && <ArrowRight className="w-4 h-4" />}
                   </button>
                 </div>
@@ -315,7 +315,7 @@ export function Calculator() {
                   </p>
                 ) : (
                   <p className="text-[12px] text-white/40 text-center">
-                    PDF report in your inbox. No spam, no follow-up calls unless you ask.
+                    A practical estimate based on your inputs. No spam or unsolicited follow-up.
                   </p>
                 )}
               </motion.form>

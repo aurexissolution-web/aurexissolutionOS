@@ -10,9 +10,8 @@ import GradientStartButton from "@/components/ui/demo";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { 
-    label: "Services", 
+  {
+    label: "Solutions",
     href: "/services",
     subItems: [
       { label: "Ecosystem", href: "/services/ecosystem" },
@@ -22,10 +21,12 @@ const navLinks = [
       { label: "Data Engineering", href: "/services/data-engineering" },
     ]
   },
-  { label: "Blog", href: "/blog" },
-  { label: "The Lab", href: "/the-lab" },
-  { label: "Portfolio", href: "/portfolio" },
-  { label: "Contact", href: "/contact" },
+  // Tech Ecosystem: dropdown items pending from owner — interim link to the Ecosystem page
+  { label: "Tech Ecosystem", href: "/services/ecosystem" },
+  { label: "How We Work", href: "/how-we-work" },
+  { label: "Case Studies", href: "/portfolio" },
+  { label: "Insights", href: "/blog" },
+  { label: "About", href: "/about" },
 ];
 
 export function Navbar() {
@@ -62,45 +63,18 @@ export function Navbar() {
           {/* Logo lockup — mark + wordmark */}
           <Link
             href="/"
-            className="group inline-flex items-center gap-2.5 outline-none flex-shrink-0"
+            className="group inline-flex items-center outline-none flex-shrink-0"
             aria-label="Aurexis Solution — Home"
           >
-            <span
-              className="inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg transition-all duration-200 group-hover:border-[rgba(0,240,255,0.35)]"
-              style={{
-                background:
-                  "linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 60%), rgba(12, 14, 22, 0.42)",
-                border: "1px solid rgba(255,255,255,0.12)",
-                backdropFilter: "blur(24px) saturate(180%)",
-                WebkitBackdropFilter: "blur(24px) saturate(180%)",
-                boxShadow:
-                  "inset 0 1px 0 rgba(255,255,255,0.10), inset 0 -1px 0 rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.30)",
-              }}
-            >
-              <Image
-                src="/logo.svg"
-                alt=""
-                width={22}
-                height={22}
-                className="object-contain"
-                priority
-              />
-            </span>
-            <span className="inline-flex items-baseline gap-1.5">
-              <span className="text-[16px] font-bold text-white tracking-[-0.015em] leading-none transition-colors duration-200">
-                AUREXIS
-              </span>
-              <span
-                aria-hidden
-                className="text-[16px] leading-none text-[var(--color-electric-cyan)]"
-                style={{ textShadow: "0 0 8px rgba(0,240,255,0.6)" }}
-              >
-                ·
-              </span>
-              <span className="text-[13.5px] font-semibold text-white/65 tracking-[0.2em] leading-none">
-                SOLUTION
-              </span>
-            </span>
+            <Image
+              src="/brand/aurexis-lockup.png"
+              alt=""
+              width={902}
+              height={186}
+              priority
+              sizes="146px"
+              className="h-7 w-auto object-contain transition-opacity duration-200 group-hover:opacity-90"
+            />
           </Link>
 
           {/* Center Nav Pill — liquid glass */}
@@ -182,9 +156,8 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Right: CTA (login is intentionally not exposed in the public nav —
-              admin access is via /admin or /portal/admin which auth-gates) */}
-          <div className="hidden md:flex items-center gap-4">
+          {/* Right: primary CTA */}
+          <div className="hidden md:flex items-center gap-3">
             <GradientStartButton />
           </div>
 

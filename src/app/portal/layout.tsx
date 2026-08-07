@@ -126,7 +126,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         <div className="px-5 pt-6 pb-5">
           <Link href="/" className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
-              <Image src="/logo.svg" alt="Aurexis logo" width={20} height={20} className="object-contain" />
+              <Image src="/brand/aurexis-mark.png" alt="Aurexis logo" width={20} height={20} className="object-contain" />
             </div>
             <div>
               <span className="text-white font-semibold text-[14px] tracking-tight block leading-tight">AurexisOS</span>

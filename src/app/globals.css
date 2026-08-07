@@ -294,14 +294,14 @@ html.light {
 }
 
 .fc-value-statement {
-  max-width: 34rem;
-  margin: 1.75rem auto 0;
-  padding-left: 1rem;
+  max-width: 32rem;
+  margin: 1.5rem auto 0;
+  padding-left: 0.95rem;
   border-left: 1px solid var(--fc-accent);
   color: var(--fc-text);
-  font-size: clamp(1.125rem, 4.6vw, 1.25rem);
-  font-weight: 500;
-  line-height: 1.5;
+  font-size: clamp(1rem, 4vw, 1.0625rem);
+  font-weight: 450;
+  line-height: 1.55;
 }
 
 .fc-value-emphasis {
@@ -653,11 +653,11 @@ html.light {
   }
 
   .fc-value-statement {
-    max-width: 34rem;
-    margin: 2.1rem 0 0;
-    padding-left: 1.25rem;
-    font-size: clamp(1.3125rem, 1.55vw, 1.5rem);
-    line-height: 1.45;
+    max-width: 32rem;
+    margin: 1.9rem 0 0;
+    padding-left: 1.1rem;
+    font-size: clamp(1.125rem, 1.35vw, 1.25rem);
+    line-height: 1.5;
   }
 
   .fc-hero-actions {
@@ -887,6 +887,19 @@ input[type="number"].calc-input {
 
 .animate-marquee {
   animation: marquee var(--duration, 40s) linear infinite;
+}
+
+/* Hero accent — subtle gradient sheen on the italic serif word */
+@keyframes accentShimmer {
+  from { background-position: 0% 50%; }
+  to   { background-position: 100% 50%; }
+}
+.accent-shimmer {
+  background-size: 200% 100%;
+  animation: accentShimmer 6s ease-in-out infinite alternate;
+}
+@media (prefers-reduced-motion: reduce) {
+  .accent-shimmer { animation: none; }
 }
 
 .max-w-container {

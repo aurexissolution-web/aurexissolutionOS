@@ -106,7 +106,7 @@ export default function InvitePage({ params }: { params: Promise<{ token: string
             <div className="space-y-2">
               <div className="w-14 h-14 mx-auto mb-6 rounded-full bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-center">
                 <Image
-                  src="/logo.svg"
+                  src="/brand/aurexis-mark.png"
                   alt="Aurexis logo"
                   width={40}
                   height={40}

@@ -84,6 +84,14 @@ export function MorphPanel({ initialOpen = false }: { initialOpen?: boolean } = 
   }, []);
 
   React.useEffect(() => {
+    function handleExternalOpen() {
+      triggerOpen();
+    }
+    window.addEventListener("aurexis:open-chat", handleExternalOpen);
+    return () => window.removeEventListener("aurexis:open-chat", handleExternalOpen);
+  }, [triggerOpen]);
+
+  React.useEffect(() => {
     function clickOutsideHandler(e: MouseEvent) {
       if (
         wrapperRef.current &&

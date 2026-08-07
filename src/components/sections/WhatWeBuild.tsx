@@ -1,198 +1,297 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
-type ComponentOffering = {
+// All five CTAs point at the existing solutions hub for now (no dead links).
+// Swap this one value once dedicated solution detail pages exist.
+const SOLUTIONS_HREF = "/services";
+
+const CYAN = "var(--color-electric-cyan)";
+
+type Solution = {
   number: string;
-  title: string;
+  id: string;
+  name: string;
+  headline: string;
   description: string;
-  href: string;
+  outcomes: string[];
+  capabilities: string[];
+  cta: string;
+  grid: string;
 };
 
-const components: ComponentOffering[] = [
+const solutions: Solution[] = [
+  {
+    number: "01",
+    id: "lead",
+    name: "Lead & Customer Systems",
+    headline: "Capture every opportunity.",
+    description:
+      "Bring website, WhatsApp, email, forms and CRM into one connected lead journey so every enquiry is captured, assigned, followed up and measured.",
+    outcomes: [
+      "Faster lead response",
+      "Fewer missed opportunities",
+      "Clear ownership",
+      "Better conversion visibility",
+    ],
+    capabilities: ["Presence", "Flow", "Core", "Connect"],
+    cta: "Explore Lead Systems",
+    grid: "md:col-span-2 lg:col-span-2 xl:col-span-2 lg:col-start-1 lg:row-start-1",
+  },
   {
     number: "02",
-    title: "AI Workflows",
+    id: "workflow",
+    name: "Workflow Automation",
+    headline: "Make work move without constant chasing.",
     description:
-      "Custom agents that automate the repetitive judgment calls. Slot into your stack or run standalone.",
-    href: "/services/ai-automation",
+      "Automate repetitive follow-ups, approvals, notifications, handovers and task routing across the business.",
+    outcomes: ["Less manual work", "Faster turnaround", "Fewer process gaps", "Clearer accountability"],
+    capabilities: ["Flow", "Connect", "Core"],
+    cta: "Explore Workflow Automation",
+    grid: "xl:col-start-3 xl:row-start-1",
   },
   {
     number: "03",
-    title: "Web Platforms",
+    id: "core",
+    name: "Business Operating Systems",
+    headline: "Run the business from one foundation.",
     description:
-      "High-performance Next.js web platforms — marketing sites, customer portals, internal tools.",
-    href: "/services/web-engineering",
+      "Centralise customers, projects, finance, delivery and internal operations into one structured management system.",
+    outcomes: ["One operational view", "Better workload control", "Clear project status", "Stronger management visibility"],
+    capabilities: ["Core", "Data Foundation", "Connect"],
+    cta: "Explore Operating Systems",
+    grid: "xl:col-start-4 xl:row-start-1",
   },
   {
     number: "04",
-    title: "Mobile Apps",
+    id: "integration",
+    name: "Integration & Data Systems",
+    headline: "Make your tools and data work together.",
     description:
-      "iOS and Android apps that ship and stay shipped. React Native ecosystems with backends that talk.",
-    href: "/services/mobile-ecosystems",
+      "Connect existing software, remove duplicate information and create reliable reporting across the organisation.",
+    outcomes: ["Connected systems", "Cleaner data", "Reliable reporting", "One source of truth"],
+    capabilities: ["Connect", "Data Foundation", "Core"],
+    cta: "Explore Integration & Data",
+    grid: "md:col-span-2 lg:col-span-2 xl:col-span-2 xl:col-start-1 xl:row-start-2",
   },
   {
     number: "05",
-    title: "Data Pipelines",
+    id: "ai",
+    name: "AI & Intelligence Solutions",
+    headline: "Turn connected data into better decisions.",
     description:
-      "Centralize your data, then surface it in dashboards that update themselves. Stripe + CRM + spreadsheets → one source of truth.",
-    href: "/services/data-engineering",
+      "Add AI assistants, intelligent recommendations, forecasting and automation on top of connected business systems.",
+    outcomes: ["Faster decisions", "Actionable insights", "Intelligent automation", "Better forecasting"],
+    capabilities: ["Intelligence", "Data Foundation", "Flow"],
+    cta: "Explore AI & Intelligence",
+    grid: "md:col-span-2 lg:col-span-2 xl:col-span-2 xl:col-start-3 xl:row-start-2",
   },
 ];
 
-export function WhatWeBuild() {
+function TileFooter({ capabilities, cta }: { capabilities: string[]; cta: string }) {
   return (
-    <section className="bg-[var(--color-background)] pt-12 pb-16 px-6">
+    <div className="mt-4 border-t border-white/[0.06] pt-4">
+      <div className="text-[11px] uppercase tracking-[0.14em] text-white/35">{capabilities.join(" · ")}</div>
+      <span className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-white/85">
+        {cta}
+        <ArrowRight className="h-3.5 w-3.5 text-[var(--color-electric-cyan)] transition-transform duration-200 ease-out group-hover:translate-x-[2px] group-focus-visible:translate-x-[2px] motion-reduce:transition-none motion-reduce:group-hover:translate-x-0 motion-reduce:group-focus-visible:translate-x-0" />
+      </span>
+    </div>
+  );
+}
+
+export function WhatWeBuild() {
+  const reduceMotion = useReducedMotion() ?? false;
+  const tileRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
+  const tileRects = useRef<Map<string, DOMRect>>(new Map());
+  const rafRef = useRef<number>(0);
+
+  const registerTile = useCallback((id: string, el: HTMLAnchorElement | null) => {
+    if (el) tileRefs.current.set(id, el);
+    else tileRefs.current.delete(id);
+  }, []);
+
+  const measureRects = useCallback(() => {
+    const rects = tileRects.current;
+    rects.clear();
+    tileRefs.current.forEach((el, id) => {
+      rects.set(id, el.getBoundingClientRect());
+    });
+  }, []);
+
+  useEffect(() => {
+    measureRects();
+    const onGeometryChange = () => measureRects();
+    window.addEventListener("resize", onGeometryChange, { passive: true });
+    window.addEventListener("scroll", onGeometryChange, { passive: true });
+    return () => {
+      window.removeEventListener("resize", onGeometryChange);
+      window.removeEventListener("scroll", onGeometryChange);
+      cancelAnimationFrame(rafRef.current);
+    };
+  }, [measureRects]);
+
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (reduceMotion) return;
+      if (e.pointerType !== "mouse") return;
+      const clientX = e.clientX;
+      const clientY = e.clientY;
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        const rects = tileRects.current;
+        tileRefs.current.forEach((el, id) => {
+          const rect = rects.get(id);
+          if (!rect || rect.width === 0 || rect.height === 0) return;
+          const x = ((clientX - rect.left) / rect.width) * 100;
+          const y = ((clientY - rect.top) / rect.height) * 100;
+          el.style.setProperty("--spot-x", `${x}%`);
+          el.style.setProperty("--spot-y", `${y}%`);
+        });
+      });
+    },
+    [reduceMotion]
+  );
+
+  return (
+    <section
+      aria-labelledby="solutions-heading"
+      className="bg-[var(--color-background)] px-6 py-14 lg:flex lg:min-h-screen lg:flex-col lg:justify-center"
+    >
       <div className="mx-auto max-w-7xl">
-        <motion.div
-          className="mx-auto max-w-3xl text-center mb-10"
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5 }}
-        >
-          <span className="inline-block text-[11px] font-semibold uppercase tracking-[0.28em] text-white/40 mb-5">
-            What We Build
+        <div className="mx-auto mb-5 max-w-3xl text-center lg:mb-6">
+          <span className="mb-4 inline-block text-[11px] font-semibold uppercase tracking-[0.28em] text-white/40">
+            Business Solutions
           </span>
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-[-0.02em] leading-[1.05] text-white text-balance mb-6">
-            Pick the{" "}
+          <h2
+            id="solutions-heading"
+            className="mb-3 text-3xl font-extrabold leading-[1.05] tracking-[-0.02em] text-white text-balance md:text-4xl"
+          >
+            Start with the{" "}
             <em
-              className="font-serif italic text-[var(--color-electric-cyan)] font-normal"
+              className="font-serif font-normal italic text-[var(--color-electric-cyan)]"
               style={{ filter: "drop-shadow(0 0 18px rgba(0,240,255,0.32))" }}
             >
-              layer
+              problem
             </em>{" "}
-            you need first.
+            holding your business back.
           </h2>
-          <p className="mx-auto max-w-2xl text-[15px] md:text-[16px] leading-[1.6] text-white/55 text-balance">
-            Some clients want the whole system. Others want one piece. Start where the pain is loudest.
+          <p className="mx-auto max-w-2xl text-[14px] leading-[1.5] text-white/55 text-balance md:text-[15px]">
+            You do not need to transform everything at once. Aurexis can begin with one
+            high-impact problem and expand into a connected ecosystem as your business grows.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          className="relative mx-auto max-w-6xl mb-4"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+        <div
+          onPointerMove={handlePointerMove}
+          className={cn(
+            "mx-auto grid max-w-6xl grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4",
+            "wwb-grid"
+          )}
         >
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 blur-3xl opacity-50"
-            style={{
-              background:
-                "radial-gradient(60% 60% at 50% 50%, rgba(0,240,255,0.13), transparent 70%)",
-            }}
-          />
-
-          <div
-            className="relative rounded-[20px] border border-white/[0.08] bg-white/[0.025] backdrop-blur-md p-8 lg:p-12 overflow-hidden"
-            style={{
-              boxShadow:
-                "0 0 60px rgba(0,240,255,0.10), 0 8px 32px rgba(0,0,0,0.4)",
-            }}
-          >
-            <motion.div
-              aria-hidden
-              className="absolute top-0 left-0 right-0 h-px bg-[var(--color-electric-cyan)]/60 origin-left"
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            />
-
-            <div className="grid lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-12 items-center">
-              <div>
-                <div className="flex items-baseline gap-3 mb-5">
-                  <span
-                    aria-hidden
-                    className="font-serif italic text-2xl leading-none text-white/15 select-none"
-                  >
-                    01
-                  </span>
-                  <span className="flex items-baseline gap-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-white/55">
-                    <span aria-hidden className="text-[var(--color-electric-cyan)]/70 select-none">
-                      ──
-                    </span>
-                    <span>Flagship</span>
-                  </span>
-                </div>
-
-                <h3 className="text-4xl md:text-5xl font-extrabold tracking-[-0.02em] leading-[1.05] mb-5">
-                  <em
-                    className="font-serif italic text-[var(--color-electric-cyan)] font-normal"
-                    style={{ filter: "drop-shadow(0 0 18px rgba(0,240,255,0.32))" }}
-                  >
-                    Ecosystem
-                  </em>
-                </h3>
-
-                <p className="text-[15px] md:text-[17px] leading-[1.6] text-white/65 max-w-lg">
-                  The full system: front door, operations, AI agents, glue. Designed and shipped as one coordinated stack — replace four disconnected vendors with one accountable team.
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-5 lg:items-start">
-                <Link
-                  href="/services/ecosystem"
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-white text-black text-[15px] font-semibold transition-all hover:-translate-y-0.5 shadow-[0_4px_14px_rgba(0,0,0,0.25),0_0_24px_rgba(0,240,255,0.18)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.3),0_0_32px_rgba(0,240,255,0.28)] w-fit"
-                >
-                  Explore the ecosystem
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        <div className="mx-auto max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {components.map((c, i) => (
+          {solutions.map((s, i) => (
             <motion.article
-              key={c.number}
-              initial={{ opacity: 0, y: 16 }}
+              key={s.id}
+              className={cn(s.grid, "wwb-tile")}
+              initial={reduceMotion ? false : { opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.5, delay: 0.3 + i * 0.08, ease: "easeOut" }}
-              className="group flex flex-col rounded-[16px] border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm p-6 lg:p-7 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/[0.12]"
+              transition={{
+                duration: 0.5,
+                delay: reduceMotion ? 0 : i * 0.06,
+                ease: [0.22, 1, 0.36, 1],
+              }}
             >
-              <div className="flex items-baseline gap-3 mb-4">
+              <Link
+                ref={(el) => {
+                  registerTile(s.id, el);
+                }}
+                href={SOLUTIONS_HREF}
+                aria-label={s.cta}
+                className={cn(
+                  "wwb-tile-link group relative isolate flex h-full flex-col overflow-hidden rounded-[16px] border border-white/[0.08] backdrop-blur-sm",
+                  "bg-gradient-to-b from-white/[0.05] via-white/[0.02] to-transparent",
+                  "transition-[transform,border-color] duration-200 ease-out",
+                  "hover:-translate-y-[2px] hover:border-white/[0.18]",
+                  "focus-visible:-translate-y-[2px] focus-visible:border-white/[0.18]",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-electric-cyan)]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-background)]",
+                  "motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:focus-visible:translate-y-0"
+                )}
+              >
                 <span
                   aria-hidden
-                  className="font-serif italic text-xl leading-none text-white/15 select-none"
-                >
-                  {c.number}
-                </span>
-                <span className="flex items-baseline gap-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-white/45">
-                  <span aria-hidden className="text-[var(--color-electric-cyan)]/70 select-none">
-                    ──
-                  </span>
-                  <span>Component</span>
-                </span>
-              </div>
-
-              <h3 className="text-2xl font-extrabold tracking-[-0.01em] leading-tight text-white mb-3">
-                {c.title}
-              </h3>
-
-              <p className="text-[14px] leading-[1.55] text-white/55 mb-6">
-                {c.description}
-              </p>
-
-              <div className="mt-auto">
-                <Link
-                  href={c.href}
-                  className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-white/85 hover:text-white transition-colors w-fit"
-                >
-                  Learn more
-                  <ArrowRight className="w-3.5 h-3.5 text-[var(--color-electric-cyan)] transition-transform group-hover:translate-x-0.5" />
-                </Link>
-              </div>
+                  className="wwb-spot pointer-events-none absolute inset-0 -z-10 rounded-[16px]"
+                />
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-8 top-0 z-10 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"
+                />
+                <div className="flex h-full flex-col p-5 lg:p-6">
+                  <div className="mb-3 flex items-center justify-between">
+                    <span aria-hidden className="font-mono text-[10px] tracking-[0.25em] text-[var(--color-electric-cyan)]/40">
+                      {s.number}
+                    </span>
+                    <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[var(--color-electric-cyan)]/50" />
+                  </div>
+                  <h3 className="text-lg font-extrabold leading-[1.15] tracking-[-0.01em] text-white lg:text-xl">
+                    {s.name}
+                  </h3>
+                  <p
+                    className="mt-1 font-serif text-[14px] italic text-[var(--color-electric-cyan)]"
+                    style={{ filter: "drop-shadow(0 0 12px rgba(0,240,255,0.18))" }}
+                  >
+                    {s.headline}
+                  </p>
+                  <p className="mt-2 text-[12.5px] leading-[1.5] text-white/55">{s.description}</p>
+                  {s.id === "lead" && (
+                    <ul className="mt-4 grid grid-cols-2 gap-2">
+                      {s.outcomes.map((o) => (
+                        <li key={o} className="flex items-center gap-1.5 text-[11px] text-white/55">
+                          <span aria-hidden className="h-1 w-1 rounded-full" style={{ background: CYAN }} />
+                          {o}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  <div aria-hidden className="flex-1" />
+                  <TileFooter capabilities={s.capabilities} cta={s.cta} />
+                </div>
+              </Link>
             </motion.article>
           ))}
         </div>
       </div>
+
+      <style>{`
+        .wwb-tile-link {
+          --spot-x: 50%;
+          --spot-y: 40%;
+        }
+        .wwb-spot {
+          background: radial-gradient(
+            240px circle at var(--spot-x) var(--spot-y),
+            rgba(0, 240, 255, 0.07) 0%,
+            rgba(0, 240, 255, 0.03) 40%,
+            rgba(0, 240, 255, 0) 70%
+          );
+          opacity: 0;
+          transition: opacity 200ms ease-out;
+        }
+        .wwb-tile-link:hover .wwb-spot,
+        .wwb-tile-link:focus-visible .wwb-spot {
+          opacity: 1;
+        }
+        @media (hover: none) {
+          .wwb-spot { display: none; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .wwb-spot { display: none; }
+        }
+      `}</style>
     </section>
   );
 }

@@ -3,12 +3,11 @@ import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { TechStackMarquee } from "@/components/sections/TechStackMarquee";
 import { TheShift } from "@/components/sections/TheShift";
-import { TheArchitecture } from "@/components/sections/TheArchitecture";
+import { TheEcosystem } from "@/components/sections/TheEcosystem";
 import { WhatWeBuild } from "@/components/sections/WhatWeBuild";
 import { PortfolioTeaser } from "@/components/sections/PortfolioTeaser";
-import { TheMath } from "@/components/sections/TheMath";
+import { HowAurexisWorks } from "@/components/sections/HowAurexisWorks";
 import { Calculator } from "@/components/sections/Calculator";
-import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 import { StatsSection } from "@/components/sections/StatsSection";
 import { ReviewsSection } from "@/components/sections/reviews/ReviewsSection";
 import { FAQSection } from "@/components/sections/FAQSection";
@@ -25,12 +24,11 @@ export default function Home() {
         <HeroSection />
         <TechStackMarquee />
         <TheShift />
-        <TheArchitecture />
+        <TheEcosystem />
         <WhatWeBuild />
         <PortfolioTeaser />
-        <TheMath />
+        <HowAurexisWorks />
         <Calculator />
-        <ProcessTimeline />
         <StatsSection />
         <ReviewsSection />
         <FAQSection />

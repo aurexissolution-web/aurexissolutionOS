@@ -6,6 +6,38 @@ const SERIF = "var(--font-instrument-serif), ui-serif, Georgia, serif";
 const MONO = "var(--font-geist-mono), ui-monospace, monospace";
 const SANS = "var(--font-plus-jakarta), system-ui, sans-serif";
 
+// Homepage-only repositioning: presents each case study around the business
+// problem solved, using Aurexis capability language. DB copy and the full
+// case-study pages stay untouched; unknown slugs fall back to DB content.
+type PositionedCard = {
+  title: string;
+  description: string;
+  capabilities: string[];
+  supporting?: string;
+};
+
+const POSITIONING: Record<string, PositionedCard> = {
+  "kerala-ayurvedic-lifestyle-kals": {
+    title: "KALS Digital Customer Journey",
+    description:
+      "Created a clearer service-discovery, booking and enquiry experience for a growing healthcare business.",
+    capabilities: ["Presence", "Flow", "Connect"],
+    supporting: "Three service lines connected through one enquiry journey.",
+  },
+  "m-a-veerappan-auto-digital-storefront": {
+    title: "M.A. Veerappan Auto Connected Storefront",
+    description:
+      "A connected digital storefront and customer enquiry journey for a legacy auto parts distributor — nationwide parts sales, scrap car enquiries and windscreen bookings in one place.",
+    capabilities: ["Presence", "Flow", "Core", "Connect"],
+  },
+  "medss-training-and-consultancy-digitalization": {
+    title: "MEDSS Digital Headquarters",
+    description:
+      "A digital headquarters for one of Malaysia's HRDC-registered training and compliance authorities — built around training discovery, registration and customer engagement.",
+    capabilities: ["Presence", "Flow", "Connect"],
+  },
+};
+
 async function fetchTeaserItems(): Promise<PortfolioItem[]> {
   try {
     const { data, error } = await supabaseAdmin
@@ -31,7 +63,10 @@ export async function PortfolioTeaser() {
   if (items.length === 0) return null;
 
   return (
-    <section className="relative overflow-hidden bg-[var(--color-background)] py-16 md:py-20">
+    <section
+      aria-labelledby="work-heading"
+      className="relative overflow-hidden bg-[var(--color-background)] py-16 md:py-20"
+    >
       <div className="relative mx-auto flex max-w-[1200px] flex-col gap-10 px-6">
         {/* Header — title left, archive button right */}
         <header className="flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
@@ -57,13 +92,14 @@ export async function PortfolioTeaser() {
                   display: "inline-block",
                 }}
               />
-              Selected Work
+              Proven in practice
             </span>
             <h2
+              id="work-heading"
               className="text-2xl leading-[1.1] tracking-tight text-white md:text-[34px]"
               style={{ fontFamily: SANS, fontWeight: 600, letterSpacing: "-0.025em" }}
             >
-              A few things we&rsquo;ve{" "}
+              Systems we&rsquo;ve built for{" "}
               <em
                 style={{
                   fontFamily: SERIF,
@@ -76,13 +112,25 @@ export async function PortfolioTeaser() {
                   color: "transparent",
                 }}
               >
-                actually shipped.
+                real businesses.
               </em>
             </h2>
+            <p
+              className="max-w-xl"
+              style={{
+                fontFamily: SANS,
+                fontSize: 14,
+                lineHeight: 1.55,
+                color: "rgba(255,255,255,0.58)",
+                margin: 0,
+              }}
+            >
+              See how Aurexis turns business challenges into connected digital and operational solutions.
+            </p>
           </div>
           <Link
             href="/portfolio"
-            className="group inline-flex shrink-0 items-center gap-2 self-start rounded-full border border-white/[0.12] px-4 py-2 transition-all hover:border-[#00F0FF]/40 hover:bg-[#00F0FF]/[0.06] hover:text-[#00F0FF] sm:self-auto"
+            className="group inline-flex shrink-0 items-center gap-2 self-start rounded-full border border-white/[0.12] px-4 py-2 transition-all hover:border-[#00F0FF]/40 hover:bg-[#00F0FF]/[0.06] hover:text-[#00F0FF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF]/60 sm:self-auto"
             style={{
               fontFamily: MONO,
               fontSize: 10.5,
@@ -91,7 +139,7 @@ export async function PortfolioTeaser() {
               color: "rgba(255,255,255,0.92)",
             }}
           >
-            Full archive
+            View All Case Studies
             <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
               →
             </span>
@@ -115,14 +163,17 @@ export async function PortfolioTeaser() {
    ───────────────────────────────────────────────────────────── */
 function TeaserCard({ item, index }: { item: PortfolioItem; index: number }) {
   const cover = item.images?.[0] ?? null;
-  const titleParts = splitAccent(item.title, item.accent_word);
-  const firstMetric = item.outcome_metrics?.[0];
-  const tags = (item.tech_tags ?? []).slice(0, 3);
+  const positioned = POSITIONING[item.slug];
+  const title = positioned?.title ?? item.title;
+  const titleParts = positioned
+    ? { before: title, accent: null, after: "" }
+    : splitAccent(title, item.accent_word);
 
   return (
     <Link
       href={`/portfolio/${item.slug}`}
-      className="group relative flex flex-col overflow-hidden rounded-lg border border-white/[0.06] bg-white/[0.015] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#00F0FF]/30"
+      aria-label={`View case study: ${title}`}
+      className="group relative flex flex-col overflow-hidden rounded-lg border border-white/[0.06] bg-white/[0.015] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#00F0FF]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-background)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
     >
       {/* top accent rule — brightens on hover */}
       <span
@@ -146,8 +197,8 @@ function TeaserCard({ item, index }: { item: PortfolioItem; index: number }) {
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={cover}
-            alt={item.title}
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+            alt={`${item.client_name ?? item.title} — project screenshot`}
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
           />
         )}
         <div
@@ -205,9 +256,7 @@ function TeaserCard({ item, index }: { item: PortfolioItem; index: number }) {
             margin: 0,
           }}
         >
-          {[item.category?.replace(/-/g, " "), item.client_name]
-            .filter(Boolean)
-            .join(" · ")}
+          {item.client_name ?? item.category?.replace(/-/g, " ")}
         </p>
 
         <h3
@@ -232,89 +281,67 @@ function TeaserCard({ item, index }: { item: PortfolioItem; index: number }) {
         </h3>
 
         <p
-          className="line-clamp-2 flex-1"
+          className="line-clamp-3 flex-1"
           style={{
             fontFamily: SANS,
             fontSize: 13,
             lineHeight: 1.5,
-            color: "rgba(255,255,255,0.55)",
+            color: "rgba(255,255,255,0.68)",
             margin: 0,
           }}
         >
-          {item.description}
+          {positioned?.description ?? item.description}
         </p>
 
-        {/* Footer — metric (if any) + tags + arrow */}
+        {positioned?.supporting && (
+          <p
+            style={{
+              fontFamily: SERIF,
+              fontStyle: "italic",
+              fontSize: 12.5,
+              lineHeight: 1.45,
+              color: "rgba(255,255,255,0.60)",
+              margin: 0,
+            }}
+          >
+            {positioned.supporting}
+          </p>
+        )}
+        {positioned && (
+          <p
+            style={{
+              fontFamily: MONO,
+              fontSize: 9,
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              color: "rgba(255,255,255,0.45)",
+              margin: 0,
+            }}
+          >
+            {positioned.capabilities.join(" · ")}
+          </p>
+        )}
+
+        {/* Footer — CTA */}
         <div
           className="mt-1 flex items-center gap-3 pt-3"
           style={{ borderTop: "1px dotted rgba(255,255,255,0.10)" }}
         >
-          {firstMetric ? (
-            <span
-              className="flex items-baseline gap-1.5"
-              style={{ minWidth: 0 }}
-            >
-              <span
-                style={{
-                  fontFamily: SERIF,
-                  fontStyle: "italic",
-                  fontSize: 18,
-                  lineHeight: 1,
-                  color: "#00F0FF",
-                }}
-              >
-                {firstMetric.value}
-              </span>
-              <span
-                className="truncate"
-                style={{
-                  fontFamily: MONO,
-                  fontSize: 8.5,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.40)",
-                }}
-              >
-                {firstMetric.label}
-              </span>
-            </span>
-          ) : (
-            tags.length > 0 && (
-              <span className="flex items-center gap-2 truncate">
-                {tags.slice(0, 2).map((tag, i) => (
-                  <span key={tag} className="inline-flex items-center gap-2">
-                    <span
-                      style={{
-                        fontFamily: MONO,
-                        fontSize: 9,
-                        letterSpacing: "0.16em",
-                        textTransform: "uppercase",
-                        color: "rgba(255,255,255,0.45)",
-                      }}
-                    >
-                      {tag}
-                    </span>
-                    {i < Math.min(tags.length, 2) - 1 && (
-                      <span
-                        aria-hidden
-                        style={{
-                          width: 2,
-                          height: 2,
-                          borderRadius: 999,
-                          background: "rgba(255,255,255,0.20)",
-                          display: "inline-block",
-                        }}
-                      />
-                    )}
-                  </span>
-                ))}
-              </span>
-            )
-          )}
-
+          <span
+            className="transition-colors group-hover:text-[#00F0FF]"
+            style={{
+              fontFamily: MONO,
+              fontSize: 9.5,
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              color: "rgba(255,255,255,0.60)",
+            }}
+          >
+            View Case Study
+          </span>
           <span
             aria-hidden
-            className="ml-auto text-white/30 transition-all group-hover:translate-x-0.5 group-hover:text-[#00F0FF]"
+            className="ml-auto text-white/30 transition-all group-hover:translate-x-0.5 group-hover:text-[#00F0FF] motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
             style={{ fontSize: 16, lineHeight: 1, flexShrink: 0 }}
           >
             →
