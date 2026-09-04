@@ -4,8 +4,8 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 import sharp from "sharp";
 
-const pageSource = await readFile(
-  new URL("../src/app/sanjay/page.tsx", import.meta.url),
+const pageCompositionSource = await readFile(
+  new URL("../src/components/founder-card/FounderCardPage.tsx", import.meta.url),
   "utf8",
 );
 
@@ -14,8 +14,8 @@ const connectSource = await readFile(
   "utf8",
 );
 
-const founderCardSource = await readFile(
-  new URL("../src/data/founder-card.ts", import.meta.url),
+const foundersDataSource = await readFile(
+  new URL("../src/data/founder-cards.ts", import.meta.url),
   "utf8",
 );
 
@@ -29,44 +29,71 @@ const footerSource = await readFile(
   "utf8",
 );
 
-test("uses the approved cinematic founder-card composition", () => {
-  assert.match(pageSource, /<FounderHero\s*\/>/);
-  assert.match(pageSource, /<Capabilities\s*\/>/);
-  assert.match(pageSource, /<OwnershipPanel\s*\/>/);
-  assert.match(pageSource, /<ConnectSection\s*\/>/);
-  assert.match(pageSource, /<FounderFooter\s*\/>/);
+const sanjayRouteSource = await readFile(
+  new URL("../src/app/sanjay/page.tsx", import.meta.url),
+  "utf8",
+);
+
+test("the shared page builder composes the approved cinematic founder-card sections", () => {
+  assert.match(pageCompositionSource, /<FounderHero\s+card=\{card\}\s*\/>/);
+  assert.match(pageCompositionSource, /<Capabilities\s*\/>/);
+  assert.match(pageCompositionSource, /<OwnershipPanel\s*\/>/);
+  assert.match(pageCompositionSource, /<ConnectSection\s+card=\{card\}\s*\/>/);
+  assert.match(pageCompositionSource, /<FounderFooter\s+card=\{card\}\s*\/>/);
 });
 
 test("removes the previous centred SaaS-style component sequence", () => {
-  assert.doesNotMatch(pageSource, /<Hero\s*\/>/);
-  assert.doesNotMatch(pageSource, /<FounderProfile\s*\/>/);
-  assert.doesNotMatch(pageSource, /<AboutAurexis\s*\/>/);
-  assert.doesNotMatch(pageSource, /<TrustPoints\s*\/>/);
-  assert.doesNotMatch(pageSource, /max-w-\[580px\]/);
+  assert.doesNotMatch(pageCompositionSource, /<Hero\s*\/>/);
+  assert.doesNotMatch(pageCompositionSource, /<FounderProfile\s*\/>/);
+  assert.doesNotMatch(pageCompositionSource, /<AboutAurexis\s*\/>/);
+  assert.doesNotMatch(pageCompositionSource, /<TrustPoints\s*\/>/);
+  assert.doesNotMatch(pageCompositionSource, /max-w-\[580px\]/);
+});
+
+test("the Organization JSON-LD only claims a founder relation for an actual founder", () => {
+  assert.match(pageCompositionSource, /card\.isFounder\s*\?\s*\{\s*founder:/);
+});
+
+test("sanjay's route delegates to the shared page builder with his own card", () => {
+  assert.match(sanjayRouteSource, /FOUNDER_CARDS\.sanjay/);
+  assert.match(sanjayRouteSource, /<FounderCardPage\s+card=\{card\}\s*\/>/);
 });
 
 test("uses Instagram instead of duplicating WhatsApp in the connect grid", () => {
   assert.match(connectSource, /label:\s*"Instagram"/);
-  assert.match(connectSource, /href:\s*founderCard\.instagramUrl/);
+  assert.match(connectSource, /href:\s*card\.instagramUrl/);
   assert.doesNotMatch(connectSource, /label:\s*"WhatsApp"/);
   assert.match(
-    founderCardSource,
+    foundersDataSource,
     /https:\/\/www\.instagram\.com\/aurexissolution/,
   );
 });
 
-test("uses Sanjay's dedicated CEO email on the founder card", () => {
+test("uses Sanjay's dedicated CEO email and Vasshan's CTO email on their cards", () => {
   assert.match(
-    founderCardSource,
+    foundersDataSource,
     /email:\s*"ceo\.sanjay@aurexissolution\.com"/,
+  );
+  assert.match(
+    foundersDataSource,
+    /email:\s*"vasshanraj@aurexissolution\.com"/,
   );
 });
 
-test("uses the approved discovery call booking route", () => {
+test("uses the approved discovery call booking route for sanjay and vasshan's own link", () => {
   assert.match(
-    founderCardSource,
+    foundersDataSource,
     /https:\/\/cal\.com\/aurexis-solution\/discoverycall/,
   );
+  assert.match(
+    foundersDataSource,
+    /https:\/\/cal\.com\/vasshan-raj\/30min/,
+  );
+});
+
+test("sanjay is the only card marked isFounder", () => {
+  assert.match(foundersDataSource, /isFounder:\s*true/);
+  assert.match(foundersDataSource, /isFounder:\s*false/);
 });
 
 test("uses the approved value statement with only the growth phrase highlighted", () => {

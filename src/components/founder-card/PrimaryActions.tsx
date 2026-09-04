@@ -1,18 +1,18 @@
 "use client";
 
 import { CalendarDays, MessageCircle, UserRoundPlus, ArrowRight } from "lucide-react";
-import { founderCard } from "@/data/founder-card";
+import type { FounderCardData } from "@/data/founder-cards";
 import { track } from "@/lib/founder-card/analytics";
 
-export function PrimaryActions() {
+export function PrimaryActions({ card }: { card: FounderCardData }) {
   return (
     <section aria-label="Primary actions" className="flex flex-col gap-3">
       <a
-        href={founderCard.bookingUrl}
+        href={card.bookingUrl}
         target="_blank"
         rel="noopener noreferrer"
         onClick={() => track("book_discovery_click")}
-        aria-label="Book a discovery call with Sanjay Gunabalan"
+        aria-label={`Book a discovery call with ${card.name}`}
         className="fc-focus fc-primary-action group flex min-h-[58px] items-center gap-3 rounded-[12px] px-5 text-[14px] font-semibold transition duration-200 hover:-translate-y-[1px] sm:text-[15px]"
       >
         <CalendarDays className="h-[18px] w-[18px] shrink-0" aria-hidden strokeWidth={1.7} />
@@ -26,11 +26,11 @@ export function PrimaryActions() {
 
       <div className="grid grid-cols-2 gap-3">
         <a
-          href={founderCard.whatsappUrl}
+          href={card.whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => track("whatsapp_click")}
-          aria-label="Message Sanjay on WhatsApp"
+          aria-label={`Message ${card.firstName} on WhatsApp`}
           className="fc-focus fc-secondary-action flex min-h-[54px] items-center justify-center gap-2.5 rounded-[11px] px-3 text-[13px] font-semibold transition duration-200 hover:-translate-y-[1px] min-[375px]:text-[14px]"
         >
           <MessageCircle
@@ -43,10 +43,10 @@ export function PrimaryActions() {
         </a>
 
         <a
-          href="/api/vcard"
-          download={founderCard.vcardFileName}
+          href={`/api/vcard/${card.slug}`}
+          download={card.vcardFileName}
           onClick={() => track("save_contact_click")}
-          aria-label="Save Sanjay Gunabalan's contact card"
+          aria-label={`Save ${card.name}'s contact card`}
           className="fc-focus fc-secondary-action flex min-h-[54px] items-center justify-center gap-2.5 rounded-[11px] px-3 text-[13px] font-semibold transition duration-200 hover:-translate-y-[1px] min-[375px]:text-[14px]"
         >
           <UserRoundPlus

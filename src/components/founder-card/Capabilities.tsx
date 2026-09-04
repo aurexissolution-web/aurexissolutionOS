@@ -1,4 +1,4 @@
-import { CAPABILITIES } from "@/data/founder-card";
+import { CAPABILITIES } from "@/data/founder-cards";
 import { SectionLabel } from "./SectionLabel";
 import { Search, Workflow, ChartNoAxesCombined, ChevronRight } from "lucide-react";
 

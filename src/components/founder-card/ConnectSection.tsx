@@ -1,55 +1,58 @@
 "use client";
 
 import { Globe2, Instagram, Linkedin, Mail, MapPin } from "lucide-react";
-import { founderCard } from "@/data/founder-card";
+import type { FounderCardData } from "@/data/founder-cards";
 import { track } from "@/lib/founder-card/analytics";
 import { SectionLabel } from "./SectionLabel";
 import type { FounderCardEvent } from "@/lib/founder-card/analytics";
 
-const contactItems: ReadonlyArray<{
+function buildContactItems(card: FounderCardData): ReadonlyArray<{
   label: string;
   value: string;
   href: string;
   icon: typeof Mail;
   event: FounderCardEvent;
   external?: boolean;
-}> = [
-  {
-    label: "Email",
-    value: founderCard.email,
-    href: `mailto:${founderCard.email}`,
-    icon: Mail,
-    event: "email_click",
-  },
-  {
-    label: "Website",
-    value: founderCard.websiteDisplay,
-    href: founderCard.website,
-    icon: Globe2,
-    event: "website_click",
-    external: true,
-  },
-  {
-    label: "LinkedIn",
-    value: founderCard.linkedinIsPersonal ? founderCard.name : founderCard.company,
-    href: founderCard.linkedin,
-    icon: Linkedin,
-    event: "linkedin_click",
-    external: true,
-  },
-  {
-    label: "Instagram",
-    value: founderCard.instagramDisplay,
-    href: founderCard.instagramUrl,
-    icon: Instagram,
-    event: "instagram_click",
-    external: true,
-  },
-];
+}> {
+  return [
+    {
+      label: "Email",
+      value: card.email,
+      href: `mailto:${card.email}`,
+      icon: Mail,
+      event: "email_click",
+    },
+    {
+      label: "Website",
+      value: card.websiteDisplay,
+      href: card.website,
+      icon: Globe2,
+      event: "website_click",
+      external: true,
+    },
+    {
+      label: "LinkedIn",
+      value: card.linkedinIsPersonal ? card.name : card.company,
+      href: card.linkedin,
+      icon: Linkedin,
+      event: "linkedin_click",
+      external: true,
+    },
+    {
+      label: "Instagram",
+      value: card.instagramDisplay,
+      href: card.instagramUrl,
+      icon: Instagram,
+      event: "instagram_click",
+      external: true,
+    },
+  ];
+}
 
-export function ConnectSection() {
+export function ConnectSection({ card }: { card: FounderCardData }) {
+  const contactItems = buildContactItems(card);
   return (
-    <section aria-label="Contact Sanjay Gunabalan">
+    <section aria-label={`Contact ${card.name}`}>
       <SectionLabel>Let&apos;s Connect</SectionLabel>
       <div className="fc-contact-grid">
         {contactItems.map(({ label, value, href, icon: Icon, event, external }) => (
@@ -71,7 +74,7 @@ export function ConnectSection() {
       <div className="fc-service-area">
         <span>
           <MapPin aria-hidden strokeWidth={1.6} />
-          {founderCard.publicLocation}
+          {card.publicLocation}
         </span>
         <i aria-hidden />
         <span>

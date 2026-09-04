@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { founderCard } from "@/data/founder-card";
+import type { FounderCardData } from "@/data/founder-cards";
 
-export function FounderFooter() {
+export function FounderFooter({ card }: { card: FounderCardData }) {
   return (
     <footer className="fc-footer">
       <Image
@@ -14,16 +14,16 @@ export function FounderFooter() {
       />
       <div className="fc-footer-links">
         <a
-          href={founderCard.website}
+          href={card.website}
           target="_blank"
           rel="noopener noreferrer"
           className="fc-focus"
         >
-          {founderCard.websiteDisplay}
+          {card.websiteDisplay}
         </a>
         <span aria-hidden />
         <a
-          href={founderCard.privacyUrl}
+          href={card.privacyUrl}
           className="fc-focus"
         >
           Privacy Policy
