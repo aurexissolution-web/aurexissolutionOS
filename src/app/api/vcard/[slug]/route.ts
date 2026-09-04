@@ -1,18 +1,28 @@
 import { NextResponse } from "next/server";
 import { buildVCard } from "@/lib/founder-card/vcard";
-import { FOUNDER_CARDS } from "@/data/founder-cards";
+import { getFounderCard } from "@/data/founder-cards";
 
 export const runtime = "nodejs";
 
-export async function GET() {
+export async function GET(
+  _request: Request,
+  { params }: { params: Promise<{ slug: string }> },
+) {
+  const { slug } = await params;
+  const card = getFounderCard(slug);
+
+  if (!card) {
+    return NextResponse.json({ error: "Unknown card." }, { status: 404 });
+  }
+
   try {
-    const vcard = buildVCard(FOUNDER_CARDS.sanjay);
+    const vcard = buildVCard(card);
     return new NextResponse(vcard, {
       status: 200,
       headers: {
         // Explicit type required — the site sets X-Content-Type-Options: nosniff.
         "Content-Type": "text/vcard; charset=utf-8",
-        "Content-Disposition": `attachment; filename="${FOUNDER_CARDS.sanjay.vcardFileName}"`,
+        "Content-Disposition": `attachment; filename="${card.vcardFileName}"`,
         "Cache-Control": "public, max-age=3600",
       },
     });

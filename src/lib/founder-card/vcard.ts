@@ -1,7 +1,7 @@
 // src/lib/founder-card/vcard.ts
 // Pure builder for a valid, cross-device vCard 3.0. No dependencies so it can be
-// unit-checked in isolation and reused by the /api/vcard route.
-import { founderCard } from "@/data/founder-card";
+// unit-checked in isolation and reused by the /api/vcard/[slug] route.
+import type { FounderCardData } from "@/data/founder-cards";
 
 /** vCard 3.0 text escaping: backslash, newline, comma, semicolon. */
 function esc(value: string): string {
@@ -12,8 +12,8 @@ function esc(value: string): string {
     .replace(/;/g, "\\;");
 }
 
-export function buildVCard(): string {
-  const p = founderCard;
+export function buildVCard(card: FounderCardData): string {
+  const p = card;
 
   const lines: string[] = [
     "BEGIN:VCARD",
