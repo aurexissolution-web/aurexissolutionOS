@@ -44,6 +44,7 @@ next-env.d.ts
 # claude code / superpowers session artifacts
 .claude/
 .superpowers/
+.worktrees/
 
 # local debugging/scratch artifacts
 .playwright-mcp/
