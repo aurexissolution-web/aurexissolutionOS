@@ -59,7 +59,7 @@ export function ConnectSection({ card }: { card: FounderCardData }) {
           <a
             key={label}
             href={href}
-            onClick={() => track(event)}
+            onClick={() => track(event, { card: card.slug })}
             {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
             className="fc-contact-item fc-focus"
             aria-label={`${label}: ${value}`}

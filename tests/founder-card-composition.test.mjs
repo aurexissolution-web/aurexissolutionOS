@@ -39,6 +39,11 @@ const vasshanrajRouteSource = await readFile(
   "utf8",
 );
 
+const primaryActionsSource = await readFile(
+  new URL("../src/components/founder-card/PrimaryActions.tsx", import.meta.url),
+  "utf8",
+);
+
 test("the shared page builder composes the approved cinematic founder-card sections", () => {
   assert.match(pageCompositionSource, /<FounderHero\s+card=\{card\}\s*\/>/);
   assert.match(pageCompositionSource, /<Capabilities\s*\/>/);
@@ -131,4 +136,23 @@ test("uses one genuinely transparent official logo in the header and footer", as
 test("vasshanraj's route delegates to the shared page builder with his own card", () => {
   assert.match(vasshanrajRouteSource, /FOUNDER_CARDS\.vasshanraj/);
   assert.match(vasshanrajRouteSource, /<FounderCardPage\s+card=\{card\}\s*\/>/);
+});
+
+test("analytics events record which person's card they came from", () => {
+  assert.match(
+    primaryActionsSource,
+    /track\("book_discovery_click",\s*\{\s*card:\s*card\.slug\s*\}\)/,
+  );
+  assert.match(
+    primaryActionsSource,
+    /track\("whatsapp_click",\s*\{\s*card:\s*card\.slug\s*\}\)/,
+  );
+  assert.match(
+    primaryActionsSource,
+    /track\("save_contact_click",\s*\{\s*card:\s*card\.slug\s*\}\)/,
+  );
+  assert.match(
+    connectSource,
+    /track\(event,\s*\{\s*card:\s*card\.slug\s*\}\)/,
+  );
 });
