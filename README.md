@@ -37,35 +37,36 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ---
 
-## Digital Founder Card — `/sanjay`
+## Digital Name Cards — `/sanjay`, `/vasshanraj`
 
-A premium, mobile-first digital business card for **Sanjay Gunabalan, Founder & CEO of Aurexis Solution**. It works as a founder profile, contact card, downloadable vCard, and QR-sharing destination, and funnels visitors to a discovery call.
+Premium, mobile-first digital business cards — one per person, sharing the same page/component system. Live: **Sanjay Gunabalan, Founder & CEO** at `/sanjay`, and **Vasshan Raj, Chief Technology Officer** at `/vasshanraj`. Each works as a profile, contact card, and downloadable vCard, and funnels visitors to a discovery call.
 
-**Live route:** [`/sanjay`](http://localhost:3000/sanjay)
+**Live routes:** [`/sanjay`](http://localhost:3000/sanjay) · [`/vasshanraj`](http://localhost:3000/vasshanraj)
 
 ### Tech
-Next.js App Router · React · TypeScript · Tailwind v4 · `lucide-react` icons · `qrcode` (server-side QR to a data URI). No new heavy dependencies. The card is a server component; interactive leaves (actions, share) are client components. A restrained "liquid glass" system lives in `.fc-glass` / `.fc-surface` in `src/app/globals.css`.
+Next.js App Router · React · TypeScript · Tailwind v4 · `lucide-react` icons. No new heavy dependencies. Each card is a thin server-component route delegating to a shared `FounderCardPage`; interactive leaves (actions) are client components. A restrained "liquid glass" system lives in `.fc-glass` / `.fc-surface` in `src/app/globals.css`.
 
 ### Where things live
 | Concern | File |
 |---|---|
-| **All content + contact config** | `src/data/founder-card.ts` (reuses `CHANNELS`/`FOUNDERS` from `src/data/contact-config.ts`) |
-| Page shell, metadata, JSON-LD, QR | `src/app/sanjay/page.tsx` |
-| Social image (OG + Twitter) | `src/app/sanjay/opengraph-image.tsx` (+ `twitter-image.tsx`) |
-| vCard download endpoint | `src/app/api/vcard/route.ts` |
-| vCard / QR / analytics helpers | `src/lib/founder-card/*` |
+| **All people's content, keyed by slug** | `src/data/founder-cards.ts` (a `FOUNDER_CARDS` registry; reuses `CHANNELS` from `src/data/contact-config.ts`) |
+| Shared page shell, metadata, JSON-LD | `src/components/founder-card/FounderCardPage.tsx` |
+| Per-person route (thin wrapper) | `src/app/sanjay/page.tsx`, `src/app/vasshanraj/page.tsx` |
+| Social image (OG + Twitter) | `src/lib/founder-card/og-image.tsx` (shared renderer), `src/app/<slug>/opengraph-image.tsx` (+ `twitter-image.tsx`) per person |
+| vCard download endpoint | `src/app/api/vcard/[slug]/route.ts` |
+| vCard / analytics helpers | `src/lib/founder-card/*` |
 | UI components | `src/components/founder-card/*` |
-| Brand lockup | `public/brand/aurexis-logo-white.png` |
+| Brand lockup | `public/brand/aurexis-logo-transparent.png` |
 
 ### Common edits
-- **Founder details, positioning, principles, share copy, vCard note** → edit `src/data/founder-card.ts`. Contact facts (email / phone / WhatsApp) come from `src/data/contact-config.ts` — change them there once.
-- **Replace the logo** → drop a new white-on-black (or transparent) lockup at `public/brand/aurexis-logo-white.png`. It is composited with `mix-blend-mode: screen`, so a black background disappears on the dark page. Update the intrinsic `width`/`height` in `BrandHeader.tsx` and `FounderFooter.tsx` if the aspect ratio changes.
-- **Replace the portrait** → set `imageSrc` for `SG` in `contact-config.ts` (currently `/images/cto.jpg`), or drop a new file at that path. If missing, the card falls back to the "SG" monogram.
-- **Contact actions** → the grid (Call / WhatsApp / Email / Website / LinkedIn) is in `ContactActions.tsx`; hrefs derive from config.
-- **vCard** → shape is in `src/lib/founder-card/vcard.ts`; filename + note in config.
-- **QR destination** → the QR always encodes `founderCard.cardUrl` (= `NEXT_PUBLIC_SITE_URL` + `/sanjay`). Change the site URL env to change the QR target.
-- **Social image** → edit `src/app/sanjay/opengraph-image.tsx`.
-- **SEO** → title/description/robots/canonical are in the `metadata` export in `page.tsx`.
+- **A person's details, positioning, share copy, vCard note** → edit their entry in `src/data/founder-cards.ts`. Contact facts shared across cards (e.g. the company phone) come from `src/data/contact-config.ts`.
+- **Add a new card for someone new** → add an entry to `FOUNDER_CARDS` in `src/data/founder-cards.ts`, add their path to `CARD_PATHS` in `src/lib/founder-card/routes.ts`, and create `src/app/<slug>/page.tsx` + `opengraph-image.tsx` + `twitter-image.tsx` following the `/vasshanraj` files as a template.
+- **Replace the logo** → swap `public/brand/aurexis-logo-transparent.png`, used by `FounderHero.tsx` and `FounderFooter.tsx`. Update the intrinsic `width`/`height` there if the aspect ratio changes.
+- **Replace a portrait** → set `portrait` on that person's entry in `src/data/founder-cards.ts` (currently `/images/cto.jpg` for Sanjay, `/images/vasshan-raj.jpg` for Vasshan), or drop a new file at that path. If `portrait` is `null`, the card falls back to their initials.
+- **Contact actions** → the grid (Email / Website / LinkedIn / Instagram) is in `ConnectSection.tsx`; the primary actions (booking, WhatsApp, Save Contact) are in `PrimaryActions.tsx`. Both read from the `card` prop.
+- **vCard** → shape is in `src/lib/founder-card/vcard.ts` (`buildVCard(card)`); filename + note are per-person fields in `founder-cards.ts`.
+- **Social image** → edit the shared renderer in `src/lib/founder-card/og-image.tsx` (applies to every person's card).
+- **SEO** → title/description/robots/canonical are built per-card by `buildFounderCardMetadata()` in `FounderCardPage.tsx`.
 
 ### Environment variables
 All are `NEXT_PUBLIC_` (safe to expose) — see `.env.example`:
