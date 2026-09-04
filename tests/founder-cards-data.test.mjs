@@ -46,3 +46,7 @@ test("vasshanraj is CTO, not a founder", () => {
 test("exports a getFounderCard lookup helper", () => {
   assert.match(source, /export function getFounderCard/);
 });
+
+test("getFounderCard only returns own registry entries, not inherited Object.prototype members", () => {
+  assert.match(source, /Object\.hasOwn\(FOUNDER_CARDS,\s*slug\)/);
+});

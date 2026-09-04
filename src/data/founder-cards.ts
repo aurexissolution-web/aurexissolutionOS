@@ -129,7 +129,9 @@ export const FOUNDER_CARDS: Record<FounderCardData["slug"], FounderCardData> = {
 };
 
 export function getFounderCard(slug: string): FounderCardData | undefined {
-  return (FOUNDER_CARDS as Record<string, FounderCardData>)[slug];
+  return Object.hasOwn(FOUNDER_CARDS, slug)
+    ? (FOUNDER_CARDS as Record<string, FounderCardData>)[slug]
+    : undefined;
 }
 
 // ── Content blocks (data-driven rendering, shared across every card) ──
