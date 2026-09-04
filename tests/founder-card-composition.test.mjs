@@ -34,6 +34,11 @@ const sanjayRouteSource = await readFile(
   "utf8",
 );
 
+const vasshanrajRouteSource = await readFile(
+  new URL("../src/app/vasshanraj/page.tsx", import.meta.url),
+  "utf8",
+);
+
 test("the shared page builder composes the approved cinematic founder-card sections", () => {
   assert.match(pageCompositionSource, /<FounderHero\s+card=\{card\}\s*\/>/);
   assert.match(pageCompositionSource, /<Capabilities\s*\/>/);
@@ -121,4 +126,9 @@ test("uses one genuinely transparent official logo in the header and footer", as
   assert.equal(channels.length, 4);
   assert.equal(channels[3].min, 0);
   assert.equal(channels[3].max, 255);
+});
+
+test("vasshanraj's route delegates to the shared page builder with his own card", () => {
+  assert.match(vasshanrajRouteSource, /FOUNDER_CARDS\.vasshanraj/);
+  assert.match(vasshanrajRouteSource, /<FounderCardPage\s+card=\{card\}\s*\/>/);
 });
