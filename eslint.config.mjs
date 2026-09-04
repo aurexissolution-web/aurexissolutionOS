@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Project-local Claude Code skills (tooling, not app source).
     ".claude/**",
+    // Project-local Codex skills (tooling, not app source).
+    ".agents/**",
   ]),
   {
     rules: {
