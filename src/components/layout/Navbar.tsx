@@ -5,33 +5,27 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { ChevronRight, Menu, X } from "lucide-react";
+import { ArrowRight, ChevronDown, ChevronRight, Menu, X } from "lucide-react";
 import GradientStartButton from "@/components/ui/demo";
-
-const navLinks = [
-  { label: "Home", href: "/" },
-  {
-    label: "Solutions",
-    href: "/services",
-    subItems: [
-      { label: "Ecosystem", href: "/services/ecosystem" },
-      { label: "AI & Agentic Workflows", href: "/services/ai-automation" },
-      { label: "Web Engineering", href: "/services/web-engineering" },
-      { label: "Mobile Ecosystems", href: "/services/mobile-ecosystems" },
-      { label: "Data Engineering", href: "/services/data-engineering" },
-    ]
-  },
-  // Tech Ecosystem: dropdown items pending from owner — interim link to the Ecosystem page
-  { label: "Tech Ecosystem", href: "/services/ecosystem" },
-  { label: "How We Work", href: "/how-we-work" },
-  { label: "Case Studies", href: "/portfolio" },
-  { label: "Insights", href: "/blog" },
-  { label: "About", href: "/about" },
-];
+import { SolutionsMenu } from "@/components/layout/SolutionsMenu";
+import { TechEcosystemMenu } from "@/components/layout/TechEcosystemMenu";
+import {
+  PRIMARY_NAV_LINKS,
+  SOLUTIONS_ITEMS,
+  SOLUTIONS_FOOTER_LINKS,
+  SOLUTIONS_DISCOVERY_PANEL,
+  TECH_ECOSYSTEM_ITEMS,
+  TECH_ECOSYSTEM_OVERVIEW,
+} from "@/data/navigation";
+import { trackNavEvent } from "@/lib/navigation/analytics";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [solutionsOpen, setSolutionsOpen] = useState(false);
+  const [ecosystemOpen, setEcosystemOpen] = useState(false);
+  const [mobileSolutionsOpen, setMobileSolutionsOpen] = useState(false);
+  const [mobileEcosystemOpen, setMobileEcosystemOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -41,8 +35,46 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    queueMicrotask(() => setMobileMenuOpen(false));
+    queueMicrotask(() => {
+      setMobileMenuOpen(false);
+      setMobileSolutionsOpen(false);
+      setMobileEcosystemOpen(false);
+      setSolutionsOpen(false);
+      setEcosystemOpen(false);
+    });
   }, [pathname]);
+
+  function openSolutions() {
+    setEcosystemOpen(false);
+    setSolutionsOpen(true);
+    trackNavEvent("solutions_menu_open", { current_page: pathname });
+  }
+
+  function closeSolutions() {
+    setSolutionsOpen((wasOpen) => {
+      if (wasOpen) trackNavEvent("solutions_menu_close", { current_page: pathname });
+      return false;
+    });
+  }
+
+  function openEcosystem() {
+    setSolutionsOpen(false);
+    setEcosystemOpen(true);
+    trackNavEvent("ecosystem_menu_open", { current_page: pathname });
+  }
+
+  function closeEcosystem() {
+    setEcosystemOpen((wasOpen) => {
+      if (wasOpen) trackNavEvent("ecosystem_menu_close", { current_page: pathname });
+      return false;
+    });
+  }
+
+  function toggleMobileMenu() {
+    setMobileMenuOpen((open) => !open);
+    setSolutionsOpen(false);
+    setEcosystemOpen(false);
+  }
 
   return (
     <>
@@ -79,6 +111,7 @@ export function Navbar() {
 
           {/* Center Nav Pill — liquid glass */}
           <nav
+            aria-label="Primary"
             className="hidden md:flex items-center gap-0"
             style={{
               background:
@@ -93,67 +126,54 @@ export function Navbar() {
               gap: "2px",
             }}
           >
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return link.subItems ? (
-                <div key={link.label} className="relative group/nav-item">
-                  <Link
-                    href={link.href}
-                    className={cn(
-                      "text-[13.5px] font-medium transition-colors duration-200 px-4 py-1.5 rounded-full flex items-center gap-1",
-                      isActive
-                        ? "text-white bg-white/[0.08]"
-                        : "text-[#9ca3af] hover:text-white"
-                    )}
-                  >
-                    {link.label}
-                    <svg width="10" height="10" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-60 group-hover/nav-item:opacity-100 transition-opacity">
-                      <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </Link>
-
-                  {/* Dropdown Menu */}
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 pointer-events-none group-hover/nav-item:opacity-100 group-hover/nav-item:pointer-events-auto transition-all duration-300">
-                    <div className="w-[260px] rounded-2xl p-2.5 flex flex-col gap-1 border border-white/10 bg-[#02040A]/95 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.8)] relative overflow-hidden">
-                      {/* Subtle top glare */}
-                      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00F0FF]/30 to-transparent" />
-                      
-                      {link.subItems.map((sub, idx) => (
-                        <Link
-                          key={idx}
-                          href={sub.href}
-                          className="group/sub relative px-4 py-3 rounded-xl flex items-center justify-between text-[13px] font-medium text-[#9ca3af] hover:text-white transition-colors overflow-hidden"
-                        >
-                          {/* Hover background layer */}
-                          <div className="absolute inset-0 bg-gradient-to-r from-white/[0.08] to-transparent opacity-0 group-hover/sub:opacity-100 transition-opacity" />
-                          
-                          {/* Animated left indicator */}
-                          <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#00F0FF] scale-y-0 group-hover/sub:scale-y-100 transition-transform origin-top z-10" />
-
-                          <span className="relative z-10">{sub.label}</span>
-                          
-                          {/* Hover arrow indicator */}
-                          <ChevronRight className="w-3.5 h-3.5 opacity-0 -translate-x-2 group-hover/sub:opacity-100 group-hover/sub:translate-x-0 transition-all text-[#00F0FF] relative z-10" />
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className={cn(
-                    "text-[13.5px] font-medium transition-colors duration-200 px-4 py-1.5 rounded-full",
-                    isActive
-                      ? "text-white bg-white/[0.12] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
-                      : "text-[#9ca3af] hover:text-white hover:bg-white/[0.04]"
-                  )}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
+            <ul className="flex list-none items-center gap-0.5">
+              {PRIMARY_NAV_LINKS.map((link) => {
+                if (link.type === "solutions-dropdown") {
+                  return (
+                    <li key={link.label}>
+                      <SolutionsMenu
+                        variant="header"
+                        isOpen={solutionsOpen}
+                        onOpen={openSolutions}
+                        onClose={closeSolutions}
+                        currentPage={pathname}
+                        visible={!scrolled}
+                      />
+                    </li>
+                  );
+                }
+                if (link.type === "ecosystem-dropdown") {
+                  return (
+                    <li key={link.label}>
+                      <TechEcosystemMenu
+                        variant="header"
+                        isOpen={ecosystemOpen}
+                        onOpen={openEcosystem}
+                        onClose={closeEcosystem}
+                        currentPage={pathname}
+                        visible={!scrolled}
+                      />
+                    </li>
+                  );
+                }
+                const isActive = !solutionsOpen && !ecosystemOpen && pathname === link.href;
+                return (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className={cn(
+                        "flex min-h-[44px] items-center text-[13.5px] font-medium transition-colors duration-200 px-4 py-1.5 rounded-full",
+                        isActive
+                          ? "text-white bg-white/[0.12] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+                          : "text-[#9ca3af] hover:text-white hover:bg-white/[0.04]"
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
           </nav>
 
           {/* Right: primary CTA */}
@@ -164,7 +184,9 @@ export function Navbar() {
           {/* Mobile Toggle */}
           <button
             className="md:hidden flex items-center justify-center p-2 text-[#9ca3af] hover:text-white transition-colors"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onClick={toggleMobileMenu}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-nav"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -172,43 +194,156 @@ export function Navbar() {
 
         {/* Mobile Dropdown */}
         {mobileMenuOpen && (
-          <div className="md:hidden absolute top-[72px] left-0 right-0 border-b border-white/[0.06] p-4 flex flex-col shadow-2xl"
-            style={{ background: "#02040A" }}>
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <div key={link.label} className="border-b border-white/[0.04] last:border-none">
-                  <Link
-                    href={link.href}
-                    className={cn(
-                      "block px-4 py-3 text-[14px] font-medium transition-colors",
-                      isActive ? "text-white" : "text-[#9ca3af] hover:text-white"
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                  {link.subItems && (
-                    <div className="flex flex-col pb-3 pl-8 pr-4 gap-3 bg-white/[0.01]">
-                      {link.subItems.map((sub, idx) => {
-                        const isSubActive = pathname === sub.href;
-                        return (
+          <nav
+            id="mobile-nav"
+            aria-label="Primary"
+            className="md:hidden absolute top-[72px] left-0 right-0 border-b border-white/[0.06] p-4 flex flex-col shadow-2xl"
+            style={{ background: "#02040A" }}
+          >
+            <ul className="flex list-none flex-col">
+              {PRIMARY_NAV_LINKS.map((link) => {
+                if (link.type === "solutions-dropdown") {
+                  return (
+                    <li key={link.label} className="border-b border-white/[0.04]">
+                      <button
+                        type="button"
+                        aria-expanded={mobileSolutionsOpen}
+                        aria-controls="mobile-solutions-panel"
+                        onClick={() => setMobileSolutionsOpen((open) => !open)}
+                        className="flex min-h-[44px] w-full items-center justify-between px-4 py-3 text-left text-[14px] font-medium text-[#9ca3af] transition-colors hover:text-white"
+                      >
+                        Solutions
+                        <ChevronDown
+                          className={cn(
+                            "h-4 w-4 transition-transform duration-200",
+                            mobileSolutionsOpen && "rotate-180"
+                          )}
+                        />
+                      </button>
+                      {mobileSolutionsOpen && (
+                        <div id="mobile-solutions-panel" className="flex flex-col gap-1 bg-white/[0.02] pb-3 pl-4 pr-4">
+                          {SOLUTIONS_ITEMS.map((item) => (
+                            <Link
+                              key={item.href}
+                              href={item.href}
+                              onClick={() =>
+                                trackNavEvent("solutions_offer_click", {
+                                  offer_name: item.title,
+                                  offer_position: SOLUTIONS_ITEMS.indexOf(item) + 1,
+                                  current_page: pathname,
+                                })
+                              }
+                              className="flex min-h-[44px] flex-col justify-center border-l border-white/10 py-2 pl-4 text-[13.5px] font-medium text-[#c0c6d1] transition-colors hover:text-white hover:border-[#00F0FF]/50"
+                            >
+                              {item.title}
+                              <span className="mt-0.5 text-[12px] font-normal text-white/40">
+                                {item.description}
+                              </span>
+                            </Link>
+                          ))}
+                          {SOLUTIONS_FOOTER_LINKS.map((footerLink) => (
+                            <Link
+                              key={footerLink.href}
+                              href={footerLink.href}
+                              onClick={() => trackNavEvent(footerLink.analyticsId, { current_page: pathname })}
+                              className="flex min-h-[44px] items-center gap-1.5 border-l border-white/10 py-2 pl-4 text-[13px] font-semibold text-[#00F0FF]"
+                            >
+                              {footerLink.label}
+                              <ArrowRight className="h-3.5 w-3.5" />
+                            </Link>
+                          ))}
                           <Link
-                            key={idx}
-                            href={sub.href}
-                            className={cn(
-                              "text-[13px] font-medium transition-colors border-l border-white/10 pl-4",
-                              isSubActive ? "text-[#00F0FF]" : "text-[#64748b] hover:text-white hover:border-[#00F0FF]/50"
-                            )}
+                            href={SOLUTIONS_DISCOVERY_PANEL.buttonHref}
+                            onClick={() => trackNavEvent("solutions_discovery_click", { current_page: pathname })}
+                            className="flex min-h-[44px] items-center gap-1.5 border-l border-white/10 py-2 pl-4 text-[13px] font-semibold text-white"
                           >
-                            {sub.label}
+                            {SOLUTIONS_DISCOVERY_PANEL.buttonLabel}
+                            <ArrowRight className="h-3.5 w-3.5 text-[#00F0FF]" />
                           </Link>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                        </div>
+                      )}
+                    </li>
+                  );
+                }
+                if (link.type === "ecosystem-dropdown") {
+                  return (
+                    <li key={link.label} className="border-b border-white/[0.04]">
+                      <button
+                        type="button"
+                        aria-expanded={mobileEcosystemOpen}
+                        aria-controls="mobile-ecosystem-panel"
+                        onClick={() => setMobileEcosystemOpen((open) => !open)}
+                        className="flex min-h-[44px] w-full items-center justify-between px-4 py-3 text-left text-[14px] font-medium text-[#9ca3af] transition-colors hover:text-white"
+                      >
+                        Tech Ecosystem
+                        <ChevronDown
+                          className={cn(
+                            "h-4 w-4 transition-transform duration-200",
+                            mobileEcosystemOpen && "rotate-180"
+                          )}
+                        />
+                      </button>
+                      {mobileEcosystemOpen && (
+                        <div
+                          id="mobile-ecosystem-panel"
+                          className="flex flex-col gap-1 bg-[rgba(0,240,255,0.025)] pb-3 pl-4 pr-4"
+                        >
+                          <p className="border-l border-white/10 py-2 pl-4 text-[12px] leading-relaxed text-white/42">
+                            {TECH_ECOSYSTEM_OVERVIEW.body}
+                          </p>
+                          {TECH_ECOSYSTEM_ITEMS.map((item) => (
+                            <Link
+                              key={item.href}
+                              href={item.href}
+                              onClick={() =>
+                                trackNavEvent("ecosystem_capability_click", {
+                                  capability_name: item.title,
+                                  capability_stage: item.stage,
+                                  current_page: pathname,
+                                })
+                              }
+                              className="flex min-h-[48px] flex-col justify-center border-l border-white/10 py-2 pl-4 text-[13.5px] font-medium text-[#c0c6d1] transition-colors hover:border-[#00F0FF]/50 hover:text-white"
+                            >
+                              <span>
+                                <span className="mr-2 font-mono text-[11px] text-[#00F0FF]/75">
+                                  {item.stage}
+                                </span>
+                                {item.title}
+                              </span>
+                              <span className="mt-0.5 text-[12px] font-normal text-white/40">
+                                {item.description}
+                              </span>
+                            </Link>
+                          ))}
+                          <Link
+                            href={TECH_ECOSYSTEM_OVERVIEW.buttonHref}
+                            onClick={() => trackNavEvent("ecosystem_overview_click", { current_page: pathname })}
+                            className="flex min-h-[44px] items-center gap-1.5 border-l border-white/10 py-2 pl-4 text-[13px] font-semibold text-[#00F0FF]"
+                          >
+                            {TECH_ECOSYSTEM_OVERVIEW.buttonLabel}
+                            <ArrowRight className="h-3.5 w-3.5" />
+                          </Link>
+                        </div>
+                      )}
+                    </li>
+                  );
+                }
+                const isActive = pathname === link.href;
+                return (
+                  <li key={link.label} className="border-b border-white/[0.04] last:border-none">
+                    <Link
+                      href={link.href}
+                      className={cn(
+                        "flex min-h-[44px] items-center px-4 py-3 text-[14px] font-medium transition-colors",
+                        isActive ? "text-white" : "text-[#9ca3af] hover:text-white"
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
             <div className="h-px w-full bg-white/[0.08] my-4" />
             <Link
               href="/contact#brief"
@@ -216,7 +351,7 @@ export function Navbar() {
             >
               Start Project
             </Link>
-          </div>
+          </nav>
         )}
       </header>
 
@@ -233,6 +368,7 @@ export function Navbar() {
         )}
       >
         <nav
+          aria-label="Primary"
           className="hidden md:flex items-center"
           style={{
             background:
@@ -247,63 +383,54 @@ export function Navbar() {
             gap: "2px",
           }}
         >
-          {navLinks.map((link) => {
-            const isActive = pathname === link.href;
-            return link.subItems ? (
-              <div key={link.label} className="relative group/pill-item">
-                <Link
-                  href={link.href}
-                  className={cn(
-                    "text-[13.5px] font-medium transition-colors duration-200 px-4 py-1.5 rounded-full whitespace-nowrap flex items-center gap-1",
-                    isActive
-                      ? "text-white"
-                      : "text-[#9ca3af] hover:text-white"
-                  )}
-                >
-                  {link.label}
-                  <svg width="10" height="10" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-60 group-hover/pill-item:opacity-100 transition-opacity">
-                    <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </Link>
-
-                {/* Dropdown Menu (Pill) */}
-                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 opacity-0 pointer-events-none group-hover/pill-item:opacity-100 group-hover/pill-item:pointer-events-auto transition-all duration-300">
-                  <div className="w-[230px] rounded-xl p-1.5 flex flex-col gap-0.5 border border-white/10 bg-[rgba(15,15,20,0.98)] backdrop-blur-3xl shadow-[0_16px_40px_rgba(0,0,0,0.8)] relative overflow-hidden">
-                    {/* Subtle top glare */}
-                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00F0FF]/30 to-transparent" />
-
-                    {link.subItems.map((sub, idx) => (
-                      <Link
-                        key={idx}
-                        href={sub.href}
-                        className="group/sub relative px-3 py-2.5 rounded-lg flex items-center justify-between text-[12.5px] font-medium text-[#c0c6d1] hover:text-white transition-colors overflow-hidden"
-                      >
-                        {/* Hover background layer */}
-                        <div className="absolute inset-0 bg-white/[0.06] opacity-0 group-hover/sub:opacity-100 transition-opacity" />
-                        
-                        <span className="relative z-10">{sub.label}</span>
-
-                        <ChevronRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover/sub:opacity-100 group-hover/sub:translate-x-0 transition-all text-[#00F0FF] relative z-10" />
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <Link
-                key={link.label}
-                href={link.href}
-                className={cn(
-                  "text-[13.5px] font-medium transition-colors duration-200 px-4 py-1.5 rounded-full whitespace-nowrap",
-                  isActive
-                    ? "text-white bg-white/[0.10] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
-                    : "text-[#9ca3af] hover:text-white hover:bg-white/[0.04]"
-                )}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
+          <ul className="flex list-none items-center gap-0.5">
+            {PRIMARY_NAV_LINKS.map((link) => {
+              if (link.type === "solutions-dropdown") {
+                return (
+                  <li key={link.label}>
+                    <SolutionsMenu
+                      variant="pill"
+                      isOpen={solutionsOpen}
+                      onOpen={openSolutions}
+                      onClose={closeSolutions}
+                      currentPage={pathname}
+                      visible={scrolled}
+                    />
+                  </li>
+                );
+              }
+              if (link.type === "ecosystem-dropdown") {
+                return (
+                  <li key={link.label}>
+                    <TechEcosystemMenu
+                      variant="pill"
+                      isOpen={ecosystemOpen}
+                      onOpen={openEcosystem}
+                      onClose={closeEcosystem}
+                      currentPage={pathname}
+                      visible={scrolled}
+                    />
+                  </li>
+                );
+              }
+              const isActive = !solutionsOpen && !ecosystemOpen && pathname === link.href;
+              return (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className={cn(
+                      "flex min-h-[44px] items-center text-[13.5px] font-medium transition-colors duration-200 px-4 py-1.5 rounded-full whitespace-nowrap",
+                      isActive
+                        ? "text-white bg-white/[0.10] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+                        : "text-[#9ca3af] hover:text-white hover:bg-white/[0.04]"
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
 
           {/* Separator */}
           <div
